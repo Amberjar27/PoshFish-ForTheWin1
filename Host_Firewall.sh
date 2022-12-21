@@ -12,8 +12,9 @@ denyAll(){
   iptables -A INPUT -j DROP
 }
 showFirewall(){
-  echo -e -n "${CYAN}"
+  echo -e -n "${GREEN}"
   echo -e "...DONE"
+  echo -e -n "${CYAN}"
   iptables -L --line-numbers
   echo -e "${RESET}"
 }
