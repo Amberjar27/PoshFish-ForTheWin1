@@ -28,7 +28,10 @@ setDNS-NTP(){
 setEcom(){
   iptables -A INPUT -p tcp --dport 80 -j ACCEPT
   iptables -A OUTPUT -p tcp --dport 80 -j ACCEPT
-# May also need TCP-443 opened, check with Ecomm  
+# May also need TCP-443 opened, check with Ecomm
+# Required to communicate with NTP
+  iptables -A INPUT -p udp --dport 123 -j ACCEPT
+  iptables -A OUTPUT -p udp --dport 123 -j ACCEPT
   denyAll
   showFirewall
 }
@@ -40,6 +43,9 @@ setWebmail(){
   iptables -A OUTPUT -p tcp --dport 80 -j ACCEPT
   iptables -A OUTPUT -p tcp --dport 25 -j ACCEPT
   iptables -A OUTPUT -p tcp --dport 110 -j ACCEPT
+# Required to communicate with NTP
+  iptables -A INPUT -p udp --dport 123 -j ACCEPT
+  iptables -A OUTPUT -p udp --dport 123 -j ACCEPT
   denyAll
   showFirewall
 }
