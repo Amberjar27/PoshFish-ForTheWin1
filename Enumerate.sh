@@ -30,17 +30,17 @@ enumUsers(){
   echo "**  root user(s) & root group members **"
   echo "****************************************"
   echo -e -n "${GREEN}"
-  for i in $(cut -d":" -f1 /etc/passwd);
+  for i in $(cut -d ":" -f1 /etc/passwd);
     do id $i;
   done | grep "(root)"
-  grep -v -E "^#" /etc/passwd | awk -F: '$3 == 0 { print $1}'
+  grep -v -E "^#" /etc/passwd | awk -F: '$3 == 0 {print $1}'
   echo -e "${RESET}"
   
   echo "**************************************"
   echo "**  Users with defined sudo rights  **"
   echo "**************************************"
   echo -e -n "${GREEN}"
-  for j in $(cut -d":" -f1 /etc/passwd);
+  for j in $(cut -d ":" -f1 /etc/passwd);
     do cat /etc/sudoers | grep "$j" | grep -wv Defaults | grep -wv "#";
   done
   echo -e "${RESET}"
@@ -49,7 +49,7 @@ enumUsers(){
   echo "**  Groups with defined sudo rights **"
   echo "**************************************"
   echo -e -n "${GREEN}"
-  for k in $(cut -d":" -f1 /etc/group);
+  for k in $(cut -d ":" -f1 /etc/group);
     do cat /etc/sudoers | grep "%$k" | grep -wv "#"
   done
   echo -e "${RESET}"
@@ -58,7 +58,7 @@ enumUsers(){
   echo "**  Non-root users in the sudo group  **"
   echo "****************************************"
   echo -e -n "${GREEN}"
-  grep '^sudo:.*$' /etc/group | cut -d: -f4
+  grep '^sudo:.*$' /etc/group | cut -d ":" -f4
   echo -e "${RESET}"
   
 }
