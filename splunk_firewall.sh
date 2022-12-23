@@ -32,6 +32,8 @@ else
 	# indexers
 	firewall-cmd --zone=public --add-port=4023/tcp
 	firewall-cmd --zone=public --add-port=9404/tcp
+	firewall-cmd --zone=public --add-port=601/tcp
+	firewall-cmd --zone=public --add-port=514/udp
 fi
 
 printf "\nChecking for Splunk\n"
@@ -44,6 +46,7 @@ else
 	firewall-cmd --zone=public --add-port=8000/tcp
 	# Splunk indexer
 	firewall-cmd --zone=public --add-port=8089/tcp 
+	firewall-cmd --zone=public --add-port=9997/tcp
 	# Some other splunk stuff
 	firewall-cmd --zone=public --add-port=8191/tcp
 fi
