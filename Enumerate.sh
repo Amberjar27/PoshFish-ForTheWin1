@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 # This section is used to define colors used to improve readability of output
 RED='\033[0;31m'
