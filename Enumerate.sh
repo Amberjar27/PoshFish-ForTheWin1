@@ -57,7 +57,7 @@ enumUsers(){
   echo "****************************************"
   echo "**  Non-root users in the sudo group  **"
   echo "****************************************"
-  echo -e -n "${GREEN}"
+  echo -e -n "${RED}"
   grep '^sudo:.*$' /etc/group | cut -d ":" -f4
   echo -e "${RESET}"
   
