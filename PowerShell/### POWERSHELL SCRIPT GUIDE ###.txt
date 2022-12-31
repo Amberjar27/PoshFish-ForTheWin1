@@ -50,4 +50,4 @@ Ginger
 	Run Ginger to output a list of all processes, services, and tasks. It will also get a list of all groups and group members.
 
 NetEnum
-	NetEnum looks at all adapters and finds the connections on those adapters and optionally resolves the DNS.
+	NetEnum looks at all adapters and finds the connections on those adapters.
