@@ -49,9 +49,9 @@ setEcom(){
   iptables -A OUTPUT -p tcp --dport 80 -j ACCEPT
   iptables -A INPUT -p tcp --dport 443 -j ACCEPT
   iptables -A OUTPUT -p tcp --dport 443 -j ACCEPT
-  allowNTP      # Required to sync with NTP
-  denyAll       # Closes all ports not already explicitly set to ACCEPT
-  showFirewall  # Lists firewall rules applied to the system
+  iptables -A OUTPUT -p udp --dport 123 -j ACCEPT # Required to sync with NTP
+  denyAll                                         # Closes all ports not already explicitly set to ACCEPT
+  showFirewall                                    # Lists firewall rules applied to the system
 }
 
 setWebmail(){
@@ -61,9 +61,9 @@ setWebmail(){
   iptables -A OUTPUT -p tcp --dport 80 -j ACCEPT
   iptables -A OUTPUT -p tcp --dport 25 -j ACCEPT
   iptables -A OUTPUT -p tcp --dport 110 -j ACCEPT
-  allowNTP      # Required to sync with NTP
-  denyAll       # Closes all ports not already explicitly set to ACCEPT
-  showFirewall  # Lists firewall rules applied to the system
+  iptables -A OUTPUT -p udp --dport 123 -j ACCEPT # Required to sync with NTP
+  denyAll                                         # Closes all ports not already explicitly set to ACCEPT
+  showFirewall                                    # Lists firewall rules applied to the system
 }
 
 while getopts 'dewf :' OPTION; do
