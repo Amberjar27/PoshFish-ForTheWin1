@@ -1,0 +1,53 @@
+### POWERSHELL SCRIPT GUIDE ###
+Please remove when repo is made public
+
+### GUIDE ###
+Vynae 
+	Vynae is a powerful process exploration tool built around a variety of filters and matching systems for discovery
+BeardedDragon
+	BeardedDragon is an enumeration tool that enumerates Windows servers based on installed roles and features. It outputs an HTML website.
+Burrow
+	Burrow creates a masterlist of processes, services, and scheduled tasks and compares the current running programs with the masterlist, outputting changes.
+Ginger
+	Similar to BeardedDragon but more focused on users and groups.
+NetEnum
+	Enumerates network hardware and analyzes connections on each adapter.
+
+### USAGE AND EXAMPLES ###
+Vynae
+	Vynae supports a large variety of filters, and most filters are compatible with each other.
+	For example, to find processes with remote connections to 8.8.8.8, you can use 
+		Vynae -RemoteAddress 8.8.8.8
+	
+	To find all processes with network connections,
+		Vynae -NetOnly
+	
+	To find processes that match a certain hash,
+		Vynae.ps1 -Algorithm md5 -MatchHash 5C27608411832C5B39BA04E33D53536C
+	
+	To trace all child processes of a given parent process,
+		Vynae -ParentID 123
+	
+	To find processes that spawned during a certain time,
+		Vynae -ActiveTime 2
+		Vynae -Date 01/01/23
+		Vynae -Time 4
+    
+    To find all processes with established connections
+    	Vynae -NetStatus Established
+    
+    To learn more commands and filters, see Vynae -help
+
+BeardedDragon
+	BeardedDragon is an automated enumeration tool that outputs to an html website.
+	It does IIS, DNS, and Active Directory. Use parameters Name, Device, Competition to enter details.
+		BeardedDragon -Name "Liam Powell" -Device "2012 Active Directory" -Competition "Regionals"
+
+Burrow
+	Use Burrow -Backup to create the backup files. USe Burrow -Compare to compare the files.
+
+Ginger 
+	Run Ginger to output a list of all processes, services, and tasks. It will also get a list of all groups and group members.
+
+NetEnum
+	NetEnum looks at all adapters and finds the connections on those adapters and optionally resolves the DNS.
