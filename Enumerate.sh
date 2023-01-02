@@ -57,6 +57,7 @@ enumUsers(){
   echo "****************************************"
   echo "**  Non-root users in the sudo group  **"
   echo "****************************************"
+  
   sudoMembers=$(grep '^sudo:.*$' /etc/group | cut -d ":" -f4)
   if(test -z "$sudoMembers"); then
     echo -e -n "${GREEN}None found"
@@ -67,7 +68,50 @@ enumUsers(){
   
 }
 
+enumFiles(){
+
+  echo "*********************************************"
+  echo "** Display all files with SUID permissions **"
+  echo "*********************************************"
+  echo -e -n "${RED}"
+  find / -perm -4000 -exec ls -ldb {} \;
+  echo -e "${RESET}"
+
+  echo "*********************************************"
+  echo "** Display all files with SGID permissions **"
+  echo "*********************************************"
+  echo -e -n "${RED}"
+  find / -perm -2000 -exec ls -ldb {} \;
+  echo -e "${RESET}"
+
+  echo "*************************************************"
+  echo "** Display all files with SUID/SGID permissions**"
+  echo "*************************************************"
+  echo -e -n "${RED}"
+  find / -perm -6000 -exec ls -ldb {} \;
+  echo -e "${RESET}"
+
+  echo "**********************************"
+  echo "** Display world-writable files **"
+  echo "**********************************"
+  echo -e -n "${RED}"
+  find -xdev -type f -perm -o+w -name "*"  
+  echo -e "${RESET}"
+
+  echo "****************************************"
+  echo "** Display world-writable directories **"
+  echo "****************************************"
+  echo -e -n "${RED}"
+  find -xdev -type d -perm -o+w -name "*"  
+  echo -e "${RESET}"
+
+
+}
+
+
 enumUsers
+enumFiles
+
 
 # Accidently deleted previous file and had to rebuild based of script output
 # Will add flags in next version ~DW
