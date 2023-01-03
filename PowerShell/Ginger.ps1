@@ -53,6 +53,14 @@ function Main{
     write-host "<----- Temp File Enumeration ----->`n"
     ExePrint $usertmp
     ExePrint $wintemp
+    $Group = Get-ADGroup -Filter * 
+    foreach($x in $Group){
+        Write-Host $x.Name -ForegroundColor Green
+        $Members = Get-ADGroupMember -Identity $x.Name | Select Name, SID
+        foreach($x in $Members){
+            Write-Host $x.Name $x.SID
+        }
+    }
 }
 
 function ProcPrint($Process){
