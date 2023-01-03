@@ -57,10 +57,9 @@ enumUsers(){
   echo "****************************************"
   echo "**  Non-root users in the sudo group  **"
   echo "****************************************"
-  
   sudoMembers=$(grep '^sudo:.*$' /etc/group | cut -d ":" -f4)
   if(test -z "$sudoMembers"); then
-    echo -e -n "${GREEN}None found"
+    echo -e -n "${GREEN}None found\n"
   else
     echo -e -n "${RED} $sudoMembers"
   fi
@@ -71,39 +70,60 @@ enumUsers(){
 enumFiles(){
 
   echo "*********************************************"
-  echo "** Display all files with SUID permissions **"
+  echo "** Files with SUID permissions **"
   echo "*********************************************"
-  echo -e -n "${RED}"
-  find / -perm -4000 -exec ls -ldb {} \;
+  sUidFiles=$(find / -type f -perm -4000  2> /dev/null)
+  if(test -z "$sUidFiles"); then
+    echo -e -n "${GREEN}None found\n"
+  else
+    echo -e -n "${RED}$sUidFiles\n"
+  fi
   echo -e "${RESET}"
 
-  echo "*********************************************"
-  echo "** Display all files with SGID permissions **"
-  echo "*********************************************"
-  echo -e -n "${RED}"
-  find / -perm -2000 -exec ls -ldb {} \;
+  echo "*********************************"
+  echo "** Files with SGID permissions **"
+  echo "*********************************"
+  sGidFiles=$(find / -type f -perm -2000  2> /dev/null)
+  if(test -z "$sGidFiles"); then
+    echo -e -n "${GREEN}None found\n"
+  else
+    echo -e -n "${RED}$sGidFiles\n"
+  fi
   echo -e "${RESET}"
 
-  echo "*************************************************"
-  echo "** Display all files with SUID/SGID permissions**"
-  echo "*************************************************"
-  echo -e -n "${RED}"
-  find / -perm -6000 -exec ls -ldb {} \;
+  echo "***************************************"
+  echo "** Files with SUID & SGID permissions**"
+  echo "***************************************"
+  sUGidFiles=$(find / -type f -perm -6000 2> /dev/null)
+  if(test -z "$sUGidFiles"); then
+    echo -e -n "${GREEN}None found\n"
+  else
+    echo -e -n "${RED}$sUGidFiles\n"
+  fi
   echo -e "${RESET}"
 
-  echo "**********************************"
-  echo "** Display world-writable files **"
-  echo "**********************************"
-  echo -e -n "${RED}"
-  find -xdev -type f -perm -o+w -name "*"  
+  echo "*************************************"
+  echo "** World-writable executable files **"
+  echo "*************************************"
+  worldWritableFiles=$(find / -type f -perm -o+wx 2> /dev/null)
+  if(test -z "$worldWritableFiles"); then
+    echo -e -n "${GREEN}None found\n"
+  else
+    echo -e -n "${RED}$worldWritableFiles\n"
+  fi
   echo -e "${RESET}"
 
-  echo "****************************************"
-  echo "** Display world-writable directories **"
-  echo "****************************************"
-  echo -e -n "${RED}"
-  find -xdev -type d -perm -o+w -name "*"  
-  echo -e "${RESET}"
+# Commented out this check as it may not be very usefull
+#  echo "********************************"
+#  echo "** World-writable directories **"
+#  echo "********************************"
+#  worldWritableDirs=$(find / -type d -perm -o+w -name "*")
+#  if(test -z "$worldWritableDirs"); then
+#    echo -e -n "${GREEN}None found\n"
+#  else
+#    echo -e -n "${RED}$worldWritableDirs"
+#  fi
+#  echo -e "${RESET}"
 
 
 }
