@@ -113,26 +113,31 @@ enumFiles(){
   fi
   echo -e "${RESET}"
 
-# Commented out this check as it may not be very usefull
-#  echo "********************************"
-#  echo "** World-writable directories **"
-#  echo "********************************"
-#  worldWritableDirs=$(find / -type d -perm -o+w -name "*")
-#  if(test -z "$worldWritableDirs"); then
-#    echo -e -n "${GREEN}None found\n"
-#  else
-#    echo -e -n "${RED}$worldWritableDirs"
-#  fi
-#  echo -e "${RESET}"
-
-
 }
 
+enumKeys(){
+  echo "***********************************"
+  echo "** Hidden keys and access tokens **"
+  echo "***********************************"
+  cryptoKey=$(find / -exec grep -rl -e "-----BEGIN PRIVATE KEY-----" {} \; 2> /dev/null)
+  rsaPK=$(find / -exec grep -rl -e "-----BEGIN RSA PRIVATE KEY-----" {} \; 2> /dev/null)
+  openSshPK=$(find / -exec grep -rl -e "-----BEGIN OPENSSH PRIVATE KEY-----" {} \; 2> /dev/null)
+  pgpPK=$(find / -exec grep -rl -e "-----BEGIN PGP PRIVATE KEY BLOCK-----" {} \; 2> /dev/null)
+  sshdsaPK=$(find / -exec grep -rl -e "-----BEGIN DSA PRIVATE KEY-----" {} \; 2> /dev/null)
+  sshecPK=$(find / -exec grep -rl -e "-----BEGIN EC PRIVATE KEY-----" {} \; 2> /dev/null)
 
+  if(test -z "$cryptoKey"); then
+    echo -e -n "${GREEN}PKCS8 private keys not found\n"
+  else
+    echo -e -n "${RED}$cryptoKey\n"
+  fi
+  echo -e "${RESET}"
+
+}
 
 enumUsers
 enumFiles
 
 
-# Accidently deleted previous file and had to rebuild based of script output
-# Will add flags in next version ~DW
+
+# Will finish enumKeys & add flags in future version ~DW
