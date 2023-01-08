@@ -69,9 +69,9 @@ enumUsers(){
 
 enumFiles(){
 
-  echo "*********************************************"
+  echo "*********************************"
   echo "** Files with SUID permissions **"
-  echo "*********************************************"
+  echo "*********************************"
   sUidFiles=$(find / -type f -perm -4000  2> /dev/null)
   if(test -z "$sUidFiles"); then
     echo -e -n "${GREEN}None found\n"
@@ -119,25 +119,68 @@ enumKeys(){
   echo "***********************************"
   echo "** Hidden keys and access tokens **"
   echo "***********************************"
-  cryptoKey=$(find / -exec grep -rl -e "-----BEGIN PRIVATE KEY-----" {} \; 2> /dev/null)
-  rsaPK=$(find / -exec grep -rl -e "-----BEGIN RSA PRIVATE KEY-----" {} \; 2> /dev/null)
-  openSshPK=$(find / -exec grep -rl -e "-----BEGIN OPENSSH PRIVATE KEY-----" {} \; 2> /dev/null)
-  pgpPK=$(find / -exec grep -rl -e "-----BEGIN PGP PRIVATE KEY BLOCK-----" {} \; 2> /dev/null)
-  sshdsaPK=$(find / -exec grep -rl -e "-----BEGIN DSA PRIVATE KEY-----" {} \; 2> /dev/null)
-  sshecPK=$(find / -exec grep -rl -e "-----BEGIN EC PRIVATE KEY-----" {} \; 2> /dev/null)
+  cryptoKey=$(find /home -exec grep -rl -e "-----BEGIN PRIVATE KEY-----" {} \; 2> /dev/null)
+  rsaPK=$(find /home -exec grep -rl -e "-----BEGIN RSA PRIVATE KEY-----" {} \; 2> /dev/null)
+  openSshPK=$(find /home -exec grep -rl -e "-----BEGIN OPENSSH PRIVATE KEY-----" {} \; 2> /dev/null)
+  pgpPK=$(find /home -exec grep -rl -e "-----BEGIN PGP PRIVATE KEY BLOCK-----" {} \; 2> /dev/null)
+  sshdsaPK=$(find /home -exec grep -rl -e "-----BEGIN DSA PRIVATE KEY-----" {} \; 2> /dev/null)
+  sshecPK=$(find /home -exec grep -rl -e "-----BEGIN EC PRIVATE KEY-----" {} \; 2> /dev/null)
 
-  if(test -z "$cryptoKey"); then
-    echo -e -n "${GREEN}PKCS8 private keys not found\n"
+  keyCheck="$cryptoKey\n$rsaPK\n$openSshPK\n$pgpPK\n$sshdsaPK\n$sshecPK"
+  keyCheck=$(echo -e -n "$keyCheck" | sort -u)
+
+  if(test -z "$keyCheck"); then
+    echo -e -n "${GREEN}No private keys not found\n"
   else
-    echo -e -n "${RED}$cryptoKey\n"
+    echo -e -n "${RED}** Regex match(s), possible keys found: **\n${YELLOW}$keyCheck\n"
   fi
   echo -e "${RESET}"
 
 }
 
-enumUsers
-enumFiles
+enumLogs(){
+  echo "*****************************"
+  echo "** Suspicious log activity **"
+  echo "*****************************"
+}
+
+enumConfigs(){
+  echo "***************************"
+  echo "** System Configurations **"
+  echo "***************************"
+}
 
 
+while getopts 'ufckl :' OPTION; do
+	case "$OPTION" in
+		u)
+			enumUsers
+			;;
+		f)
+			enumFiles
+			;;
+		c)
+			enumConfigs
+			;;
+		k)
+			enumKeys
+			;;
+		l)
+			enumLogs
+			;;
 
-# Will finish enumKeys & add flags in future version ~DW
+		?)
+			echo -e -n "${YELLOW}"
+			echo -e "Correct usage:\t $(basename $0) -flag(s)"
+			echo -e "-u\t Enumerates users & groups"
+			echo -e "-f\t Enumerates for suspicous or potentially exploitable files"
+			echo -e "-c\t Identifies system configs that may be unsafe"
+			echo -e "-k\t Searches the filesystem for access (SSH) keys"
+			echo -e "-l\t Searches logfiles for suspiciousl activity"
+			echo -e "${RESET}"
+			exit 1
+			;;
+	esac
+done
+
+# enumLogs & enumConfigs still not finished ~DW
