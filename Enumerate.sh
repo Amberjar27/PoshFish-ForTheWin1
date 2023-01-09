@@ -201,7 +201,6 @@ enumCronServices(){
     for j in $deletedBinarys;
 	do k=$(echo $j | cut -d "/" -f 3) 
 	cp $j /tmp/recovered_bins/bin_$k.sh
-	
         echo -e "${RED}$j sent to /tmp/recovered_bins/bin_$k.sh"
     done
   fi
