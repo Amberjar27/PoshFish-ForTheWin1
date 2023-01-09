@@ -197,11 +197,12 @@ enumCronServices(){
   if(test -z "$deletedBinarys"); then
     echo -e "${GREEN}No deleted binaries running found"
   else
-#    mkdir /tmp/recovered_bins/
+    mkdir /tmp/recovered_bins/ 2> /dev/null
     for j in $deletedBinarys;
-#	do cp /proc/$j/exe /tmp/recovered_bin$j.sh 2> /dev/null
-	do cp $j /tmp/recovered_bins$j".sh
-        echo -e "${RED}$j sent to /tmp/recovered_bins/"
+	do k=$(echo $j | cut -d "/" -f 3) 
+	cp $j /tmp/recovered_bins/bin_$k.sh
+	
+        echo -e "${RED}$j sent to /tmp/recovered_bins/bin_$k.sh"
     done
   fi
   echo -e "${RESET}"
@@ -244,4 +245,4 @@ while getopts 'ufcksl :' OPTION; do
 	esac
 done
 
-# enumLogs & enumConfigs still not finished, deleted binary recovery still needs work ~DW
+# enumLogs & enumConfigs still not finished ~DW
