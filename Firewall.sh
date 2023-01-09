@@ -1,6 +1,6 @@
 #! /bin/bash
 ################################################################################
-# Written by: K7-Avenger & previous MetroCCDC	team member(s)                   #
+# Written by: K7-Avenger & previous MetroCCDC team member(s)                   #
 # For: Metro State CCDC 2023                                                   #
 # Purpose: To set appropriate firewall (iptables) rules for linux hosts and    #
 # add logging rules which may indicate a particular host is activly under      #
