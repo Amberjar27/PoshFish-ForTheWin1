@@ -1,4 +1,11 @@
 #! /bin/bash
+################################################################################
+# Written by: K7-Avenger & previous MetroCCDC	team member(s)                   #
+# For: Metro State CCDC 2023                                                   #
+# Purpose: To set appropriate firewall (iptables) rules for linux hosts and    #
+# add logging rules which may indicate a particular host is activly under      #
+# attack.                                                                      #
+################################################################################
 
 # This section is used to define colors used to improve readability of output
 RED='\033[0;31m'
