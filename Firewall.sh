@@ -41,12 +41,14 @@ showFirewall(){
   iptables -L --line-numbers
   echo -e "${RESET}"
 }
+
 flushFirewall(){
   iptables -F
   echo -e -n "${RED}"
   echo "Firewall rules removed, user beware!"
   echo -e "${RESET}"
 }
+
 allowNTP(){
   iptables -A INPUT -p udp --dport 123 -j ACCEPT
   iptables -A OUTPUT -p udp --dport 123 -j ACCEPT
