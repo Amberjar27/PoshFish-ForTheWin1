@@ -189,15 +189,20 @@ enumCronServices(){
   cut -d ":" -f 1 /etc/passwd | xargs -n1 crontab -l -u
   echo -e "${RESET}"
 
-  echo "****************************"
-  echo "** World-writable cronjob **"
-  echo "****************************"
-  wordWritableCron=$(find /etc/cron* -perm -0002 -type f -exec ls -la {} \; -exec cat {} \;)
+  echo "***************************************"
+  echo "** Deleted binarys currently running **"
+  echo "***************************************"
+  deletedBinarys=$(ls -la /proc/*/exe 2> /dev/null | grep deleted | cut -d " " -f20)
 
-  if(test -z "$wordWritableCron"); then
-    echo -e "${GREEN}No world-writable cronjob found"
+  if(test -z "$deletedBinarys"); then
+    echo -e "${GREEN}No deleted binaries running found"
   else
-    echo -e -n "${RED}$wordWritableCron"
+#    mkdir /tmp/recovered_bins/
+    for j in $deletedBinarys;
+#	do cp /proc/$j/exe /tmp/recovered_bin$j.sh 2> /dev/null
+	do cp $j /tmp/recovered_bins$j".sh
+        echo -e "${RED}$j sent to /tmp/recovered_bins/"
+    done
   fi
   echo -e "${RESET}"
 }
@@ -239,4 +244,4 @@ while getopts 'ufcksl :' OPTION; do
 	esac
 done
 
-# enumLogs & enumConfigs still not finished ~DW
+# enumLogs & enumConfigs still not finished, deleted binary recovery still needs work ~DW
