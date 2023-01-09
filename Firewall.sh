@@ -12,6 +12,28 @@ RESET='\033[0m'
 denyAll(){
   iptables -A INPUT -j DROP
 }
+
+logFirewallEvents(){
+  iptables -A INPUT -p tcp ! --syn -m state --state NEW -m limit --limit 1/min -j LOG --log-prefix "SYN packet flood: "
+  iptables -A INPUT -p tcp ! --syn -m state --state NEW -j DROP
+  iptables -A INPUT -f -m limit --limit 1/min -j LOG --log-prefix "Fragmented packet: "
+  iptables -A INPUT -f -j DROP
+  iptables -A INPUT -p tcp --tcp-flags ALL ALL -m limit --limit 1/min -j LOG --log-prefix "XMAS packet: "
+  iptables -A INPUT -p tcp --tcp-flags ALL ALL -j DROP
+  iptables -A INPUT -p tcp --tcp-flags ALL NONE -m limit --limit 1/min -j LOG --log-prefix "NULL packet: "
+  iptables -A INPUT -p tcp --tcp-flags ALL NONE -j DROP
+  iptables -A INPUT -p icmp -m limit --limit 1/minute -j LOG --log-prefix "ICMP Flood: "
+  iptables -A INPUT -p icmp -m limit --limit 3/sec -j ACCEPT
+  iptables -A OUTPUT -p icmp -m limit --limit 3/sec -j ACCEPT
+  iptables -A FORWARD -f -m limit --limit 1/min -j LOG --log-prefix "Hacked Client "
+  iptables -A FORWARD -p tcp --dport 31337:31340 --sport 31337:31340 -j DROP
+  iptables -A INPUT -i lo -j ACCEPT
+  iptables -A OUTPUT -o lo -j ACCEPT
+  iptables -A OUTPUT -m limit --limit 2/min -j LOG --log-prefix "Output-Dropped: " --log-level 4
+  iptables -A INPUT -m limit --limit 2/min -j LOG --log-prefix "Input-Dropped: " --log-level 4
+  iptables -A FORWARD -m limit --limit 2/min -j LOG --log-prefix "Forward-Dropped: " --log-level 4
+}
+
 showFirewall(){
   echo -e -n "${GREEN}"
   echo -e "...DONE"
@@ -97,3 +119,5 @@ while getopts 'dewf :' OPTION; do
       ;;
   esac
 done
+
+# logFirewallEvents was stolen from previous MetroCCDC scripts & still needs testing ~ DW
