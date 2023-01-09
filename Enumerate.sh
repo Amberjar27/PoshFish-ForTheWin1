@@ -119,12 +119,12 @@ enumKeys(){
   echo "***********************************"
   echo "** Hidden keys and access tokens **"
   echo "***********************************"
-  cryptoKey=$(find /home -exec grep -rl -e "-----BEGIN PRIVATE KEY-----" {} \; 2> /dev/null)
-  rsaPK=$(find /home -exec grep -rl -e "-----BEGIN RSA PRIVATE KEY-----" {} \; 2> /dev/null)
-  openSshPK=$(find /home -exec grep -rl -e "-----BEGIN OPENSSH PRIVATE KEY-----" {} \; 2> /dev/null)
-  pgpPK=$(find /home -exec grep -rl -e "-----BEGIN PGP PRIVATE KEY BLOCK-----" {} \; 2> /dev/null)
-  sshdsaPK=$(find /home -exec grep -rl -e "-----BEGIN DSA PRIVATE KEY-----" {} \; 2> /dev/null)
-  sshecPK=$(find /home -exec grep -rl -e "-----BEGIN EC PRIVATE KEY-----" {} \; 2> /dev/null)
+  cryptoKey=$(find / -exec grep -rl -e "-----BEGIN PRIVATE KEY-----" {} \; 2> /dev/null)
+  rsaPK=$(find / -exec grep -rl -e "-----BEGIN RSA PRIVATE KEY-----" {} \; 2> /dev/null)
+  openSshPK=$(find / -exec grep -rl -e "-----BEGIN OPENSSH PRIVATE KEY-----" {} \; 2> /dev/null)
+  pgpPK=$(find / -exec grep -rl -e "-----BEGIN PGP PRIVATE KEY BLOCK-----" {} \; 2> /dev/null)
+  sshdsaPK=$(find / -exec grep -rl -e "-----BEGIN DSA PRIVATE KEY-----" {} \; 2> /dev/null)
+  sshecPK=$(find / -exec grep -rl -e "-----BEGIN EC PRIVATE KEY-----" {} \; 2> /dev/null)
 
   keyCheck="$cryptoKey\n$rsaPK\n$openSshPK\n$pgpPK\n$sshdsaPK\n$sshecPK"
   keyCheck=$(echo -e -n "$keyCheck" | sort -u)
@@ -148,10 +148,62 @@ enumConfigs(){
   echo "***************************"
   echo "** System Configurations **"
   echo "***************************"
+  safeUmask=0137
+  umaskValue=$(umask)
+  umaskSymbolic=$(umask -S)
+
+  if(("$umaskValue" >= "$safeUmask")); then
+    echo -e -n "${GREEN}umask value of $umaskValue ($umaskSymbolic) appears safe\n"
+  else
+    echo -e -n "${RED}umask value of $umaskValue ($umaskSymbolic) is less than $safeUmask and appears unsafe\n"
+  fi
+  echo -e "${RESET}"
+}
+
+enumCronServices(){
+  echo "*************"
+  echo "** Crontab **"
+  echo "*************"
+  echo -e -n "${GREEN}"
+  cat /etc/crontab
+  echo -e "${RESET}"
+
+  echo "*************************"
+  echo "** Configured Cronjobs **"
+  echo "*************************"
+  echo -e -n "${GREEN}"
+  ls -la /etc/cron*
+  echo -e "${RESET}"
+
+  echo "********************"
+  echo "** System crontab **"
+  echo "********************"
+  echo -e -n "${GREEN}"
+  cat /etc/cron.d/*
+  echo -e "${RESET}"
+
+  echo "*************************"
+  echo "** Users with cronjobs **"
+  echo "*************************"
+  echo -e -n "${GREEN}"
+  cut -d ":" -f 1 /etc/passwd | xargs -n1 crontab -l -u
+  echo -e "${RESET}"
+
+  echo "****************************"
+  echo "** World-writable cronjob **"
+  echo "****************************"
+  wordWritableCron=$(find /etc/cron* -perm -0002 -type f -exec ls -la {} \; -exec cat {} \;)
+
+  if(test -z "$wordWritableCron"); then
+    echo -e "${GREEN}No world-writable cronjob found"
+  else
+    echo -e -n "${RED}$wordWritableCron"
+  fi
+  echo -e "${RESET}"
 }
 
 
-while getopts 'ufckl :' OPTION; do
+while getopts 'ufcksl :' OPTION; do
 	case "$OPTION" in
 		u)
 			enumUsers
@@ -164,6 +216,9 @@ while getopts 'ufckl :' OPTION; do
 			;;
 		k)
 			enumKeys
+			;;
+		s)
+			enumCronServices
 			;;
 		l)
 			enumLogs
