@@ -231,7 +231,8 @@ while getopts 'ufcksl :' OPTION; do
 			echo -e "-f\t Enumerates for suspicous or potentially exploitable files"
 			echo -e "-c\t Identifies system configs that may be unsafe"
 			echo -e "-k\t Searches the filesystem for access (SSH) keys"
-			echo -e "-l\t Searches logfiles for suspiciousl activity"
+			echo -e "-s\t Enumerates cronjobs & running services"
+			echo -e "-l\t Searches logfiles for suspicious activity"
 			echo -e "${RESET}"
 			exit 1
 			;;
