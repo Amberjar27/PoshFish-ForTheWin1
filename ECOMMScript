@@ -4,8 +4,6 @@ sudo yum -y install epel-release
 sudo yum -y install clamav
 freshclam
 
-zip -r /var/www/html/ps.zip /var/www/html/prestashop
-mv /var/www/html/ps.zip /etc/ps.zip
-
+zip -r /etc/ps.zip /var/www/html/prestashop
 
 ./firewall.sh -e
