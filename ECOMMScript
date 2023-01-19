@@ -6,3 +6,6 @@ freshclam
 
 zip -r /var/www/html/ps.zip /var/www/html/prestashop
 mv /var/www/html/ps.zip /etc/ps.zip
+
+
+./firewall.sh -e
