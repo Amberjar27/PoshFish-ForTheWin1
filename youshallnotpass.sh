@@ -14,7 +14,7 @@ sudo cp /etc/issue /etc/issue.orig
 
 # Create banner text
 echo "************************* WARNING! *************************" >> /etc/ssh/metro_banner
-echo "*  This computer system is intended for * authorized users *" >> /etc/ssh/metro_banner
+echo "*   This computer system is intended for authorized users  *" >> /etc/ssh/metro_banner
 echo "*  only. You should have no expectation of privacy in your *" >> /etc/ssh/metro_banner
 echo "*     use of this system. Use of this system constitutes   *" >> /etc/ssh/metro_banner
 echo "*    consent to monitoring, retrieval, and disclosure of   *" >> /etc/ssh/metro_banner
@@ -24,7 +24,7 @@ echo "************************************************************" >> /etc/ssh/
 
 # Create banner text
 echo "************************* WARNING! *************************" >> /etc/issue
-echo "*  This computer system is intended for * authorized users *" >> /etc/issue
+echo "*   This computer system is intended for authorized users  *" >> /etc/issue
 echo "*  only. You should have no expectation of privacy in your *" >> /etc/issue
 echo "*     use of this system. Use of this system constitutes   *" >> /etc/issue
 echo "*    consent to monitoring, retrieval, and disclosure of   *" >> /etc/issue
