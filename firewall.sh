@@ -144,6 +144,7 @@ while getopts 'dewfp :' OPTION; do
       echo -e "-e\t Applies firewall rules for E-com"
       echo -e "-w\t Applies firewall rules for Webmail"
       echo -e "-f\t Deletes all firewall rules"
+      echo -e "-P\t Applies firewall rules for Palo"
       echo -e "-h\t or any unlisted flag returns this message."
       echo -e "${RESET}"
       exit 1
