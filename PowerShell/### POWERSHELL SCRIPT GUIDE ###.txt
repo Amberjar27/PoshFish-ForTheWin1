@@ -12,6 +12,10 @@ Ginger
 	Similar to BeardedDragon but more focused on users and groups.
 NetEnum
 	Enumerates network hardware and analyzes connections on each adapter.
+	
+### Modules ###
+Get-ADInfo returns objects for users, computers, and groups. Vynae module is the same as script, but in module form. 
+	Install-Module -Name modname.psd1
 
 ### USAGE AND EXAMPLES ###
 Vynae
