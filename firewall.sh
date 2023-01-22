@@ -97,7 +97,22 @@ setWebmail(){
   showFirewall                                    # Lists firewall rules applied to the system
 }
 
-while getopts 'dewf :' OPTION; do
+setPaloWS(){
+  iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+  iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+  iptables -A INPUT -p tcp --dport 8000 -d $2 -j ACCEPT
+  iptables -A INPUT -p tcp --dport 22 -d $1 -j ACCEPT
+  iptables -A OUTPUT -p tcp --dport 80 -j ACCEPT 
+  iptables -A OUTPUT -p tcp --dport 443 -j ACCEPT
+  iptables -A OUTPUT -p udp --dport 53 -d $3 -j ACCEPT
+  iptables -A OUTPUT -p tcp --dport 22 -d $1 -j ACCEPT
+  iptables -A OUTPUT -p udp --dport 123 -d $3 -j ACCEPT
+  iptables -A OUTPUT -p tcp --dport 8000 -d $2 -j ACCEPT
+  denyAll
+  showFirewall
+}
+
+while getopts 'dewfp :' OPTION; do
   case "$OPTION" in
     d)
       echo "Appling firewall rules for DNS-NTP..."
@@ -110,6 +125,13 @@ while getopts 'dewf :' OPTION; do
     w)
       echo "Applying firewall rules for webmail..."
       setWebmail
+      ;;
+    p)
+      echo "Applying firewall rules for Palo Workstation"
+      read -p "Enter Palo IP address: " pip
+      read -p "Enter SIEM IP: " sip
+      read -p "Enter DNS IPL " dip
+      setPaloWS $pip $sip $dip
       ;;
     f)
       echo "Removing all firewall rules..."
@@ -130,3 +152,4 @@ while getopts 'dewf :' OPTION; do
 done
 
 # logFirewallEvents was stolen from previous MetroCCDC scripts & still needs testing ~ DW
+# setPaloWS needs to be tested ~ NO
