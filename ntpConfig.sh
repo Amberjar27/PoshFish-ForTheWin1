@@ -32,7 +32,7 @@ debianClient(){
 	echo "filegen clockstats file clockstats type day enable" >> /etc/ntp.conf
 
 	echo "# LAN NTP source" >> /etc/ntp.conf
-	echo " server $DNS1 iburst prefer" >> /etc/ntp.conf
+	echo " server $1 iburst prefer" >> /etc/ntp.conf
 
 	echo " By default, exchange time with everyone, but don't allow configuration" >> /etc/ntp.connf
 	echo "restrict -4 default kod notrap nomodify nopeer noquery" >> /etc/ntp.connf
