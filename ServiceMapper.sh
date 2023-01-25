@@ -7,7 +7,7 @@ GetServices(){
 	# Create regex to identify valid pids
 	re='^[0-9]+$'
 	# For loop to iterate running services
-	for i in $(systemctl --type=service | grep running); do
+	for i in $(systemctl --type=service | grep running | awk '{print $1}'); do
 		# Set IFS to . to split the service name. E.g., sshd.service -> sshd
 		IFS='.';read -ra srr <<< "$i";
 		# Get the pid of the service | str match might not be the most accurate ??
@@ -92,8 +92,8 @@ if [[ $OPTIND == 1 ]]; then
 fi
 # Getopts | with : in front, ignore getopts errors
 while getopts ':hd:' opt; do
-	case "$opt" in
-		h)
+	case "$opt" i
+n		h)
 			printf "%s-d, DisplayNone\nDisplays services without processes when set to 'True'\n"
 			exit
 			;;
