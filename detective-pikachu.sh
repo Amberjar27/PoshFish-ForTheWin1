@@ -1,5 +1,13 @@
 #!/bin/bash
 
+################################################################################
+# Written by: K7-Avenger				 		       #
+# For: Metro State CCDC 2023						       #
+# Purpose: To investigate Linux hosts for potential weaknesses & IoC's, giving #
+# users a better understanding of the host landscape, and prioritized list of  #
+# manual enumeration items.						       #
+################################################################################
+
 # This section is used to define colors used to improve readability of output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
