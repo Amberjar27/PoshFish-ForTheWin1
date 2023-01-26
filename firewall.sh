@@ -17,6 +17,7 @@ CYAN='\033[0;36m'
 RESET='\033[0m'
 
 denyAll(){
+  #should be called dropAll, deny is a seperate IPtables command
   iptables -A INPUT -j DROP
 }
 
@@ -50,6 +51,7 @@ showFirewall(){
 }
 
 flushFirewall(){
+#should remove chains with -X option, as you only need the default ones
   iptables -F
   echo -e -n "${RED}"
   echo "Firewall rules removed, user beware!"
