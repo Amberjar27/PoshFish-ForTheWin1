@@ -7,6 +7,8 @@
 # attack.                                                                      #
 ################################################################################
 
+#NEED TO ADD POLICY CHANGES. THIS CAN BE DONE WITH -P. DO NOT FORGET FORWARD CHAIN FOR POLICIES - Darien
+
 # This section is used to define colors used to improve readability of output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
