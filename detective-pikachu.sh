@@ -33,7 +33,16 @@ enumUsers(){
   echo -e -n "${GREEN}"
   w
   echo -e "${RESET}"
-  
+
+  echo "*******************************************"
+  echo "**  Users with available password logins **"
+  echo "*******************************************"
+  echo -e -n "${YELLOW}"
+  for i in $(cat /etc/shadow | grep -wv ! | grep -wv '*');
+    do echo -e $i | cut -d ":" -f1 
+  done
+  echo -e "${RESET}"
+
   echo "****************************************"
   echo "**  root user(s) & root group members **"
   echo "****************************************"
@@ -169,32 +178,49 @@ enumConfigs(){
 }
 
 enumTeamRocket(){
-  echo "*****************************"
-  echo "** Known Red-team activity **"
-  echo "*****************************"
-# Checks for the following should be implemented
+  echo "*******************************************************"
+  echo "** SSH keys for any user (including system accounts) **"
+  echo "*******************************************************"
+  redKeys=""
+  for i in $(cat /etc/ssh/sshd_config | grep AuthorizedKeysFile | awk '//{print $2}');
+    do for j in $(cut -d ":" -f1 /etc/passwd);
+      do if(test -z "$(ls -lad /home/$j/$i/ 2> /dev/null)"); then
+        redKeys=$redKeys
+      else
+        redKeys+="$(ls -lad /home/$j/$i/ 2> /dev/null)\n"
+      fi
+      
+      if(test -z "$(ls -lad /$j/$i/ 2> /dev/null)"); then
+        redKeys=$redKeys
+      else
+        redKeys+="$(ls -lad /$j/$i/ 2> /dev/null)\n"
+      fi
+      
+      if(test -z "$(ls -lad /$j/.ssh 2> /dev/null)"); then
+        redKeys=$redKeys
+      else
+        redKeys+="$(ls -lad /$j/.ssh 2> /dev/null)\n"
+      fi
+    done
+  done
 
-  # Non-standard ssh keys
-    # /root/.ssh/authorized
-    # /root/.ssh/authorized_keys*
-    # /dev/.ssh/
-    # /etc/ssh/sshd_config
+  redKeys=$(echo -e -n "$redKeys" | sort -u)
 
-  # Permitting root ssh login
+  if(test -z "$redKeys"); then
+    echo -e -n "${GREEN}No hidden SSH keys found\n"
+  else
+    echo -e -n "${RED}SSH Keys located, possible finding in \n${YELLOW}$redKeys\n"
+  fi
+  echo -e "${RESET}"
+
+  # Permitting root ssh login >> send to hardening script
     # sed -i 's/^PermitRootLogin .$/PermitRootLogin yes/' /etc/ssh/sshd_config
 
-  # Use of chattr (chatter -i) to make dirs/files sticky
+  # Use of chattr (chatter -i) to make dirs/files sticky >> send to logging
     # chatter -i /root/.ssh/authroized_keys*
     # chatter -i "/etc/ssh/sshd_config"
 
-  # Modifying crontab
-    # echo "*/5 * * * * /sbin/iptables -F" | crontab -
-
-
-  # enabling logins on 'bin' or other system accounts (modified /etc/shadow)
-    #sed -i -e 's/bin:\*:/bin:$6$* /etc/shadow
-
-  # modifying user permissions
+  # modifying user permissions >> send to logging
     # usermod -s /bin/sh bin
 
   # /etc/sudoers - gloabal sudoers 'ALL ALL=(ALL:ALL) NOPASSWD:ALL'
@@ -246,6 +272,7 @@ enumTeamRocket(){
     # for user in $(awk -f: '$3 > 500 {print $1}' /etc/passwd); do
       #echo "'/etc/udev/conf.d/    /default' $C2_IP $C2_PORT >> $home/.bashrc 
       # >> /dev/.bashrc ; /etc/profile ; /etc/bash.bashrc
+
 }
 
 enumCronServices(){
@@ -297,7 +324,7 @@ enumCronServices(){
 }
 
 
-while getopts 'ufcksl :' OPTION; do
+while getopts 'ufckrsl :' OPTION; do
 	case "$OPTION" in
 		u)
 			enumUsers
@@ -310,6 +337,9 @@ while getopts 'ufcksl :' OPTION; do
 			;;
 		k)
 			enumKeys
+			;;
+		r)
+			enumTeamRocket
 			;;
 		s)
 			enumCronServices
