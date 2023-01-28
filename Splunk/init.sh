@@ -26,6 +26,12 @@ tar -cf splunkbackup.tar /opt/splunk
 printf "\nScript Copmlete\n"
 printf "\nInstalling GUI files...\n"
 printf "\nLogging to /tmp/yum-out\n"
+printf "\nSetting up syslog server settings...\n"
+echo "\$template RemoteLogs,\"/var/log/%HOSTNAME%/%PROGRAMNAME%.log\"" >> /etc/rsyslog.conf
+echo "*.* ?RemoteLogs" >> /etc/rsyslog.conf
+echo "& ~" >> /etc/rsyslog.conf
+printf "\nLines pushed to /etc/rsyslog.conf\n"
+tail -c 50 /etc/rsyslog.conf
 yum -y groups install "GNOME Desktop" >/tmp/yum-out 2>&1 &
 echo "exec gnome-session" >> ~/.xinitrc
 printf "Done installing, run startx to start\n"
