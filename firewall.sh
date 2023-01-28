@@ -7,6 +7,8 @@
 # attack.                                                                      #
 ################################################################################
 
+#NEED TO ADD POLICY CHANGES. THIS CAN BE DONE WITH -P. DO NOT FORGET FORWARD CHAIN FOR POLICIES - Darien
+
 # This section is used to define colors used to improve readability of output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -17,6 +19,7 @@ CYAN='\033[0;36m'
 RESET='\033[0m'
 
 denyAll(){
+  #should be called dropAll, deny is a seperate IPtables command
   iptables -A INPUT -j DROP
 }
 
@@ -50,6 +53,7 @@ showFirewall(){
 }
 
 flushFirewall(){
+#should remove chains with -X option, as you only need the default ones
   iptables -F
   echo -e -n "${RED}"
   echo "Firewall rules removed, user beware!"
