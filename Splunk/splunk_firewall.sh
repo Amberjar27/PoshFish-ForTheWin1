@@ -47,6 +47,7 @@ else
 	# Splunk indexer
 	firewall-cmd --zone=public --add-port=8089/tcp 
 	firewall-cmd --zone=public --add-port=9997/tcp
+	firewall-cmd --zone=public --add-port=9998/tcp
 	# Some other splunk stuff
 	firewall-cmd --zone=public --add-port=8191/tcp
 fi
