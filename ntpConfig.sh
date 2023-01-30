@@ -48,11 +48,11 @@ debianClient(){
 	ntpq -pn -4
 }
 
-centOsClient(){
-}
+#centOsClient(){
+#}
 
-serverConfig(){
-}
+#serverConfig(){
+#}
 
 while getopts 'ucs :' OPTION; do
   case "$OPTION" in
