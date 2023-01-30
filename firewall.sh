@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 ################################################################################
 # Written by: K7-Avenger & previous MetroCCDC team member(s)                   #
 # For: Metro State CCDC 2023                                                   #
