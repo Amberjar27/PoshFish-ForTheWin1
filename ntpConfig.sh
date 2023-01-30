@@ -73,7 +73,7 @@ centOsClient(){
 	echo "restrict 127.0.0.1" >> /etc/ntp.connf
 	
 	# Restart ntp service
-	service ntp restart
+	systemctl restart ntpd.service
 	ntpdate -u $1
 	echo -e "The output should identify the server is sync'd with a '*'.\nIf it is not, wait a few minutes and check again with 'ntpq -pn -4' before taking a screenshot.\n"
 	echo -e "Capture a screenshot of the following output for a potential inject.\nOtherwise referr to 'NTP Client configuration' by DW for inject steps.\n"
