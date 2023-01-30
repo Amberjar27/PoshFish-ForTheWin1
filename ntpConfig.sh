@@ -44,7 +44,7 @@ debianClient(){
 	# Restart ntp service
 	service ntp restart
 	ntpdate -u $1
-	echo "Capture a screenshot of the following output for a potential inject.\nOtherwise referr to 'NTP Client configuration' by DW for inject steps."
+	echo "Capture a screenshot of the following output for a potential inject.\nOtherwise referr to 'NTP Client configuration' by DW for inject steps.\n"
 	ntpq -pn -4
 }
 
@@ -57,8 +57,8 @@ serverConfig(){
 while getopts 'ucs :' OPTION; do
   case "$OPTION" in
     u)
-      read -p "Enter the IPv4 address of the servper providing NTP:\t" ntpIP
-      echo "Applying NTP configs for Debian/Ubuntu clients..."
+      read -p "Enter the IPv4 address of the servper providing NTP:" ntpIP
+      echo -e "Applying NTP configs for Debian/Ubuntu clients...\n"
       debianClient $ntpIP
       ;;
     c)
