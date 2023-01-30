@@ -45,6 +45,7 @@ debianClient(){
 	service ntp restart
 	ntpdate -u $1
 	echo -e "Capture a screenshot of the following output for a potential inject.\nOtherwise referr to 'NTP Client configuration' by DW for inject steps.\n"
+	sleep 10
 	ntpq -pn -4
 }
 
