@@ -80,8 +80,52 @@ centOsClient(){
 	ntpq -pn -4
 }
 
-#serverConfig(){
-#}
+serverConfig(){
+	sudo apt-get install ntp -y --allow-unauthenticated	# Should allow for uninterupted insallation of NTP
+	
+	mv /etc/ntp.conf /etc/ntp.conf.orig			# Preserves the origanals files by renaming them
+	
+	touch /etc/ntp.conf					# Creates blanks file to be used for NTP client configs
+
+	# Begin writes to new ntp configuration files
+	echo "NTPD_OPTS='-4 -g'" > /etc/default/ntp
+	
+	echo "driftfile /var/lib/ntp/ntp.drift" >> /etc/ntp.conf
+	echo "statistics loopstats peerstats clockstats" >> /etc/ntp.conf
+	echo "filegen loopstats file loopstats type day enable" >> /etc/ntp.conf
+	echo "filegen peerstats file peerstats type day enable" >> /etc/ntp.conf
+	echo "filegen clockstats file clockstats type day enable" >> /etc/ntp.conf
+	
+	echo "#Pooled source(s)" >> /etc/ntp.conf
+	echo "server 0.north-america.pool.ntp.org iburst prefer" >> /etc/ntp.conf
+	echo "server 1.us.pool.ntp.org iburst" >> /etc/ntp.conf
+	echo "server 1.us.pool.ntp.org iburst" >> /etc/ntp.conf
+	echo "server 2.us.pool.ntp.org iburst" >> /etc/ntp.conf
+	echo "server 3.us.pool.ntp.org iburst" >> /etc/ntp.conf
+	
+	echo -e "\nNon-pooled source(s)" >> /etc/ntp.conf
+	echo "server nss.nts.umn.edu iburst" >> /etc/ntp.conf
+	echo "server time.cloudflare.com iburst" >> /etc/ntp.conf
+	
+	echo -e "\nBy default exchange time with everybody, but don't allow configuration"
+	echo "restrict -4 default kod notrap nomodify nopeer noquery"
+	
+	echo -e "\nLocal users may interrogate the ntp server more closely"
+	echo "restrict 127.0.0.1"
+	
+	echo -e "\n Clients from this subnet have unlimited access, but only if cryptographically authenticated"
+	echo "retrict $1 mask $2 limited nomodify notrap noquery nopeer"
+	
+	# Finish sysetm configs
+	timedatectl set-ntp false
+	
+	# Restart ntp service
+	service ntp restart
+	systemctl enable ntp
+	service ntp status
+	ntpq -pn -4
+	
+}
 
 while getopts 'ucs :' OPTION; do
   case "$OPTION" in
@@ -96,8 +140,10 @@ while getopts 'ucs :' OPTION; do
       centOsClient $ntpIP
       ;;
     s)
-      echo "Applying NTP configs for NTP server..."
-      serverConfig
+      read -p "Enter the IPv4 network address of clients: " ntpClientIP
+      read -p "Enter IPv4 subnet mask: " ntpClientMask
+      echo -e "Applying NTP configs for NTP server...\n"
+      serverConfig $ntpClientIP $ntpClientMask
       ;;
     ?)
       echo -e -n "${YELLOW}"
