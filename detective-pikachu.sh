@@ -53,6 +53,16 @@ enumUsers(){
   grep -v -E "^#" /etc/passwd | awk -F: '$3 == 0 {print $1}'
   echo -e "${RESET}"
   
+  echo "******************************************"
+  echo "**  admin user(s) & admin group members **"
+  echo "******************************************"
+  echo -e -n "${GREEN}"
+  for i in $(cut -d ":" -f1 /etc/passwd);
+    do id $i;
+  done | grep "(adm)"
+  grep -v -E "^#" /etc/passwd | awk -F: '$3 == 4 {print $1}'
+  echo -e "${RESET}"
+  
   echo "**************************************"
   echo "**  Users with defined sudo rights  **"
   echo "**************************************"
@@ -81,6 +91,17 @@ enumUsers(){
     echo -e -n "${RED} $sudoMembers"
   fi
   echo -e "${RESET}"
+  
+#  echo "****************************************"
+#  echo "**  Has global sudoers been enabled?  **"
+#  echo "****************************************"
+#  globalSudoers=$(grep '(ALL:ALL)' /etc/sudoers |)
+#  if(test -z "$sudoMembers"); then
+#    echo -e -n "${GREEN}None found\n"
+#  else
+#    echo -e -n "${RED} $sudoMembers"
+#  fi
+#  echo -e "${RESET}"  
   
 }
 
