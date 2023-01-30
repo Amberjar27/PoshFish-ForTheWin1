@@ -49,8 +49,36 @@ debianClient(){
 	ntpq -pn -4
 }
 
-#centOsClient(){
-#}
+centOsClient(){
+	sudo yum -y install ntp					# Should allow for uninterupted insallation of NTP
+	
+	mv /etc/ntp.conf /etc/ntp.conf.orig			# Preserves the origanals files by renaming them
+	
+	touch /etc/ntp.conf					# Creates blanks file to be used for NTP client configs
+
+	# Begin writes to new ntp configuration files
+	echo "NTPD_OPTS='-4 -g'" > /etc/default/ntp
+	
+	echo "driftfile /var/lib/ntp/ntp.drift" >> /etc/ntp.conf
+	echo "statistics loopstats peerstats clockstats" >> /etc/ntp.conf
+	echo "filegen loopstats file loopstats type day enable" >> /etc/ntp.conf
+	echo "filegen peerstats file peerstats type day enable" >> /etc/ntp.conf
+	echo "filegen clockstats file clockstats type day enable" >> /etc/ntp.conf
+
+	echo "# LAN NTP source" >> /etc/ntp.conf
+	echo " server $1 iburst prefer" >> /etc/ntp.conf
+
+	echo " By default, exchange time with everyone, but don't allow configuration" >> /etc/ntp.connf
+	echo "restrict -4 default kod notrap nomodify nopeer noquery" >> /etc/ntp.connf
+	echo "restrict 127.0.0.1" >> /etc/ntp.connf
+	
+	# Restart ntp service
+	service ntp restart
+	ntpdate -u $1
+	echo -e "The output should identify the server is sync'd with a '*'.\nIf it is not, wait a few minutes and check again with 'ntpq -pn -4' before taking a screenshot.\n"
+	echo -e "Capture a screenshot of the following output for a potential inject.\nOtherwise referr to 'NTP Client configuration' by DW for inject steps.\n"
+	ntpq -pn -4
+}
 
 #serverConfig(){
 #}
@@ -63,8 +91,9 @@ while getopts 'ucs :' OPTION; do
       debianClient $ntpIP
       ;;
     c)
-      echo "Applying NTP configs for CentOS/Fedora clients..."
-      centOsClient
+      read -p "Enter the IPv4 address of the servper providing NTP: " ntpIP
+      echo -e "Applying NTP configs for centOS/Fedora clients...\n"
+      centOsClient $ntpIP
       ;;
     s)
       echo "Applying NTP configs for NTP server..."
