@@ -143,7 +143,7 @@ while getopts 'dewfp :' OPTION; do
       echo "Applying firewall rules for Palo Workstation"
       read -p "Enter Palo IP address: " pip
       read -p "Enter SIEM IP: " sip
-      read -p "Enter DNS IPL " dip
+      read -p "Enter DNS IP: " dip
       setPaloWS $pip $sip $dip
       ;;
     f)
