@@ -44,7 +44,7 @@ debianClient(){
 	# Restart ntp service
 	service ntp restart
 	ntpdate -u $1
-	echo -e "The output should identify the server is sync'd with a '*'. If it is not, wait a few minutes and check again with 'ntpq -p -4' before taking a screenshot.\n"
+	echo -e "The output should identify the server is sync'd with a '*'.\nIf it is not, wait a few minutes and check again with 'ntpq -pn -4' before taking a screenshot.\n"
 	echo -e "Capture a screenshot of the following output for a potential inject.\nOtherwise referr to 'NTP Client configuration' by DW for inject steps.\n"
 	ntpq -pn -4
 }
