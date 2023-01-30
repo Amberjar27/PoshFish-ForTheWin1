@@ -57,8 +57,9 @@ serverConfig(){
 while getopts 'ucs :' OPTION; do
   case "$OPTION" in
     u)
+      read -p "Enter the IPv4 address of the servper providing NTP:\t" ntpIP
       echo "Applying NTP configs for Debian/Ubuntu clients..."
-      debianClient
+      debianClient $ntpIP
       ;;
     c)
       echo "Applying NTP configs for CentOS/Fedora clients..."
