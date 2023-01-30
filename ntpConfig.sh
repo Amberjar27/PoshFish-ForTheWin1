@@ -132,18 +132,24 @@ while getopts 'ucs :' OPTION; do
     u)
       read -p "Enter the IPv4 address of the servper providing NTP: " ntpIP
       echo -e "Applying NTP configs for Debian/Ubuntu clients...\n"
+      echo -e -n "${GREEN}"
       debianClient $ntpIP
+      echo -e "${RESET}"      
       ;;
     c)
       read -p "Enter the IPv4 address of the servper providing NTP: " ntpIP
       echo -e "Applying NTP configs for centOS/Fedora clients...\n"
+      echo -e -n "${GREEN}"
       centOsClient $ntpIP
+      echo -e "${RESET}"
       ;;
     s)
       read -p "Enter the IPv4 network address of clients: " ntpClientIP
       read -p "Enter IPv4 subnet mask: " ntpClientMask
       echo -e "Applying NTP configs for NTP server...\n"
+      echo -e -n "${GREEN}"
       serverConfig $ntpClientIP $ntpClientMask
+      echo -e "${RESET}"
       ;;
     ?)
       echo -e -n "${YELLOW}"
