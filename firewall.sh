@@ -18,7 +18,7 @@ MAGENTA='\033[0;35m'
 CYAN='\033[0;36m'
 RESET='\033[0m'
 
-denyAll(){
+dropAll(){
   #should be called dropAll, deny is a seperate IPtables command
   iptables -A INPUT -j DROP
 }
@@ -81,7 +81,7 @@ setDNS-NTP(){
   iptables -A OUTPUT -p udp --dport 953 -j ACCEPT
   allowNTP      # Required to provide NTP services
   allowSysLog   # Allows syslogs to be forwarded to datalake
-  denyAll       # Closes all ports not already explicitly set to ACCEPT
+  dropAll       # Opens the required ports for syslogs to be forwarded to datalake
   showFirewall  # Lists firewall rules applied to the system
 }
 
@@ -92,7 +92,7 @@ setEcom(){
   iptables -A OUTPUT -p tcp --dport 443 -j ACCEPT
   iptables -A OUTPUT -p udp --dport 123 -j ACCEPT # Required to sync with NTP
   allowSysLog                                     # Allows syslogs to be forwarded to datalake
-  denyAll                                         # Closes all ports not already explicitly set to ACCEPT
+  dropAll                                         # Opens the required ports for syslogs to be forwarded to datalake
   showFirewall                                    # Lists firewall rules applied to the system
 }
 
@@ -104,8 +104,8 @@ setWebmail(){
   iptables -A OUTPUT -p tcp --dport 25 -j ACCEPT
   iptables -A OUTPUT -p tcp --dport 110 -j ACCEPT
   iptables -A OUTPUT -p udp --dport 123 -j ACCEPT # Required to sync with NTP
-  allowSysLog                                     # Allows syslogs to be forwarded to datalake
-  denyAll                                         # Closes all ports not already explicitly set to ACCEPT
+  allowSysLog                                     # Opens the required ports for syslogs to be forwarded to datalake
+  dropAll                                         # Closes all ports not already explicitly set to ACCEPT
   showFirewall                                    # Lists firewall rules applied to the system
 }
 
@@ -120,8 +120,8 @@ setPaloWS(){
   iptables -A OUTPUT -p tcp --dport 22 -d $1 -j ACCEPT
   iptables -A OUTPUT -p udp --dport 123 -d $3 -j ACCEPT
   iptables -A OUTPUT -p tcp --dport 8000 -d $2 -j ACCEPT
-  allowSysLog   # Allows syslogs to be forwarded to datalake
-  denyAll
+  allowSysLog   # Opens the required ports for syslogs to be forwarded to datalake
+  dropAll
   showFirewall
 }
 
