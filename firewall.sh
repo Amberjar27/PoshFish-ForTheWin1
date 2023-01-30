@@ -19,7 +19,6 @@ CYAN='\033[0;36m'
 RESET='\033[0m'
 
 dropAll(){
-  #should be called dropAll, deny is a seperate IPtables command
   iptables -A INPUT -j DROP
 }
 
