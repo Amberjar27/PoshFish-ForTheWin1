@@ -44,6 +44,11 @@ logFirewallEvents(){
   iptables -A FORWARD -m limit --limit 2/min -j LOG --log-prefix "Forward-Dropped: " --log-level 4
 }
 
+allowSysLog(){
+  iptables -A OUTPUT -p tcp --dport 9997 -j ACCEPT
+  iptables -A OUTPUT -p tcp --dport 601 -j ACCEPT
+}
+
 showFirewall(){
   echo -e -n "${GREEN}"
   echo -e "...DONE"
@@ -75,6 +80,7 @@ setDNS-NTP(){
   iptables -A OUTPUT -p udp --dport 53 -j ACCEPT
   iptables -A OUTPUT -p udp --dport 953 -j ACCEPT
   allowNTP      # Required to provide NTP services
+  allowSysLog   # Allows syslogs to be forwarded to datalake
   denyAll       # Closes all ports not already explicitly set to ACCEPT
   showFirewall  # Lists firewall rules applied to the system
 }
@@ -85,6 +91,7 @@ setEcom(){
   iptables -A INPUT -p tcp --dport 443 -j ACCEPT
   iptables -A OUTPUT -p tcp --dport 443 -j ACCEPT
   iptables -A OUTPUT -p udp --dport 123 -j ACCEPT # Required to sync with NTP
+  allowSysLog                                     # Allows syslogs to be forwarded to datalake
   denyAll                                         # Closes all ports not already explicitly set to ACCEPT
   showFirewall                                    # Lists firewall rules applied to the system
 }
@@ -97,6 +104,7 @@ setWebmail(){
   iptables -A OUTPUT -p tcp --dport 25 -j ACCEPT
   iptables -A OUTPUT -p tcp --dport 110 -j ACCEPT
   iptables -A OUTPUT -p udp --dport 123 -j ACCEPT # Required to sync with NTP
+  allowSysLog                                     # Allows syslogs to be forwarded to datalake
   denyAll                                         # Closes all ports not already explicitly set to ACCEPT
   showFirewall                                    # Lists firewall rules applied to the system
 }
@@ -112,6 +120,7 @@ setPaloWS(){
   iptables -A OUTPUT -p tcp --dport 22 -d $1 -j ACCEPT
   iptables -A OUTPUT -p udp --dport 123 -d $3 -j ACCEPT
   iptables -A OUTPUT -p tcp --dport 8000 -d $2 -j ACCEPT
+  allowSysLog   # Allows syslogs to be forwarded to datalake
   denyAll
   showFirewall
 }
