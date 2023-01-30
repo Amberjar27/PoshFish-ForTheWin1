@@ -18,6 +18,7 @@ MAGENTA='\033[0;35m'
 CYAN='\033[0;36m'
 RESET='\033[0m'
 
+# Drops attempted connections on ports not already explicityly defined as ACCEPT
 dropAll(){
   iptables -A INPUT -j DROP
 }
