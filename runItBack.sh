@@ -25,4 +25,6 @@ tar rf /tmp/critical_backups/initial_backup.tar /bin/
 # Confirm backups
 echo -e -n "${GREEN}"
 tar -tf /tmp/critical_backups/initial_backup.tar
+echo -e -n "${CYAN}"
+echo "For instructions on extracting contents, see notes by DW"
 echo -e "${RESET}"
