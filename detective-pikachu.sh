@@ -5,7 +5,8 @@
 # For: Metro State CCDC 2023						       #
 # Purpose: To investigate Linux hosts for potential weaknesses & IoC's, giving #
 # users a better understanding of the host landscape, and prioritized list of  #
-# manual enumeration items.						       #
+# manual enumeration items. Many checks are taken or based on those present in #
+# LinEnum.sh enumeration script for CTF-style enumeration scripts.	       #
 ################################################################################
 
 # This section is used to define colors used to improve readability of output
