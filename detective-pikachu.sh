@@ -377,6 +377,7 @@ while getopts 'ufckrsl :' OPTION; do
 			echo -e "-c\t Identifies system configs that may be unsafe"
 			echo -e "-k\t Searches the filesystem for access (SSH) keys"
 			echo -e "-s\t Enumerates cronjobs & running services"
+			echo -e "-r\t Searches for Team Rocket activity such as hidden SSH keys"
 			echo -e "-l\t Searches logfiles for suspicious activity"
 			echo -e "${RESET}"
 			exit 1
