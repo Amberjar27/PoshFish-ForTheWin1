@@ -21,6 +21,7 @@ mkdir /tmp/critical_backups
 # Create backups
 tar -cf /tmp/critical_backups/initial_backup.tar /etc/
 tar rf /tmp/critical_backups/initial_backup.tar /bin/
+tar rf /tmp/critical_backups/initial_backup.tar /boot/
 
 # Confirm backups
 echo -e -n "${GREEN}"
