@@ -126,6 +126,10 @@ setPaloWS(){
   showFirewall
 }
 
+setSplunk(){
+  flushFirewall  #Fulsh all the bad rules
+}
+
 while getopts 'dewfp :' OPTION; do
   case "$OPTION" in
     d)
