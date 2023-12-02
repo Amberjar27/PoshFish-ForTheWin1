@@ -132,7 +132,7 @@ setSplunk(){
   flushFirewall  #Flush all the bad rules
   
   #HTTP and HTTPS
-  iptables -A INPUT -i eth0 -p tcp --dport 80
+  iptables -A INPUT -i eth0 -p tcp --dport 80    #Defining an interface is typically not required, but if you only want access from your machine, the loopback adapter may be more appropriate.
   iptables -A OUTPUT -o eth0 -p tcp --sport 80
   iptables -A INPUT -i eth0 -p tcp --dport 443
   iptables -A OUTPUT -o eth0 -p tcp --sport 443
