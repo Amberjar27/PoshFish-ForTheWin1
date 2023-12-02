@@ -171,6 +171,7 @@ while getopts 'dewfps :' OPTION; do
       echo -e "-w\t Applies firewall rules for Webmail"
       echo -e "-f\t Deletes all firewall rules"
       echo -e "-p\t Applies firewall rules for Palo"
+      echo -e "-s\t Applies firewall rules for Splunk"
       echo -e "-h\t or any unlisted flag returns this message."
       echo -e "${RESET}"
       exit 1
