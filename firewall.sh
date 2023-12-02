@@ -45,11 +45,6 @@ logFirewallEvents(){
   iptables -A FORWARD -m limit --limit 2/min -j LOG --log-prefix "Forward-Dropped: " --log-level 4
 }
 
-allowSysLog(){
-  iptables -A OUTPUT -p tcp --dport 9997 -j ACCEPT
-  iptables -A OUTPUT -p tcp --dport 601 -j ACCEPT
-}
-
 showFirewall(){
   echo -e -n "${GREEN}"
   echo -e "...DONE"
@@ -126,11 +121,20 @@ setPaloWS(){
   showFirewall
 }
 
-setSplunk(){
-  flushFirewall  #Fulsh all the bad rules
+allowSysLog(){
+  iptables -A OUTPUT -p tcp --dport 9997 -j ACCEPT
+  iptables -A OUTPUT -p tcp --dport 601 -j ACCEPT
 }
 
-while getopts 'dewfp :' OPTION; do
+setSplunk(){
+  flushFirewall  #Fulsh all the bad rules
+  #add new rules here
+  allowSysLog   # Opens the required ports for syslogs to be forwarded to datalake
+  dropAll
+  showFirewall
+}
+
+while getopts 'dewfps :' OPTION; do
   case "$OPTION" in
     d)
       echo "Appling firewall rules for DNS-NTP..."
@@ -147,9 +151,13 @@ while getopts 'dewfp :' OPTION; do
     p)
       echo "Applying firewall rules for Palo Workstation"
       read -p "Enter Palo IP address: " pip
-      read -p "Enter SIEM IP: " sip
+      read -p "Enter SIEM/Splunk IP: " sip
       read -p "Enter DNS IP: " dip
       setPaloWS $pip $sip $dip
+      ;;
+    s)
+      echo "Applying firewall rules for the Splunk machine"
+      setSplunk
       ;;
     f)
       echo "Removing all firewall rules..."
