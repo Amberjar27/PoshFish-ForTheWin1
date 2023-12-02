@@ -123,12 +123,24 @@ setPaloWS(){
 
 allowSysLog(){
   iptables -A OUTPUT -p tcp --dport 9997 -j ACCEPT
+  iptables -A OUTPUT -p tcp --dport 9998 -j ACCEPT
   iptables -A OUTPUT -p tcp --dport 601 -j ACCEPT
+  iptables -A OUTPUT -p udp --dport 514 -j ACCEPT
 }
 
 setSplunk(){
-  flushFirewall  #Fulsh all the bad rules
-  #add new rules here
+  flushFirewall  #Flush all the bad rules
+  
+  #HTTP and HTTPS
+  iptables -A INPUT -i eth0 -p tcp --dport 80
+  iptables -A OUTPUT -o eth0 -p tcp --sport 80
+  iptables -A INPUT -i eth0 -p tcp --dport 443
+  iptables -A OUTPUT -o eth0 -p tcp --sport 443
+  #Splunk Web UI
+  iptables -A INPUT -p tcp --dport 8000
+  iptables -A OUTPUT -p tcp --sport 8000
+  #Splunk Management Port
+  iptables -A INPUT -p tcp --dport 8089
   allowSysLog   # Opens the required ports for syslogs to be forwarded to datalake
   dropAll
   showFirewall
