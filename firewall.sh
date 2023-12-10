@@ -132,15 +132,15 @@ setSplunk(){
   flushFirewall  #Flush all the bad rules
   
   #HTTP and HTTPS
-  iptables -A INPUT -i eth0 -p tcp --dport 80    #Defining an interface is typically not required, but if you only want access from your machine, the loopback adapter may be more appropriate.
-  iptables -A OUTPUT -o eth0 -p tcp --sport 80
-  iptables -A INPUT -i eth0 -p tcp --dport 443
-  iptables -A OUTPUT -o eth0 -p tcp --sport 443
+  iptables -A INPUT -p tcp --dport 80 -j ACCEPT   #Defining an interface is typically not required, but if you only want access from your machine, the loopback adapter may be more appropriate.
+  iptables -A OUTPUT -p tcp --dport 80 -j ACCEPT
+  iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+  iptables -A OUTPUT -p tcp --dport 443 -j ACCEPT
   #Splunk Web UI
-  iptables -A INPUT -p tcp --dport 8000
-  iptables -A OUTPUT -p tcp --sport 8000
+  iptables -A INPUT -p tcp --dport 8000 -j ACCEPT
+  iptables -A OUTPUT -p tcp --dport 8000 -j ACCEPT
   #Splunk Management Port
-  iptables -A INPUT -p tcp --dport 8089
+  iptables -A INPUT -p tcp --dport 8089 -j ACCEPT
   allowSysLog   # Opens the required ports for syslogs to be forwarded to datalake
   dropAll
   showFirewall
