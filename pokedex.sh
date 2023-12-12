@@ -56,7 +56,7 @@ allowDNSNTPclient(){
   iptables -A OUTPUT -p udp --dport 123 -d $1 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 }
 
-# Rules for HIDS clients needs server identification
+# Rules for HIDS clients
 allowHIDSClient(){
   iptables -A OUTPUT -p tcp --dport 1514 -d $1 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT  #Agent connection
   iptables -A OUTPUT -p udp --dport 1514 -d $1 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT  #Agent connection
