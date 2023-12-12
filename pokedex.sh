@@ -43,21 +43,21 @@ allowLoopback(){
 }
 
 # Allow web browsing
-enableWebBrowsing(){
+allowWebBrowsing(){
   iptables -A OUTPUT -p tcp --dport 80 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
   iptables -A OUTPUT -p tcp --dport 443 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
   iptables -A OUTPUT -p udp --dport 443 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 }
 
 # Rule for a DNS/NTP clients
-enableDNSNTPclient(){
+allowDNSNTPclient(){
   iptables -A OUTPUT -p tcp --dport 53 -d $1 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
   iptables -A OUTPUT -p udp --dport 53 -d $1 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
   iptables -A OUTPUT -p udp --dport 123 -d $1 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 }
 
 # Rules for HIDS clients needs server identification
-enableHIDSClient(){
+allowHIDSClient(){
   iptables -A OUTPUT -p tcp --dport 1514 -d $1 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT  #Agent connection
   iptables -A OUTPUT -p udp --dport 1514 -d $1 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT  #Agent connection
   iptables -A OUTPUT -p tcp --dport 1515 -d $1 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT  #Agent enrollment
@@ -121,12 +121,12 @@ while getopts 'dfij :' OPTION; do
     i)
       read -p "Enter IP address for HIDS server" hip
       echo "Applying firewall rules for HIDS clients"
-      enableHIDSClient $hip
+      allowHIDSClient $hip
       ;;
     j)
       read -p "Enter network IP address for HIDS clients" hip
       echo "Applying firewall rules for HIDS server"
-      enableHIDSserver $hip
+      allowHIDSserver $hip
       ;;
     ?)
       echo -e -n "${YELLOW}"
