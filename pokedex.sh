@@ -74,6 +74,11 @@ allowSysLog(){
   iptables -A OUTPUT -p udp --dport 514 -d $sip -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 }
 
+allowICMP(){
+  iptables -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
+  iptables -A OUTPUT -p icmp --icmp-type echo-reply -j ACCEPT
+}
+
 flushFirewall(){
   iptables -F
   iptables --policy INPUT ACCEPT
@@ -94,6 +99,10 @@ showFirewall(){
 
 setDNS-NTP(){
   dropAll
+  allowSelf-started
+  allowWebBrowsing
+  allowLoopback
+  allowICMP
   iptables -A INPUT -p tcp --sport 53 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
   iptables -A INPUT -p tcp --sport 953 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
   iptables -A INPUT -p udp --sport 53 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
