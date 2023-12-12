@@ -24,15 +24,14 @@ dropAll(){
   iptables --policy OUTPUT DROP
 }
 
-# Allows connections on the loopback adapter
-allowLoopback(){
-  #iptables -A INPUT -i lo -j ACCEPT #<-- May not be needed
-  iptables -A OUTPUT -o lo -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
-}
-
 # Allows all incoming connections that are self-initiated 
 allowSelf-started(){
   iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+}
+
+# Allows connections on the loopback adapter
+allowLoopback(){
+  iptables -A OUTPUT -o lo -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 }
 
 # Allow web browsing
