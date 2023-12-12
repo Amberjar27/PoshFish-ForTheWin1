@@ -24,6 +24,14 @@ dropAll(){
   iptables --policy OUTPUT DROP
 }
 
+showFirewall(){
+  echo -e -n "${GREEN}"
+  echo -e "...DONE"
+  echo -e -n "${CYAN}"
+  iptables -L --line-numbers
+  echo -e "${RESET}"
+}
+
 # Allows all incoming connections that are self-initiated 
 allowSelf-started(){
   iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
@@ -41,7 +49,95 @@ enableWebBrowsing(){
   iptables -A OUTPUT -p udp --dport 443 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 }
 
-# Rule for a DNS client (still needs DNS server identification)
-enableDNSclient(){
-  iptables -A OUTPUT -p udp --dport 53 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+# Rule for a DNS/NTP clients
+enableDNSNTPclient(){
+  iptables -A OUTPUT -p tcp --dport 53 -d $1 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+  iptables -A OUTPUT -p udp --dport 53 -d $1 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+  iptables -A OUTPUT -p udp --dport 123 -d $1 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 }
+
+# Rules for HIDS clients needs server identification
+enableHIDSClient(){
+  iptables -A OUTPUT -p tcp --dport 1514 -d $1 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT  #Agent connection
+  iptables -A OUTPUT -p udp --dport 1514 -d $1 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT  #Agent connection
+  iptables -A OUTPUT -p tcp --dport 1515 -d $1 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT  #Agent enrollment
+  iptables -A OUTPUT -p tcp --dport 514 -d $1 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT  #Syslog collector
+  iptables -A OUTPUT -p udp --dport 514 -d $1 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT  #Syslog collector
+}
+
+# Rule for a syslog clients
+allowSysLog(){
+  read -p "Enter IP address for Splunk server" sip
+  iptables -A OUTPUT -p tcp --dport 9997 -d $sip -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+  iptables -A OUTPUT -p tcp --dport 9998 -d $sip -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+  iptables -A OUTPUT -p tcp --dport 601 -d $sip -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+  iptables -A OUTPUT -p udp --dport 514 -d $sip -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+}
+
+flushFirewall(){
+  iptables -F
+  iptables --policy INPUT ACCEPT
+  iptables --policy FORWARD ACCEPT
+  iptables --policy OUTPUT ACCEPT
+  echo -e -n "${RED}"
+  echo "Firewall rules removed, default policy set to ACCEPT user beware!"
+  echo -e "${RESET}"
+}
+
+showFirewall(){
+  echo -e -n "${GREEN}"
+  echo -e "...DONE"
+  echo -e -n "${CYAN}"
+  iptables -L --line-numbers
+  echo -e "${RESET}"
+}
+
+setDNS-NTP(){
+  dropAll
+  iptables -A INPUT -p tcp --sport 53 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+  iptables -A INPUT -p tcp --sport 953 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+  iptables -A INPUT -p udp --sport 53 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+  iptables -A INPUT -p udp --sport 953 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+  iptables -A OUTPUT -p tcp --dport 53 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+  iptables -A OUTPUT -p tcp --dport 953 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+  iptables -A OUTPUT -p udp --dport 53 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+  iptables -A OUTPUT -p udp --dport 953 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+  iptables -A INPUT -p udp --dport 123 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+  iptables -A OUTPUT -p udp --dport 123 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+  allowSysLog   # Allows syslogs to be forwarded to datalake
+  showFirewall  # Lists firewall rules applied to the system
+}
+
+while getopts 'dfij :' OPTION; do
+  case "$OPTION" in
+    d)
+      echo "Appling firewall rules for DNS-NTP..."
+      setDNS-NTP
+      ;;
+    f)
+      echo "Removing all firewall rules..."
+      flushFirewall
+      ;;
+    i)
+      read -p "Enter IP address for HIDS server" hip
+      echo "Applying firewall rules for HIDS clients"
+      enableHIDSClient $hip
+      ;;
+    j)
+      read -p "Enter network IP address for HIDS clients" hip
+      echo "Applying firewall rules for HIDS server"
+      enableHIDSserver $hip
+      ;;
+    ?)
+      echo -e -n "${YELLOW}"
+      echo -e "Correct usage:\t $(basename $0) -flag(s)"
+      echo -e "-d\t Applies firewall rules for DNS/NTP"
+      echo -e "-f\t Deletes all firewall rules"
+      echo -e "-i\t Applies firewall rules for HIDS clients"
+      echo -e "-j\t Applies firewall rules for HIDS server"
+      echo -e "-h\t or any unlisted flag returns this message."
+      echo -e "${RESET}"
+      exit 1
+      ;;
+  esac
+done
