@@ -45,12 +45,3 @@ enableWebBrowsing(){
 enableDNSclient(){
   iptables -A OUTPUT -p udp --dport 53 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 }
-
-# Rules for Wazuh clients needs Wazuh server identification
-enableWazuhClient(){
-  iptables -A OUTPUT -p tcp --dport 1514 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT  #Agent connection
-  iptables -A OUTPUT -p udp --dport 1514 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT  #Agent connection
-  iptables -A OUTPUT -p tcp --dport 1515 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT  #Agent enrollment
-  iptables -A OUTPUT -p tcp --dport 514 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT  #Syslog collector
-  iptables -A OUTPUT -p udp --dport 514 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT  #Syslog collector
-}
