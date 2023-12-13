@@ -154,9 +154,18 @@ setSplunk(){
   iptables -A INPUT -p tcp --dport 601 -j ACCEPT
   iptables -A INPUT -p udp --dport 514 -j ACCEPT
 
+
   # Kill SSH traffic
   iptables -A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j DROP
   iptables -A OUTPUT -p tcp --sport 22 -m state --state ESTABLISHED -j DROP
+
+  # Allow established connections
+  iptables -A INPUT -m state --state ESTABLISHED -j ACCEPT
+  
+  # Drop all input and forward
+  iptables -P INPUT DROP
+  iptables -P FORWARD DROP
+
 
   #allowSysLog   # Opens the required ports for syslogs to be forwarded to datalake
   dropAll
