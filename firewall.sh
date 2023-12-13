@@ -139,9 +139,7 @@ setSplunk(){
   iptables -A OUTPUT -o lo -j ACCEPT
 
   # HTTP & HTTPS rules 
-  iptables -A INPUT -p tcp --sport 80 -j ACCEPT
   iptables -A OUTPUT -p tcp --dport 80 -j ACCEPT
-  iptables -A INPUT -p tcp --sport 443 -j ACCEPT
   iptables -A OUTPUT -p tcp --dport 443 -j ACCEPT
 
   # Splunk WebGUI rules 
@@ -156,10 +154,6 @@ setSplunk(){
   iptables -A INPUT -p tcp --dport 9998 -j ACCEPT
   iptables -A INPUT -p tcp --dport 601 -j ACCEPT
   iptables -A INPUT -p udp --dport 514 -j ACCEPT
-
-  # Kill SSH traffic
-  iptables -A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j DROP
-  iptables -A OUTPUT -p tcp --sport 22 -m state --state ESTABLISHED -j DROP
 
   # Allow established connections
   iptables -A INPUT -m state --state ESTABLISHED -j ACCEPT
