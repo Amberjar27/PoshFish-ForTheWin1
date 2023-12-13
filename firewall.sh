@@ -20,8 +20,10 @@ RESET='\033[0m'
 
 # Drops attempted connections on ports not already explicityly defined as ACCEPT
 dropAll(){
-  iptables -A INPUT -j DROP
-  iptables -A OUTPUT -j DROP #needs testing, but needed to prevent reverse shells on unused ports.
+  iptables -A INPUT -m state --state ESTABLISHED -j ACCEPT
+  iptables -P FORWARD -j DROP
+  iptables -P INPUT -j DROP
+  iptables -P OUTPUT -j DROP #needs testing, but needed to prevent reverse shells on unused ports.
 }
 
 logFirewallEvents(){
@@ -152,6 +154,11 @@ setSplunk(){
   iptables -A INPUT -p tcp --dport 601 -j ACCEPT
   iptables -A INPUT -p udp --dport 514 -j ACCEPT
 
+
+  # Kill SSH traffic
+  iptables -A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j DROP
+  iptables -A OUTPUT -p tcp --sport 22 -m state --state ESTABLISHED -j DROP
+
   # Allow established connections
   iptables -A INPUT -m state --state ESTABLISHED -j ACCEPT
   
@@ -159,8 +166,9 @@ setSplunk(){
   iptables -P INPUT DROP
   iptables -P FORWARD DROP
 
+
   #allowSysLog   # Opens the required ports for syslogs to be forwarded to datalake
-  #dropAll
+  dropAll
   showFirewall
 }
 
