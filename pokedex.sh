@@ -18,35 +18,22 @@ RESET='\033[0m'
 
 # Sets the default policy to drop any attempted connections not explicitly 
 # allowed by other rules
-dropAll(){
+defaultPolicy(){
   iptables --policy INPUT DROP
   iptables --policy FORWARD DROP
   iptables --policy OUTPUT DROP
-}
-
-showFirewall(){
-  echo -e -n "${GREEN}"
-  echo -e "...DONE"
-  echo -e -n "${CYAN}"
-  iptables -L --line-numbers
-  echo -e "${RESET}"
-}
-
-# Allows all incoming connections that are self-initiated 
-allowSelf-started(){
+  iptables -A INPUT -i lo -j ACCEPT
+  iptables -A OUTPUT -o lo -j ACCEPT
   iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
-}
-
-# Allows connections on the loopback adapter
-allowLoopback(){
-  iptables -A OUTPUT -o lo -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 }
 
 # Allow web browsing
 allowWebBrowsing(){
-  iptables -A OUTPUT -p tcp --dport 80 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
-  iptables -A OUTPUT -p tcp --dport 443 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
-  iptables -A OUTPUT -p udp --dport 443 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+  iptables -A OUTPUT -p tcp --dport 53 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+  iptables -A OUTPUT -p udp --dport 53 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+  iptables -A OUTPUT -p tcp --dport 80 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+  iptables -A OUTPUT -p tcp --dport 443 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+  iptables -A OUTPUT -p udp --dport 443 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
 }
 
 # Rule for a DNS/NTP clients
@@ -85,6 +72,7 @@ flushFirewall(){
   iptables --policy FORWARD ACCEPT
   iptables --policy OUTPUT ACCEPT
   echo -e -n "${RED}"
+  iptables -L
   echo "Firewall rules removed, default policy set to ACCEPT user beware!"
   echo -e "${RESET}"
 }
@@ -117,7 +105,7 @@ setDNS-NTP(){
   showFirewall  # Lists firewall rules applied to the system
 }
 
-while getopts 'dfij :' OPTION; do
+while getopts 'dfijs :' OPTION; do
   case "$OPTION" in
     d)
       echo "Appling firewall rules for DNS-NTP..."
@@ -136,6 +124,12 @@ while getopts 'dfij :' OPTION; do
       read -p "Enter network IP address for HIDS clients" hip
       echo "Applying firewall rules for HIDS server"
       allowHIDSserver $hip
+      ;;
+    s)
+      echo "Applying secure firewall rules..."
+      defaultPolicy
+      allowWebBrowsing
+      showFirewall
       ;;
     ?)
       echo -e -n "${YELLOW}"
