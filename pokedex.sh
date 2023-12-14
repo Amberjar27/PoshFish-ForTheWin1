@@ -86,10 +86,8 @@ showFirewall(){
 }
 
 setDNS-NTP(){
-  dropAll
-  allowSelf-started
+  defaultPolicy
   allowWebBrowsing
-  allowLoopback
   allowICMP
   iptables -A INPUT -p tcp --sport 53 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
   iptables -A INPUT -p tcp --sport 953 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
