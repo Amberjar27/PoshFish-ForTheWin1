@@ -38,9 +38,9 @@ allowWebBrowsing(){
 
 # Rule for a DNS/NTP clients
 allowDNSNTPclient(){
-  iptables -A OUTPUT -p tcp --dport 53 -d $1 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
-  iptables -A OUTPUT -p udp --dport 53 -d $1 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
-  iptables -A OUTPUT -p udp --dport 123 -d $1 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+  iptables -A OUTPUT -p tcp --dport 53 -d -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+  iptables -A OUTPUT -p udp --dport 53 -d -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+  iptables -A OUTPUT -p udp --dport 123 -d -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 }
 
 # Rules for HIDS clients
@@ -89,16 +89,16 @@ setDNS-NTP(){
   defaultPolicy
   allowWebBrowsing
   allowICMP
-  iptables -A INPUT -p tcp --sport 53 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
-  iptables -A INPUT -p tcp --sport 953 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
-  iptables -A INPUT -p udp --sport 53 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
-  iptables -A INPUT -p udp --sport 953 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
-  iptables -A OUTPUT -p tcp --dport 53 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
-  iptables -A OUTPUT -p tcp --dport 953 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
-  iptables -A OUTPUT -p udp --dport 53 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
-  iptables -A OUTPUT -p udp --dport 953 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+  iptables -A INPUT -p tcp --dport 53 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+  iptables -A INPUT -p tcp --dport 953 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+  iptables -A INPUT -p udp --dport 53 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+  iptables -A INPUT -p udp --dport 953 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+  iptables -A OUTPUT -p tcp --sport 53 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+  iptables -A OUTPUT -p tcp --sport 953 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+  iptables -A OUTPUT -p udp --sport 53 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+  iptables -A OUTPUT -p udp --sport 953 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
   iptables -A INPUT -p udp --dport 123 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
-  iptables -A OUTPUT -p udp --dport 123 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+  iptables -A OUTPUT -p udp --sport 123 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
   allowSysLog   # Allows syslogs to be forwarded to datalake
   showFirewall  # Lists firewall rules applied to the system
 }
