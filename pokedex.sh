@@ -17,7 +17,8 @@ CYAN='\033[0;36m'
 RESET='\033[0m'
 
 # Sets the default policy to drop any attempted connections not explicitly 
-# allowed by other rules
+# allowed by other rules & allows inbound connections initiated by us as 
+# well as enabling communication on the loopback adapter
 defaultPolicy(){
   iptables --policy INPUT DROP
   iptables --policy FORWARD DROP
@@ -71,10 +72,6 @@ flushFirewall(){
   iptables --policy INPUT ACCEPT
   iptables --policy FORWARD ACCEPT
   iptables --policy OUTPUT ACCEPT
-  echo -e -n "${RED}"
-  iptables -L
-  echo "Firewall rules removed, default policy set to ACCEPT user beware!"
-  echo -e "${RESET}"
 }
 
 showFirewall(){
@@ -86,9 +83,11 @@ showFirewall(){
 }
 
 setDNS-NTP(){
+  flushFirewall  #Removes any potentially bad rules
   defaultPolicy
   allowWebBrowsing
   allowICMP
+  allowSysLog 
   # Rules for DNS/NTP server
   iptables -A INPUT -p tcp --dport 53 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
   iptables -A INPUT -p tcp --dport 953 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
@@ -107,10 +106,33 @@ setDNS-NTP(){
   iptables -A OUTPUT -p udp --dport 53 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
   iptables -A OUTPUT -p udp --dport 953 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
   iptables -A OUTPUT -p udp --dport 123 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+  showFirewall  
+}
+
+setSplunk(){
+  flushFirewall  #Removes any potentially bad rules
+  defaultPolicy
+  allowWebBrowsing
+  allowICMP
+  allowSysLog 
+  allowDNSNTPclient
   
+  # Splunk WebGUI rules 
+  iptables -A INPUT -p tcp --dport 8000 -j ACCEPT
+  iptables -A OUTPUT -p tcp --sport 8000 -j ACCEPT
+
+  # Splunk Management Port
+  iptables -A INPUT -p tcp --dport 8089 -j ACCEPT
+
+  # Syslog traffic
+  iptables -A INPUT -p tcp --dport 9997 -j ACCEPT
+  iptables -A INPUT -p tcp --dport 9998 -j ACCEPT
+  iptables -A INPUT -p tcp --dport 601 -j ACCEPT
+  iptables -A INPUT -p udp --dport 514 -j ACCEPT
   
-  allowSysLog   # Allows syslogs to be forwarded to datalake
-  showFirewall  # Lists firewall rules applied to the system
+  allowSysLog
+  dropall
+  showFirewall
 }
 
 while getopts 'dfijs :' OPTION; do
@@ -124,6 +146,10 @@ while getopts 'dfijs :' OPTION; do
     f)
       echo "Removing all firewall rules..."
       flushFirewall
+      echo -e -n "${RED}"
+      iptables -L
+      echo "Firewall rules removed, default policy set to ACCEPT user beware!"
+      echo -e "${RESET}"
       ;;
     i)
       read -p "Enter IP address for HIDS server" hip
