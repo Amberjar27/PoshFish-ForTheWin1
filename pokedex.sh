@@ -89,16 +89,26 @@ setDNS-NTP(){
   defaultPolicy
   allowWebBrowsing
   allowICMP
+  # Rules for DNS/NTP server
   iptables -A INPUT -p tcp --dport 53 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
   iptables -A INPUT -p tcp --dport 953 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
   iptables -A INPUT -p udp --dport 53 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
   iptables -A INPUT -p udp --dport 953 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
-  iptables -A OUTPUT -p tcp --sport 53 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
-  iptables -A OUTPUT -p tcp --sport 953 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
-  iptables -A OUTPUT -p udp --sport 53 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
-  iptables -A OUTPUT -p udp --sport 953 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+  iptables -A OUTPUT -p tcp --sport 53 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+  iptables -A OUTPUT -p tcp --sport 953 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+  iptables -A OUTPUT -p udp --sport 53 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+  iptables -A OUTPUT -p udp --sport 953 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
   iptables -A INPUT -p udp --dport 123 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
-  iptables -A OUTPUT -p udp --sport 123 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+  iptables -A OUTPUT -p udp --sport 123 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+  
+  # Rules for DNS/NTP client of opstream provider(s)
+  iptables -A OUTPUT -p tcp --dport 53 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+  iptables -A OUTPUT -p tcp --dport 953 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+  iptables -A OUTPUT -p udp --dport 53 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+  iptables -A OUTPUT -p udp --dport 953 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+  iptables -A OUTPUT -p udp --dport 123 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+  
+  
   allowSysLog   # Allows syslogs to be forwarded to datalake
   showFirewall  # Lists firewall rules applied to the system
 }
@@ -107,6 +117,8 @@ while getopts 'dfijs :' OPTION; do
   case "$OPTION" in
     d)
       echo "Appling firewall rules for DNS-NTP..."
+      defaultPolicy
+      allowWebBrowsing
       setDNS-NTP
       ;;
     f)
