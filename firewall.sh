@@ -155,6 +155,9 @@ setSplunk(){
                                                    #A safer option would be to specify an IP or 
                                                    #range of IPs allowed to use this port. See
                                                    #the next 2 (commented) lines for an example
+                                                   #Alternatively, you could define the loopback
+                                                   #interface here to only allow you access.
+                                                   
   #read -p "Enter your IP address " sip                                               
   #iptables -A INPUT -p tcp --dport 8089 -d $sip -j ACCEPT
 
