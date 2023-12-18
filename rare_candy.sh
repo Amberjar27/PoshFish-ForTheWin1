@@ -64,17 +64,17 @@ updateToDeb11(){
 updateToDeb12(){
   cp /etc/apt/sources.list /etc/apt/sources.list.11
   
-  echo "deb http://deb.debian.org/debian bookworm main contrib non-free-frimware non-free" > /etc/apt/sources.list
-  echo "deb-src http://deb.debian.org/debian bookworm main contrib non-free-frimware non-free" >> /etc/apt/sources.list
+  echo "deb http://deb.debian.org/debian bookworm main contrib non-free-firmware non-free" > /etc/apt/sources.list
+  echo "deb-src http://deb.debian.org/debian bookworm main contrib non-free-firmware non-free" >> /etc/apt/sources.list
 
-  echo "deb http://deb.debian.org/debian bookworm-updates main contrib non-free-frimware non-free" >> /etc/apt/sources.list
-  echo "deb-src http://deb.debian.org/debian bookworm-updates main contrib non-free-frimware non-free" >> /etc/apt/sources.list
+  echo "deb http://deb.debian.org/debian bookworm-updates main contrib non-free-firmware non-free" >> /etc/apt/sources.list
+  echo "deb-src http://deb.debian.org/debian bookworm-updates main contrib non-free-firmware non-free" >> /etc/apt/sources.list
 
-  echo "deb http://deb.debian.org/debian bookworm-backports main contrib non-free-frimware non-free" >> /etc/apt/sources.list
-  echo "deb-src http://deb.debian.org/debian bookworm-backports main contrib non-free-frimware non-free" >> /etc/apt/sources.list
+  echo "deb http://deb.debian.org/debian bookworm-backports main contrib non-free-firmware non-free" >> /etc/apt/sources.list
+  echo "deb-src http://deb.debian.org/debian bookworm-backports main contrib non-free-firmware non-free" >> /etc/apt/sources.list
 
-  echo "deb http://deb.debian.org/debian-security bookworm-security main contrib non-free-frimware non-free" >> /etc/apt/sources.list
-  echo "deb-src http://deb.debian.org/debian-security bookworm-security main contrib non-free-frimware non-free" >> /etc/apt/sources.list
+  echo "deb http://deb.debian.org/debian-security bookworm-security main contrib non-free-firmware non-free" >> /etc/apt/sources.list
+  echo "deb-src http://deb.debian.org/debian-security bookworm-security main contrib non-free-firmware non-free" >> /etc/apt/sources.list
 
   apt-get update && apt-get dist-upgrade --force-yes -y
   sed -i 's/rare_candy.sh -d/echo "You have reached the maximum level"/g' /etc/profile
