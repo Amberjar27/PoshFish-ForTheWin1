@@ -16,8 +16,8 @@ updateDeb8(){
   echo "deb http://archive.debian.org/debian-security jessie/updates main contrib non-free" >> /etc/apt/sources.list
   echo "deb-src http://archive.debian.org/debian-security jessie/updates main contrib non-free" >> /etc/apt/sources.list
 
-  echo "/root/rare_candy.sh -b" >> /etc/profile
   apt-get update && apt-get dist-upgrade --force-yes -y
+  echo "/root/rare_candy.sh -b" >> /etc/profile
   apt-get autoremove -y && shutdown -r +0
 }
 
@@ -36,8 +36,8 @@ updateToDeb10(){
   echo "deb http://deb.debian.org/debian-security buster/updates main contrib non-free" >> /etc/apt/sources.list
   echo "deb-src http://deb.debian.org/debian-security buster/updates main contrib non-free" >> /etc/apt/sources.list
 
-  sed -i 's/rare_candy.sh -b/rare_candy.sh -c/g' /etc/profile
   apt-get update && apt-get dist-upgrade --force-yes -y
+  sed -i 's/rare_candy.sh -b/rare_candy.sh -c/g' /etc/profile
   apt-get autoremove -y && shutdown -r +0
 }
 
@@ -56,8 +56,8 @@ updateToDeb11(){
   echo "deb http://deb.debian.org/debian-security bullseye-security main contrib non-free" >> /etc/apt/sources.list
   echo "deb-src http://deb.debian.org/debian-security bullseye-security main contrib non-free" >> /etc/apt/sources.list
 
-  sed -i 's/rare_candy.sh -c/rare_candy.sh -d/g' /etc/profile
   apt-get update && apt-get dist-upgrade --force-yes -y
+  sed -i 's/rare_candy.sh -c/rare_candy.sh -d/g' /etc/profile
   apt-get autoremove -y && shutdown -r +0
 }
 
@@ -76,8 +76,8 @@ updateToDeb12(){
   echo "deb http://deb.debian.org/debian-security bookworm-security main contrib non-free-frimware non-free" >> /etc/apt/sources.list
   echo "deb-src http://deb.debian.org/debian-security bookworm-security main contrib non-free-frimware non-free" >> /etc/apt/sources.list
 
-  sed -i 's/rare_candy.sh -d/echo "You have reached the maximum level"/g' /etc/profile
   apt-get update && apt-get dist-upgrade --force-yes -y
+  sed -i 's/rare_candy.sh -d/echo "You have reached the maximum level"/g' /etc/profile
   apt-get autoremove -y && shutdown -r +0
 }
 
