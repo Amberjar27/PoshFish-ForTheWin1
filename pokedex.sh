@@ -26,6 +26,10 @@ defaultPolicy(){
   iptables -A INPUT -i lo -j ACCEPT
   iptables -A OUTPUT -o lo -j ACCEPT
   iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+  ip6tables --policy INPUT DROP
+  ip6tables --policy FORWARD DROP
+  ip6tables --policy OUTPUT DROP
+  
 }
 
 logFirewallEvents(){
@@ -38,6 +42,10 @@ logFirewallEvents(){
   iptables -A INPUT -p tcp ! --syn -m state --state NEW -m limit --limit 1/min -j LOG --log-prefix "SYN packet flood: "
   iptables -A INPUT -p icmp -m limit --limit 1/minute -j LOG --log-prefix "ICMP Flood: "
   iptables -A FORWARD -f -m limit --limit 1/min -j LOG --log-prefix "Hacked Client "
+}
+
+saveIPrulesDebian(){
+  apt-get install iptables-persistent --force-yes -y
 }
 
 # Allow web browsing
@@ -84,6 +92,10 @@ flushFirewall(){
   iptables --policy INPUT ACCEPT
   iptables --policy FORWARD ACCEPT
   iptables --policy OUTPUT ACCEPT
+  ip6tables -F
+  ip6tables --policy INPUT ACCEPT
+  ip6tables --policy FORWARD ACCEPT
+  ip6tables --policy OUTPUT ACCEPT
   echo -e -n "${RED}"
   echo "Firewall rules removed, user beware!"
   echo -e "${RESET}"
@@ -94,6 +106,7 @@ showFirewall(){
   echo -e "...DONE"
   echo -e -n "${CYAN}"
   iptables -L --line-numbers
+  ip6tables -L --line-numbers
   echo -e "${RESET}"
 }
 
@@ -122,6 +135,7 @@ setDNS-NTP(){
   iptables -A OUTPUT -p udp --dport 53 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
   iptables -A OUTPUT -p udp --dport 953 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
   iptables -A OUTPUT -p udp --dport 123 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+  saveIPrulesDebian
   showFirewall  
 }
 
