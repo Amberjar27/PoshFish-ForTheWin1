@@ -16,7 +16,7 @@ updateDeb8(){
   echo "deb http://archive.debian.org/debian-security jessie/updates main contrib non-free" >> /etc/apt/sources.list
   echo "deb-src http://archive.debian.org/debian-security jessie/updates main contrib non-free" >> /etc/apt/sources.list
 
-  echo "rare_candy.sh -a" >> /etc/profile
+  echo "/root/rare_candy.sh -a" >> /etc/profile
   apt-get update && apt-get dist-upgrade --force-yes -y
   apt-get autoremove -y && shutdown -r +0
 }
