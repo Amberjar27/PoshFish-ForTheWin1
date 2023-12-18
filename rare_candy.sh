@@ -83,6 +83,7 @@ updateToDeb12(){
 while getopts 'abc :' OPTION; do
 	case "$OPTION" in
 		a)
+  			updateDeb8
 			updateToDeb10
 			;;
 		b)
