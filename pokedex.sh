@@ -16,9 +16,9 @@ MAGENTA='\033[0;35m'
 CYAN='\033[0;36m'
 RESET='\033[0m'
 
-# Sets the default policy to drop any attempted connections not explicitly 
-# allowed by other rules & allows inbound connections initiated by us as 
-# well as enabling communication on the loopback adapter
+# Sets the default policies to "allow-listing"
+# Allows connections via the loopback adapter
+# Allows inbound connections only if they were started by the host
 defaultPolicy(){
   iptables --policy INPUT DROP
   iptables --policy FORWARD DROP
@@ -28,13 +28,25 @@ defaultPolicy(){
   iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 }
 
+logFirewallEvents(){
+  iptables -A INPUT -m limit --limit 2/min -j LOG --log-prefix "Input-Dropped: " --log-level 4
+  iptables -A FORWARD -m limit --limit 2/min -j LOG --log-prefix "Forward-Dropped: " --log-level 4
+  iptables -A OUTPUT -m limit --limit 2/min -j LOG --log-prefix "Output-Dropped: " --log-level 4
+  iptables -A INPUT -p tcp --tcp-flags ALL NONE -m limit --limit 1/min -j LOG --log-prefix "NULL packet: "
+  iptables -A INPUT -p tcp --tcp-flags ALL ALL -m limit --limit 1/min -j LOG --log-prefix "XMAS packet: "
+  iptables -A INPUT -f -m limit --limit 1/min -j LOG --log-prefix "Fragmented packet: "
+  iptables -A INPUT -p tcp ! --syn -m state --state NEW -m limit --limit 1/min -j LOG --log-prefix "SYN packet flood: "
+  iptables -A INPUT -p icmp -m limit --limit 1/minute -j LOG --log-prefix "ICMP Flood: "
+  iptables -A FORWARD -f -m limit --limit 1/min -j LOG --log-prefix "Hacked Client "
+}
+
 # Allow web browsing
 allowWebBrowsing(){
-  iptables -A OUTPUT -p tcp --dport 53 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
-  iptables -A OUTPUT -p udp --dport 53 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
-  iptables -A OUTPUT -p tcp --dport 80 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
-  iptables -A OUTPUT -p tcp --dport 443 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
-  iptables -A OUTPUT -p udp --dport 443 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+  iptables -A OUTPUT -p tcp --dport 53 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+  iptables -A OUTPUT -p udp --dport 53 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+  iptables -A OUTPUT -p tcp --dport 80 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+  iptables -A OUTPUT -p tcp --dport 443 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+  iptables -A OUTPUT -p udp --dport 443 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 }
 
 # Rule for a DNS/NTP clients
@@ -72,6 +84,9 @@ flushFirewall(){
   iptables --policy INPUT ACCEPT
   iptables --policy FORWARD ACCEPT
   iptables --policy OUTPUT ACCEPT
+  echo -e -n "${RED}"
+  echo "Firewall rules removed, user beware!"
+  echo -e "${RESET}"
 }
 
 showFirewall(){
@@ -84,6 +99,7 @@ showFirewall(){
 
 setDNS-NTP(){
   flushFirewall  #Removes any potentially bad rules
+  logFirewallEvents
   defaultPolicy
   allowWebBrowsing
   allowICMP
@@ -100,7 +116,7 @@ setDNS-NTP(){
   iptables -A INPUT -p udp --dport 123 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
   iptables -A OUTPUT -p udp --sport 123 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
   
-  # Rules for DNS/NTP client of opstream provider(s)
+  # Rules for DNS/NTP client of upstream provider(s)
   iptables -A OUTPUT -p tcp --dport 53 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
   iptables -A OUTPUT -p tcp --dport 953 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
   iptables -A OUTPUT -p udp --dport 53 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
