@@ -16,7 +16,7 @@ updateDeb8(){
   echo "deb http://archive.debian.org/debian-security jessie/updates main contrib non-free" >> /etc/apt/sources.list
   echo "deb-src http://archive.debian.org/debian-security jessie/updates main contrib non-free" >> /etc/apt/sources.list
 
-  echo "/root/rare_candy.sh -a" >> /etc/profile
+  echo "/root/rare_candy.sh -b" >> /etc/profile
   apt-get update && apt-get dist-upgrade --force-yes -y
   apt-get autoremove -y && shutdown -r +0
 }
@@ -36,7 +36,7 @@ updateToDeb10(){
   echo "deb http://deb.debian.org/debian-security buster/updates main contrib non-free" >> /etc/apt/sources.list
   echo "deb-src http://deb.debian.org/debian-security buster/updates main contrib non-free" >> /etc/apt/sources.list
 
-  sed -i 's/rare_candy.sh -a/rare_candy.sh -b/g' /etc/profile
+  sed -i 's/rare_candy.sh -b/rare_candy.sh -c/g' /etc/profile
   apt-get update && apt-get dist-upgrade --force-yes -y
   apt-get autoremove -y && shutdown -r +0
 }
@@ -56,7 +56,7 @@ updateToDeb11(){
   echo "deb http://deb.debian.org/debian-security bullseye-security main contrib non-free" >> /etc/apt/sources.list
   echo "deb-src http://deb.debian.org/debian-security bullseye-security main contrib non-free" >> /etc/apt/sources.list
 
-  sed -i 's/rare_candy.sh -b/rare_candy.sh -c/g' /etc/profile
+  sed -i 's/rare_candy.sh -c/rare_candy.sh -d/g' /etc/profile
   apt-get update && apt-get dist-upgrade --force-yes -y
   apt-get autoremove -y && shutdown -r +0
 }
@@ -80,17 +80,19 @@ updateToDeb12(){
   apt-get autoremove -y && shutdown -r +0
 }
 
-while getopts 'abc :' OPTION; do
+while getopts 'abcd :' OPTION; do
 	case "$OPTION" in
 		a)
   			updateDeb8
+     			;;
+		b)
 			updateToDeb10
 			;;
-		b)
+		c)
 			updateToDeb11
 			;;
-		c)
-			updateToDeb12
+   		d)
+     			updateToDeb12
 			;;
 		?)
 			echo -e -n "${YELLOW}"
@@ -98,6 +100,7 @@ while getopts 'abc :' OPTION; do
 			echo -e "-a\t Perform initial upgrade process"
 			echo -e "-b\t Perform secondary upgrade process"
 			echo -e "-c\t Perform tertiary upgrade process"
+   			echo -e "-d\t Perform tertiary upgrade process"
 			echo -e "${RESET}"
 			exit 1
 			;;
