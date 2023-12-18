@@ -101,7 +101,7 @@ while getopts 'abcd :' OPTION; do
 			echo -e "-a\t Perform initial upgrade process"
 			echo -e "-b\t Perform secondary upgrade process"
 			echo -e "-c\t Perform tertiary upgrade process"
-   			echo -e "-d\t Perform tertiary upgrade process"
+   			echo -e "-d\t Perform final upgrade process"
 			echo -e "${RESET}"
 			exit 1
 			;;
