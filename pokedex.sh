@@ -83,7 +83,7 @@ allowHIDSClient(){
 }
 
 # Rule for a syslog clients
-allowSysLog(){
+allowClientSysLog(){
   read -p "Enter IP address for Splunk server" sip
   iptables -A OUTPUT -p tcp --dport 9997 -d $sip -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
   iptables -A OUTPUT -p tcp --dport 9998 -d $sip -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
@@ -122,7 +122,7 @@ setDNS-NTP(){
   defaultPolicy
   allowWebBrowsing
   allowICMP
-  allowSysLog 
+  allowClientSysLog 
   # Rules for DNS/NTP server
   iptables -A INPUT -p tcp --dport 53 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
   iptables -A INPUT -p tcp --dport 953 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
