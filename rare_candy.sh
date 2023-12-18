@@ -76,7 +76,7 @@ updateToDeb12(){
   echo "deb http://deb.debian.org/debian-security bookworm-security main contrib non-free-frimware non-free" >> /etc/apt/sources.list
   echo "deb-src http://deb.debian.org/debian-security bookworm-security main contrib non-free-frimware non-free" >> /etc/apt/sources.list
 
-  sed -i 's/rare_candy.sh -d/ /g' /etc/profile
+  sed -i 's/rare_candy.sh -d/echo "You have reached the maximum level"/g' /etc/profile
   apt-get update && apt-get dist-upgrade --force-yes -y
   apt-get autoremove -y && shutdown -r +0
 }
