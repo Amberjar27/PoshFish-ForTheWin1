@@ -148,11 +148,7 @@ setSplunk(){
   
   # Splunk WebGUI rules 
   iptables -A INPUT -p tcp --dport 8000 -j ACCEPT  #See note on management port
-  iptables -A OUTPUT -p tcp --sport 8000 -j ACCEPT #TCP connections typically do not allow
-                                                   #you to specify a source port, only a 
-                                                   #destination port. This rule should be 
-                                                   #amended to "--dport" or removed if not
-                                                   #needed
+  iptables -A OUTPUT -p tcp --sport 8000 -j ACCEPT 
 
   # Splunk Management Port
   iptables -A INPUT -p tcp --dport 8089 -j ACCEPT  #This opens up the management port to EVERYONE
