@@ -48,6 +48,15 @@ saveIPrulesDebian(){
   apt-get install iptables-persistent --force-yes -y
 }
 
+saveIPrulesCent(){
+  systemctl stop firewalld
+  systemctl disable firewalld
+  systemctl start iptables
+  systemctl enable iptables
+  iptables-save > /etc/sysconfig/iptables
+  ip6tables-save > /etc/sysconfig/iptables
+}
+
 # Allow web browsing
 allowWebBrowsing(){
   iptables -A OUTPUT -p tcp --dport 53 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
@@ -160,8 +169,7 @@ setSplunk(){
   iptables -A INPUT -p tcp --dport 601 -j ACCEPT
   iptables -A INPUT -p udp --dport 514 -j ACCEPT
   
-  allowSysLog
-  dropall
+  saveIPrulesCent
   showFirewall
 }
 
