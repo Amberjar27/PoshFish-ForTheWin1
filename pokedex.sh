@@ -98,16 +98,13 @@ allowICMP(){
 
 flushFirewall(){
   iptables -F
+  ip6tables -F
   iptables --policy INPUT ACCEPT
   iptables --policy FORWARD ACCEPT
   iptables --policy OUTPUT ACCEPT
-  ip6tables -F
   ip6tables --policy INPUT ACCEPT
   ip6tables --policy FORWARD ACCEPT
   ip6tables --policy OUTPUT ACCEPT
-  echo -e -n "${RED}"
-  echo "Firewall rules removed, user beware!"
-  echo -e "${RESET}"
 }
 
 showFirewall(){
@@ -186,6 +183,7 @@ while getopts 'dfijs :' OPTION; do
       flushFirewall
       echo -e -n "${RED}"
       iptables -L
+      ip6tables -L
       echo "Firewall rules removed, default policy set to ACCEPT user beware!"
       echo -e "${RESET}"
       ;;
