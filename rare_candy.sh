@@ -77,7 +77,8 @@ updateToDeb12(){
   echo "deb-src http://deb.debian.org/debian-security bookworm-security main contrib non-free-firmware non-free" >> /etc/apt/sources.list
 
   apt-get update && apt-get dist-upgrade --force-yes -y
-  sed -i 's+/root/PoshFish-ForTheWin/rare_candy.sh -d+echo "You have reached the maximum level"+g' /etc/profile
+#  sed -i 's+/root/PoshFish-ForTheWin/rare_candy.sh -d+echo "You have reached the maximum level"+g' /etc/profile
+  sed -i 's/rare_candy.sh -d/pokedex.sh -d"/g' /etc/profile
   apt-get autoremove -y && shutdown -r +0
 }
 
