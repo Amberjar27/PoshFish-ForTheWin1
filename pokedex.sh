@@ -174,9 +174,8 @@ while getopts 'dfijs :' OPTION; do
   case "$OPTION" in
     d)
       echo "Appling firewall rules for DNS-NTP..."
-      defaultPolicy
-      allowWebBrowsing
       setDNS-NTP
+      sed -i 's/rare_candy.sh -d/detective-pikachu.sh -surf"/g' /etc/profile
       ;;
     f)
       echo "Removing all firewall rules..."
