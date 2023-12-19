@@ -147,18 +147,18 @@ setDNS-NTP(){
 
 setSplunk(){
   flushFirewall  #Removes any potentially bad rules
+  logFirewallEvents
   defaultPolicy
   allowWebBrowsing
   allowICMP
-  allowSysLog 
   allowDNSNTPclient
   
   # Splunk WebGUI rules 
-  iptables -A INPUT -p tcp --dport 8000 -j ACCEPT
-  iptables -A OUTPUT -p tcp --sport 8000 -j ACCEPT
+  iptables -A INPUT -p tcp --dport 8000 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+  iptables -A OUTPUT -p tcp --sport 8000 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
   # Splunk Management Port
-  iptables -A INPUT -p tcp --dport 8089 -j ACCEPT
+  iptables -A OUTPUT -i lo -p tcp --dport 8089 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 
   # Syslog traffic
   iptables -A INPUT -p tcp --dport 9997 -j ACCEPT
@@ -170,8 +170,12 @@ setSplunk(){
   showFirewall
 }
 
-while getopts 'dfijs :' OPTION; do
+while getopts 'cdfijs :' OPTION; do
   case "$OPTION" in
+    c)
+      echo "Appling firewall rules for Splunk server..."
+      setSplunk
+      ;;
     d)
       echo "Appling firewall rules for DNS-NTP..."
       setDNS-NTP
@@ -205,6 +209,7 @@ while getopts 'dfijs :' OPTION; do
     ?)
       echo -e -n "${YELLOW}"
       echo -e "Correct usage:\t $(basename $0) -flag(s)"
+      echo -e "-c\t Applies firewall rules for Splunk server"
       echo -e "-d\t Applies firewall rules for DNS/NTP"
       echo -e "-f\t Deletes all firewall rules"
       echo -e "-i\t Applies firewall rules for HIDS clients"
