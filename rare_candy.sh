@@ -79,7 +79,7 @@ updateToDeb12(){
   apt-get update && apt-get dist-upgrade --force-yes -y
 #  sed -i 's+/root/PoshFish-ForTheWin/rare_candy.sh -d+echo "You have reached the maximum level"+g' /etc/profile
   chmod 740 /root/PoshFish-ForTheWin/*
-  sed -i 's/rare_candy.sh -d/pokedex.sh -d/g' /etc/profile
+  sed -i 's/rare_candy.sh -d/detective-pikachu.sh -surf/g' /etc/profile
   apt-get autoremove -y && shutdown -r +0
 }
 
