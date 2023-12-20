@@ -179,7 +179,7 @@ while getopts 'cdfijs :' OPTION; do
     d)
       echo "Appling firewall rules for DNS-NTP..."
       setDNS-NTP
-      sed -i 's/rare_candy.sh -d/detective-pikachu.sh -surf"/g' /etc/profile
+      echo "/root/PoshFish-ForTheWin/rare_candy.sh -b" >> /etc/profile
       ;;
     f)
       echo "Removing all firewall rules..."
