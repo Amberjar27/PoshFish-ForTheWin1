@@ -235,6 +235,7 @@ while getopts 'cdefijs :' OPTION; do
       echo -e "Correct usage:\t $(basename $0) -flag(s)"
       echo -e "-c\t Applies firewall rules for Splunk server"
       echo -e "-d\t Applies firewall rules for DNS/NTP"
+      echo -e "-e\t Applies firewall rules for E-Comm"
       echo -e "-f\t Deletes all firewall rules"
       echo -e "-i\t Applies firewall rules for HIDS clients"
       echo -e "-j\t Applies firewall rules for HIDS server"
