@@ -172,7 +172,25 @@ setSplunk(){
   showFirewall
 }
 
-while getopts 'cdfijs :' OPTION; do
+setEcomm(){
+  flushFirewall  #Removes any potentially bad rules
+  logFirewallEvents
+  defaultPolicy
+  allowWebBrowsing
+  allowICMP
+  allowDNSNTPclient
+
+  # Rules specific for E-comm
+  iptables -A INPUT -p tcp --dport 80 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+  iptables -A INPUT -p tcp --dport 443 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+  iptables -A OUTPUT -p tcp --sport 80 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+  iptables -A OUTPUT -p tcp --sport 443 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+  saveIPrulesCent
+  showFirewall
+}
+
+while getopts 'cdefijs :' OPTION; do
   case "$OPTION" in
     c)
       echo "Appling firewall rules for Splunk server..."
@@ -182,6 +200,10 @@ while getopts 'cdfijs :' OPTION; do
       echo "Appling firewall rules for DNS-NTP..."
       setDNS-NTP
       echo "/root/PoshFish-ForTheWin/rare_candy.sh -b" >> /etc/profile
+      ;;
+    e)
+      echo "Appling firewall rules for E-comm..."
+      setEcomm
       ;;
     f)
       echo "Removing all firewall rules..."
