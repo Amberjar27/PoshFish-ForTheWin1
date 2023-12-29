@@ -167,8 +167,10 @@ setSplunk(){
   iptables -A INPUT -p tcp --dport 9998 -j ACCEPT
   iptables -A INPUT -p tcp --dport 601 -j ACCEPT
   iptables -A INPUT -p udp --dport 514 -j ACCEPT
+
+  #Uncomment line below if Splunk ends up on CentOS7
+  #saveIPrulesCent
   
-  saveIPrulesCent
   showFirewall
 }
 
