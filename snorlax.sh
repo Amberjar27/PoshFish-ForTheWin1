@@ -13,12 +13,12 @@ echo "Grabbing scripts"
 curl https://raw.githubusercontent.com/K7-Avenger/PoshFish-ForTheWin/main/porygon.sh > porygon.sh
 chmod 755 porygon.sh
 
-./porygon -r
+./porygon r
 yum update -y
 
 
 #Deploying Firewall
-./porygon -f 2>/dev/null
+./porygon f 2>/dev/null
 
 echo "Time to change the root password"
 passwd root
