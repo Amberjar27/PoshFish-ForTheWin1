@@ -5,20 +5,17 @@
 echo "Setting stuff up"
 echo "Grabbing scripts"
 
-#Hopefully, a team member can pull this script down immediately and you can pull it over with SCP in the first minutes.
-#Otherwise, you will need to manually change the repos and run yum update -y before pulling this script over with
-#curl. There is an SSL error for pulling from github on the version of curl that comes on CentOS6.4.
-
 #Grab Porygon script
 curl https://raw.githubusercontent.com/K7-Avenger/PoshFish-ForTheWin/main/porygon.sh > porygon.sh
 chmod 755 porygon.sh
 
-./porygon r
+./porygon -r
+cd ~
 yum update -y
 
 
 #Deploying Firewall
-./porygon f 2>/dev/null
+./porygon -f 2>/dev/null
 
 echo "Time to change the root password"
 passwd root
