@@ -9,18 +9,16 @@ echo "Grabbing scripts"
 #Otherwise, you will need to manually change the repos and run yum update -y before pulling this script over with
 #curl. There is an SSL error for pulling from github on the version of curl that comes on CentOS6.4.
 
-#combine these two into porygon.sh and pull from PoshFish repo
-curl "https://raw.githubusercontent.com/boehkarl/CentOS6/main/repos.sh" >> repos.sh
-curl "https://raw.githubusercontent.com/boehkarl/CentOS6/main/firewall.sh" >> firewall.sh
-chmod 755 repos.sh firewall.sh
+#Grab Porygon script
+https://raw.githubusercontent.com/K7-Avenger/PoshFish-ForTheWin/main/porygon.sh
+chmod 755 porygon.sh
 
-./repos.sh
+./porygon r
 yum update -y
 
 
 #Deploying Firewall
-./firewall.sh -s 2>/dev/null
-service iptables save
+./porygon f 2>/dev/null
 
 echo "Time to change the root password"
 passwd root
