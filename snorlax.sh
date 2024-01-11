@@ -1,3 +1,6 @@
+#Initial Setup script for Splunk on CentOS6 written by Karl Boeh
+#Needs some minor changes as of 1-10-2024
+
 #!/bin/bash
 echo "Setting stuff up"
 echo "Grabbing scripts"
