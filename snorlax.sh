@@ -13,7 +13,6 @@ chmod 755 porygon.sh
 cd ~
 yum update -y
 
-
 #Deploying Firewall
 ./porygon.sh f 2>/dev/null
 
@@ -40,12 +39,15 @@ echo "\$template RemoteLogs, \"var/log/%HOSTNAME%/%PROGRAMNAME%.log\"" >> /etc/r
 echo "*.* ?RemoteLogs" >> /etc/rsyslog.conf
 echo "& ~" >> /etc/rsyslog.conf
 
-
 echo "Now for Gnome!"
 yum groupinstall -y 'X Window System'
 yum groupinstall -y 'Desktop'
 sed -i 's/^id:3:/id:5:/' /etc/inittab
 yum groupinstall -y fonts
+
+cp porygon.sh /opt
+cp porygon.sh /sbin
+cp porygon.sh /etc
 
 #compressed files show up as red which stand out
 #think about ways to fix this and rename the backups to something less noticeable
@@ -53,9 +55,6 @@ cd /sbin
 tar -czf etc_backup_rename.tar.gz /etc
 tar -czf var_backup_rename.tar.gz /var/log
 tar -czf bin_backup_rename.tar.gz /bin
-cp porygon.sh /opt
-cp porygon.sh /sbin
-cp porygon.sh /etc
 
 read -p "Press Enter to reboot into GUI..."
 reboot -f
