@@ -89,7 +89,7 @@ repos(){
   cp CentOS-Base.repo /sbin/
   cd /sbin/; mv CentOS-Base.repo test.test
 }
-
+#Add backup script option
 case $1 in
   f) firewall;;
   r) repos;;
