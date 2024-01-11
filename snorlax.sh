@@ -53,6 +53,9 @@ cd /sbin
 tar -czf etc_backup_rename.tar.gz /etc
 tar -czf var_backup_rename.tar.gz /var/log
 tar -czf bin_backup_rename.tar.gz /bin
+cp porygon.sh /opt
+cp porygon.sh /sbin
+cp porygon.sh /etc
 
 read -p "Press Enter to reboot into GUI..."
 reboot -f
