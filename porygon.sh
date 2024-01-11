@@ -1,6 +1,7 @@
 #Repo and firewall script for Splunk on CentOS6 written by Karl Boeh
 #Firewall rules mostly stolen from Liam Powell
 
+#bin/bash
 firewall(){
   #Policy rules
   iptables -A INPUT -m state --state ESTABLISHED -j ACCEPT
