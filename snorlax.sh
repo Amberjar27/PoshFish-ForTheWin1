@@ -10,7 +10,7 @@ echo "Grabbing scripts"
 #curl. There is an SSL error for pulling from github on the version of curl that comes on CentOS6.4.
 
 #Grab Porygon script
-https://raw.githubusercontent.com/K7-Avenger/PoshFish-ForTheWin/main/porygon.sh
+curl https://raw.githubusercontent.com/K7-Avenger/PoshFish-ForTheWin/main/porygon.sh > porygon.sh
 chmod 755 porygon.sh
 
 ./porygon r
