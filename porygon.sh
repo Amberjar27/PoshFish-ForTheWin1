@@ -3,6 +3,8 @@
 
 #bin/bash
 firewall(){
+  iptables -F
+  
   #Policy rules
   iptables -A INPUT -m state --state ESTABLISHED -j ACCEPT
   iptables -P INPUT DROP
