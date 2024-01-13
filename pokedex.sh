@@ -85,7 +85,6 @@ allowHIDSClient(){
 # Rule for a syslog clients
 allowClientSysLog(){
   read -p "Enter IP address for Splunk server" sip
-  iptables -A OUTPUT -p tcp --dport 9997 -d $sip -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
   iptables -A OUTPUT -p tcp --dport 9998 -d $sip -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
   iptables -A OUTPUT -p tcp --dport 601 -d $sip -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
   iptables -A OUTPUT -p udp --dport 514 -d $sip -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
@@ -163,7 +162,6 @@ setSplunk(){
   iptables -A OUTPUT -i lo -p tcp --dport 8089 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 
   # Syslog traffic
-  iptables -A INPUT -p tcp --dport 9997 -j ACCEPT
   iptables -A INPUT -p tcp --dport 9998 -j ACCEPT
   iptables -A INPUT -p tcp --dport 601 -j ACCEPT
   iptables -A INPUT -p udp --dport 514 -j ACCEPT
