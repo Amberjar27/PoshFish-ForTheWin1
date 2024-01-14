@@ -86,8 +86,9 @@ allowHIDSClient(){
 allowClientSysLog(){
   read -p "Enter IP address for Splunk server" sip
   iptables -A OUTPUT -p tcp --dport 9998 -d $sip -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
-  iptables -A OUTPUT -p tcp --dport 601 -d $sip -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
-  iptables -A OUTPUT -p udp --dport 514 -d $sip -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+  iptables -A OUTPUT -p tcp --dport 1516 -d $sip -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+  iptables -A OUTPUT -p udp --dport 1514 -d $sip -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+  iptables -A OUTPUT -p udp --dport 1515 -d $sip -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 }
 
 allowICMP(){
@@ -163,8 +164,9 @@ setSplunk(){
 
   # Syslog traffic
   iptables -A INPUT -p tcp --dport 9998 -j ACCEPT
-  iptables -A INPUT -p tcp --dport 601 -j ACCEPT
-  iptables -A INPUT -p udp --dport 514 -j ACCEPT
+  iptables -A INPUT -p tcp --dport 1516 -j ACCEPT
+  iptables -A INPUT -p udp --dport 1514 -j ACCEPT
+  iptables -A INPUT -p udp --dport 1515 -j ACCEPT
 
   #Uncomment line below if Splunk ends up on CentOS7
   #saveIPrulesCent
