@@ -88,10 +88,7 @@ repos(){
   cd /etc/yum.repos.d
   mv CentOS-Base.repo CentOS-Base.repo.back
   mv CentOS-Base.repo.bak CentOS-Base.repo
-  cp CentOS-Base.repo /sbin/
-  cd /sbin/; mv CentOS-Base.repo test.test
 }
-#Add backup script option
 case $1 in
   f) firewall;;
   r) repos;;
