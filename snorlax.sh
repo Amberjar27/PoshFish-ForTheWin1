@@ -24,16 +24,17 @@ yum install -y -q epel-release
 yum install -y -q clamav
 yum install -y firefox
 yum install -y tcpdump
+yum install -y ntp
 
-yum list installed | grep -E 'epel-release|clamav|firefox|tcpdump' 2>/dev/null
+yum list installed | grep -E 'epel-release|clamav|firefox|tcpdump|ntp' 2>/dev/null
 
 #Edit rsyslog to allow incoming traffic on ports TCP 1601/UDP 1514
 #UDP
 sed -i 's/^#$ModLoad imudp/$ModLoad imudp/' /etc/rsyslog.conf
-sed -i 's/^#$UDPServerRun 514/$UDPServerRun 514/' /etc/rsyslog.conf
+sed -i 's/^#$UDPServerRun 514/$UDPServerRun 1515/' /etc/rsyslog.conf
 #TCP
 sed -i 's/^#$ModLoad imtcp/$ModLoad imtcp/' /etc/rsyslog.conf
-sed -i 's/^#$InputTCPServerRun 514/$InputTCPServerRun 601/' /etc/rsyslog.conf
+sed -i 's/^#$InputTCPServerRun 514/$InputTCPServerRun 1516/' /etc/rsyslog.conf
 #Append this to the bottom of rsyslog.conf
 echo "\$template RemoteLogs, \"var/log/%HOSTNAME%/%PROGRAMNAME%.log\"" >> /etc/rsyslog.conf
 echo "*.* ?RemoteLogs" >> /etc/rsyslog.conf
@@ -44,17 +45,6 @@ yum groupinstall -y 'X Window System'
 yum groupinstall -y 'Desktop'
 sed -i 's/^id:3:/id:5:/' /etc/inittab
 yum groupinstall -y fonts
-
-cp porygon.sh /opt
-cp porygon.sh /sbin
-cp porygon.sh /etc
-
-#compressed files show up as red which stand out
-#think about ways to fix this and rename the backups to something less noticeable
-cd /sbin
-tar -czf etc_backup_rename.tar.gz /etc
-tar -czf var_backup_rename.tar.gz /var/log
-tar -czf bin_backup_rename.tar.gz /bin
 
 read -p "Press Enter to reboot into GUI..."
 reboot -f
