@@ -32,8 +32,8 @@ firewall(){
 
   # Syslog traffic
   iptables -A INPUT -i eth0 -p tcp --dport 9998 -m state --state NEW,ESTABLISHED -j ACCEPT
-  iptables -A INPUT -i eth0 -p tcp --dport 601 -m state --state NEW,ESTABLISHED -j ACCEPT
-  iptables -A INPUT -i eth0 -p udp --dport 514 -m state --state NEW,ESTABLISHED -j ACCEPT
+  iptables -A INPUT -i eth0 -p tcp --dport 1516 -m state --state NEW,ESTABLISHED -j ACCEPT
+  iptables -A INPUT -i eth0 -p udp --dport 1515 -m state --state NEW,ESTABLISHED -j ACCEPT
   iptables -A INPUT -i eth0 -p udp --dport 1514 -m state --state NEW,ESTABLISHED -j ACCEPT
 
   #save rules
