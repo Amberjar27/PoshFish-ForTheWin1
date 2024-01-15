@@ -108,15 +108,34 @@ setWebmail(){
 }
 
 setPaloWS(){
-  iptables -A INPUT -p tcp --dport 80 -j ACCEPT
-  iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+  #iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+  #iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+  #iptables -A OUTPUT -p tcp --dport 80 -j ACCEPT 
+  #iptables -A OUTPUT -p tcp --dport 443 -j ACCEPT
+  #iptables -A OUTPUT -p udp --dport 53 -d $3 -j ACCEPT
+  
+  #Splunk port?
   iptables -A INPUT -p tcp --dport 8000 -d $2 -j ACCEPT
   iptables -A INPUT -p tcp --dport 22 -d $1 -j ACCEPT
-  iptables -A OUTPUT -p tcp --dport 80 -j ACCEPT 
-  iptables -A OUTPUT -p tcp --dport 443 -j ACCEPT
-  iptables -A OUTPUT -p udp --dport 53 -d $3 -j ACCEPT
+  
+  #loopback
+  iptables -A INPUT -i lo -j ACCEPT
+  iptables -A OUTPUT -o lo -j ACCEPT
+  
+  #DNS
+  #iptables -A OUTPUT -p udp --dport 53 -d $3 -j ACCEPT
+  iptables -A OUTPUT -p tcp --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
+  iptables -A OUTPUT -p udp --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+  #Web traffic
+  iptables -A OUTPUT -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+  iptables -A OUTPUT -p tcp --dport 443 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+  #SSH
   iptables -A OUTPUT -p tcp --dport 22 -d $1 -j ACCEPT
+  #NTP
   iptables -A OUTPUT -p udp --dport 123 -d $3 -j ACCEPT
+  #Splunk port?
   iptables -A OUTPUT -p tcp --dport 8000 -d $2 -j ACCEPT
   allowSysLog   # Opens the required ports for syslogs to be forwarded to datalake
   dropAll
