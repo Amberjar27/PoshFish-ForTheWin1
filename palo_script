@@ -1,1 +1,122 @@
+-Change Passwords
+set password (palo)
+passwd (Ubuntu)
 
+-Applications and Threats Install
+request content upgrade check
+request content upgrade download <content version>
+request content upgrade install version latest
+show job id <id>
+***Above does not work in deviceconfig mode***
+***Takes about 4 minutes***
+
+-Antivirus 
+(You cannot download the antivirus update until you have installed the 
+ Application and Threats update)
+request anti-virus upgrade check
+request anti-virus upgrade download latest
+request anti-virus upgrade install version latest
+show jobs id [first job id you saw]
+show jobs id [second job id you saw]
+***Above does not work in deviceconfig mode***
+***Takes about 2.5 minutes***
+
+-Set IP Allowed to Manage Palo
+set deviceconfig system permitted-ip <ipaddress/netmask> 
+(Should be Ununtu IP) 
+
+-Set Interface Allowed to Manage Palo
+(Should be clear!)
+
+-Block SMB 
+set rulebase security rules SMB to User
+set rulebase security rules SMB from External
+set rulebase security rules SMB source any
+set rulebase security rules SMB destination any
+set rulebase security rules SMB source-user any
+set rulebase security rules SMB category any
+set rulebase security rules SMB application [ ms-ds-smb ms-ds-smb-base ms-ds-smbv1 ms-ds-smbv2 ms-ds-smbv3 print-over-ms-smb ]
+set rulebase security rules SMB service application-default
+set rulebase security rules SMB source-hip any
+set rulebase security rules SMB destination-hip any
+set rulebase security rules SMB action deny
+set rulebase security rules SMB description "Bad :( "
+
+-Turn off HTTP
+set deviceconfig system service disable-http yes
+
+-Log-on Banner
+set deviceconfig system motd-and-banner message "Your message here!" 
+***Must be in configure mode***
+
+-Block URLs (Tentative) 
+
+-NAT Rules are in Place! (Do NOT need to make addresses!)
+
+-Set NTP to Debian 
+set deviceconfig system ntp-servers primary-ntp-server ntp-server-address 172.20.240.20
+set deviceconfig system ntp-servers primary-ntp-server authentication-type none
+
+-Zone protection profiles
+
+-Set Zone Protection Policies to Zones
+set zone Internal network layer3 ethernet1/2
+set zone Internal network zone-protection-profile ZoneProtection_Test
+set zone Internal network layer3 ethernet1/4
+set zone Internal network zone-protection-profile ZoneProtection_Test
+set zone Internal network layer3 ethernet1/1
+set zone Internal network zone-protection-profile ZoneProtection_Test
+set zone Internal network layer3 ethernet1/3
+set zone Internal network zone-protection-profile ZoneProtection_Test
+
+-Policy for blocking bad IPs (Tenatitive)
+set rulebase security rules "Block IP" to [ External Internal Public User ]
+set rulebase security rules "Block IP" from any
+set rulebase security rules "Block IP" source [ 10.100.1.150 ]
+set rulebase security rules "Block IP" destination any
+set rulebase security rules "Block IP" source-user any
+set rulebase security rules "Block IP" category any
+set rulebase security rules "Block IP" application any
+set rulebase security rules "Block IP" service application-default
+set rulebase security rules "Block IP" source-hip any
+set rulebase security rules "Block IP" destination-hip any
+set rulebase security rules "Block IP" action deny
+set rulebase security rules "Block IP" log-start yes
+set rulebase security rules "Block IP" description "Add IPs under source to block them from network"
+
+-Password Complexity (tenatitive)
+set mgt-config password-complexity enabled yes
+set mgt-config password-complexity minimum-length 10
+set mgt-config password-complexity minimum-uppercase-letters 1
+set mgt-config password-complexity minimum-lowercase-letters 1
+set mgt-config password-complexity minimum-numeric-letters 1
+set mgt-config password-complexity minimum-special-characters 3
+set mgt-config password-complexity password-history-count 3
+set mgt-config password-complexity password-change experation-period 90
+set mgt-config password-complexity password-change experation-warning-period 10
+
+-Set up the logging (Script)
+set shared log-settings syslog "Syslog server profile" server Splunk transport UDP
+set shared log-settings syslog "Syslog server profile" server Splunk port 515
+set shared log-settings syslog "Syslog server profile" server Splunk format BSD
+set shared log-settings syslog "Syslog server profile" server Splunk server 172.20.241.20
+set shared log-settings syslog "Syslog server profile" server Splunk facility LOG_USER
+set shared log-settings syslog "Syslog server profile" server SplunkTCP transport TCP
+set shared log-settings syslog "Syslog server profile" server SplunkTCP port 601
+set shared log-settings syslog "Syslog server profile" server SplunkTCP format BSD
+set shared log-settings syslog "Syslog server profile" server SplunkTCP server 172.20.241.20
+set shared log-settings syslog "Syslog server profile" server SplunkTCP facility LOG_USER
+set service Splunk protocol tcp port 8000
+set service Splunk protocol tcp override no 
+set service Splunk description "Give splunk service"
+set rulebase nat rules Splunk source-translation static-ip bi-directional yes
+set rulebase nat rules Splunk to External
+set rulebase nat rules Splunk from Public
+set rulebase nat rules Splunk source Splunk
+set rulebase nat rules Splunk destination any
+set rulebase nat rules Splunk service any 
+set rulebase nat rules Splunk description "Attempting to make internet. "
+set rulebase nat rules Splunk disabled no
+set rulebase nat rules Splunk 172.20.241.20
+
+-Updates (Last!)
