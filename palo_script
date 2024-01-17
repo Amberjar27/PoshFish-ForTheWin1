@@ -46,10 +46,18 @@ set rulebase security rules SMB description "Bad :( "
 set deviceconfig system service disable-http yes
 
 -Log-on Banner
-set deviceconfig system motd-and-banner message "Your message here!" 
+set deviceconfig system motd-and-banner message "WARNING: Authorized users only. Continued use of this device will be interpreted as consent to monitoring, logging, and auditing of suspicious actions and may be used in the court of law. You have been warned." 
 ***Must be in configure mode***
 
 -Block URLs (Tentative) 
+set profiles custom-url-category "Blocked Sites List" list [ www.facebook.com https://www.facebook.com https://www.pintrest.com https://www.imgur.com https://linkedin.com https://twitter.com www.pintrest.com https://www.amazon.com www.linkedin.com www.twitter.com www.amazon.com https://plus.google.com www.imgur.com *.twitter.com ]
+set profiles custom-url-category "Blocked Sites List" type "URL List"
+set profiles url-filtering Blocked credential-enforcement mode disabled
+set profiles url-filtering Blocked credential-enforcement log-severity medium
+set profiles url-filtering Blocked credential-enforcement block "Blocked Sites List"
+set profiles url-filtering Blocked mlav-engine-urlbased-enabled "Javascript Exploit Detection" mlav-policy-action allow
+set profiles url-filtering Blocked mlav-engine-urlbased-enabled "Phishing Detection" mlav-policy-action allow
+set profiles url-filtering Blocked block "Blocked Sites List"
 
 -NAT Rules are in Place! (Do NOT need to make addresses!)
 
@@ -58,6 +66,44 @@ set deviceconfig system ntp-servers primary-ntp-server ntp-server-address 172.20
 set deviceconfig system ntp-servers primary-ntp-server authentication-type none
 
 -Zone protection profiles
+set network profiles zone-protection-profile ZoneProtection_Test flood tcp-syn red alarm-rate 10000
+set network profiles zone-protection-profile ZoneProtection_Test flood tcp-syn red activate-rate 10000
+set network profiles zone-protection-profile ZoneProtection_Test flood tcp-syn red maximal-rate 40000
+set network profiles zone-protection-profile ZoneProtection_Test flood tcp-syn enable yes
+set network profiles zone-protection-profile ZoneProtection_Test flood udp syn alarm-rate 10000
+set network profiles zone-protection-profile ZoneProtection_Test flood udp syn activate-rate 10000
+set network profiles zone-protection-profile ZoneProtection_Test flood udp syn maximal-rate 40000
+set network profiles zone-protection-profile ZoneProtection_Test flood udp syn enable yes
+set network profiles zone-protection-profile ZoneProtection_Test flood icmp syn alarm-rate 10000
+set network profiles zone-protection-profile ZoneProtection_Test flood icmp syn activate-rate 10000
+set network profiles zone-protection-profile ZoneProtection_Test flood icmp syn maximal-rate 40000
+set network profiles zone-protection-profile ZoneProtection_Test flood icmp syn enable yes
+set network profiles zone-protection-profile ZoneProtection_Test flood icmpv6 syn alarm-rate 10000
+set network profiles zone-protection-profile ZoneProtection_Test flood icmpv6 syn activate-rate 10000
+set network profiles zone-protection-profile ZoneProtection_Test flood icmpv6 syn maximal-rate 40000
+set network profiles zone-protection-profile ZoneProtection_Test flood icmpv6 syn enable no
+set network profiles zone-protection-profile ZoneProtection_Test flood other-ip alarm-rate 10000
+set network profiles zone-protection-profile ZoneProtection_Test flood other-ip activate-rate 10000
+set network profiles zone-protection-profile ZoneProtection_Test flood other-ip maximal-rate 40000
+set network profiles zone-protection-profile ZoneProtection_Test flood other-ip enable no
+set network profiles zone-protection-profile ZoneProtection_Test scan 8001 action block
+set network profiles zone-protection-profile ZoneProtection_Test scan 8001 interval 2
+set network profiles zone-protection-profile ZoneProtection_Test scan 8001 threshold 100
+set network profiles zone-protection-profile ZoneProtection_Test scan 8003 action block
+set network profiles zone-protection-profile ZoneProtection_Test scan 8003 interval 2
+set network profiles zone-protection-profile ZoneProtection_Test scan 8003 threshold 100
+set network profiles zone-protection-profile ZoneProtection_Test scan 8002 action alert
+set network profiles zone-protection-profile ZoneProtection_Test scan 8002 interval 10
+set network profiles zone-protection-profile ZoneProtection_Test scan 8002 threshold 100
+set network profiles zone-protection-profile ZoneProtection_Test discard-ip-spoof yes
+set network profiles zone-protection-profile ZoneProtection_Test discard-ip-frag yes
+set network profiles zone-protection-profile ZoneProtection_Test discard-malformed-option yes
+set network profiles zone-protection-profile ZoneProtection_Test discard-icmp-frag yes
+set network profiles zone-protection-profile ZoneProtection_Test description "This is my attempt at zone protection. I'm dropping SYN and ICMP (ping) packets that exceed our maximum rate as seen under Flood Protection and blocking port scans as seen under RP. "
+set network profiles zone-protection-profile ZoneProtection_Test discard-strict-source-routing yes
+set network profiles zone-protection-profile ZoneProtection_Test discard-loose-source-routing yes
+set network profiles zone-protection-profile ZoneProtection_Test discard-icmp-large-packet yes
+set network profiles zone-protection-profile Default flood icmpv6 enable yes
 
 -Set Zone Protection Policies to Zones
 set zone Internal network layer3 ethernet1/2
