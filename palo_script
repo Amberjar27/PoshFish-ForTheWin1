@@ -165,4 +165,18 @@ set rulebase nat rules Splunk description "Attempting to make internet. "
 set rulebase nat rules Splunk disabled no
 set rulebase nat rules Splunk 172.20.241.20
 
+-Implicit Deny **DO THIS AFTER EVERYONE IS SETUP!!**
+set rulebase security rules "Implicit Deny" to any
+set rulebase security rules "Implicit Deny" from any
+set rulebase security rules "Implicit Deny" source any
+set rulebase security rules "Implicit Deny" destination any
+set rulebase security rules "Implicit Deny" source-user any
+set rulebase security rules "Implicit Deny" category any
+set rulebase security rules "Implicit Deny" application any
+set rulebase security rules "Implicit Deny" service any
+set rulebase security rules "Implicit Deny" source-hip any
+set rulebase security rules "Implicit Deny" destination-hip any
+set rulebase security rules "Implicit Deny" action deny
+set rulebase security rules "Implicit Deny" description "Goodbye, Internet!!" 
+
 -Updates (Last!)
