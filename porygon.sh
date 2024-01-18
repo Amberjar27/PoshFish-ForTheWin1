@@ -142,7 +142,7 @@ repos(){
   mv CentOS-Base.repo.bak CentOS-Base.repo
 }
 case $1 in
-  f) firewall;;
-  s) firewall7;;
+  x) six;;
+  n) seven;;
   r) repos;;
 esac
