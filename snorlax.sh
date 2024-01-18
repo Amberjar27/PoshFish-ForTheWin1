@@ -2,6 +2,8 @@
 #Needs some minor changes as of 1-10-2024
 
 #!/bin/bash
+
+six(){
 echo "Setting stuff up"
 echo "Grabbing scripts"
 
@@ -48,3 +50,13 @@ yum groupinstall -y fonts
 
 read -p "Press Enter to reboot into GUI..."
 reboot -f
+}
+
+seven(){
+
+}
+
+case $1 in
+  x) six;;
+  n) seven;;
+esac
