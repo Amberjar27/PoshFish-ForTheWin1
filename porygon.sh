@@ -35,9 +35,6 @@ firewall(){
   iptables -A INPUT -p tcp --dport 1516 -m state --state NEW,ESTABLISHED -j ACCEPT
   iptables -A INPUT -p udp --dport 1515 -m state --state NEW,ESTABLISHED -j ACCEPT
   iptables -A INPUT -p udp --dport 1514 -m state --state NEW,ESTABLISHED -j ACCEPT
-
-  #save rules
-  service iptables save
 }
 
 firewall7(){
