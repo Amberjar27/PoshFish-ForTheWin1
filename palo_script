@@ -165,6 +165,18 @@ set rulebase nat rules Splunk description "Attempting to make internet. "
 set rulebase nat rules Splunk disabled no
 set rulebase nat rules Splunk 172.20.241.20
 
+-Put this in the script!! 
+sudo vi /etc/rsyslog.conf
+Enter PW
+then add two lines under $IncludeConfig /etc/rsyslog.d/*.conf
+*.*@172.20.241.20:1515
+*.*@@172.20.241.20:1516
+restart the syslog!!
+sudo service rsyslog restart
+***This is in Ubuntu and for Ubuntu!***
+***The Palo logs have to be made through Objects > Services thing 
+   and then applied to a special policy!***
+
 -Implicit Deny **DO THIS AFTER EVERYONE IS SETUP!!**
 set rulebase security rules "Implicit Deny" to any
 set rulebase security rules "Implicit Deny" from any
@@ -180,3 +192,8 @@ set rulebase security rules "Implicit Deny" action deny
 set rulebase security rules "Implicit Deny" description "Goodbye, Internet!!" 
 
 -Updates (Last!)
+
+-Backups 
+ Device > Setup > Operations > Export Device State
+ Note: May bring down connections and is very time consuming. Use as a 
+ last resort. 
