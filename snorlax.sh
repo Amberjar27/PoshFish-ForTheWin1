@@ -87,7 +87,7 @@ seven(){
   yum -y groups install "GNOME Desktop"
   echo "exec gnome-session" >> ~/.xinitrc
   systemctl set-default graphical.target
-  reboot
+  startx
 
 }
 
