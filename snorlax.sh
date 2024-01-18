@@ -72,6 +72,18 @@ seven(){
   
   yum list installed | grep -E 'clamav|firefox|tcpdump|ntp' 2>/dev/null
 
+  #Edit rsyslog to allow incoming traffic on ports TCP 1516/UDP 1515/Palo 1514/UDP
+  #UDP
+  sed -i 's/^#$ModLoad imudp/$ModLoad imudp/' /etc/rsyslog.conf
+  sed -i 's/^#$UDPServerRun 514/$UDPServerRun 1515/' /etc/rsyslog.conf
+  #TCP
+  sed -i 's/^#$ModLoad imtcp/$ModLoad imtcp/' /etc/rsyslog.conf
+  sed -i 's/^#$InputTCPServerRun 514/$InputTCPServerRun 1516/' /etc/rsyslog.conf
+  #Append this to the bottom of rsyslog.conf
+  echo "\$template RemoteLogs,\"var/log/%HOSTNAME%/%PROGRAMNAME%.log\"" >> /etc/rsyslog.conf
+  echo "*.* ?RemoteLogs" >> /etc/rsyslog.conf
+  echo "& ~" >> /etc/rsyslog.conf
+
   yum -y groups install "GNOME Desktop"
   echo "exec gnome-session" >> ~/.xinitrc
   systemctl set-default graphical.target
