@@ -40,6 +40,10 @@ firewall(){
   service iptables save
 }
 
+firewall7(){
+
+}
+
 repos(){
   echo "[C6.10-base]" >> /etc/yum.repos.d/CentOS-Base.repo.bak
   echo "name=CentOS-6.10 – Base" >> /etc/yum.repos.d/CentOS-Base.repo.bak
@@ -91,5 +95,6 @@ repos(){
 }
 case $1 in
   f) firewall;;
+  s) firewall7;;
   r) repos;;
 esac
