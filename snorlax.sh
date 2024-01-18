@@ -53,6 +53,25 @@ reboot -f
 }
 
 seven(){
+  yum update -y
+
+  curl https://raw.githubusercontent.com/K7-Avenger/PoshFish-ForTheWin/main/porygon.sh > porygon.sh
+  chmod 755 porygon.sh
+
+  #Deploying Firewall
+  ./porygon.sh s 2>/dev/null
+  
+  echo "Time to change the root password"
+  passwd root
+  
+  echo "Now for packages"
+  yum install -y -q epel-release
+  yum install -y -q clamav
+  yum install -y firefox
+  yum install -y tcpdump
+  yum install -y ntp
+  
+  yum list installed | grep -E 'epel-release|clamav|firefox|tcpdump|ntp' 2>/dev/null
 
 }
 
