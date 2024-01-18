@@ -85,7 +85,7 @@ seven(){
   echo "& ~" >> /etc/rsyslog.conf
 
   yum -y groups install "GNOME Desktop"
-  sudo systemctl set-default graphical.target
+  systemctl set-default graphical.target
   reboot
 
 }
