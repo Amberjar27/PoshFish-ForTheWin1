@@ -84,10 +84,10 @@ seven(){
   echo "*.* ?RemoteLogs" >> /etc/rsyslog.conf
   echo "& ~" >> /etc/rsyslog.conf
 
+  yum groupinstall "X Window System" -y
   yum -y groups install "GNOME Desktop"
-  echo "exec gnome-session" >> ~/.xinitrc
   systemctl set-default graphical.target
-  startx
+  reboot
 
 }
 
