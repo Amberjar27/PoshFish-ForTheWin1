@@ -85,9 +85,8 @@ seven(){
   echo "& ~" >> /etc/rsyslog.conf
 
   yum -y groups install "GNOME Desktop"
-  echo "exec gnome-session" >> ~/.xinitrc
-  systemctl set-default graphical.target
-  startx
+  sudo systemctl set-default graphical.target
+  reboot
 
 }
 
