@@ -17,7 +17,6 @@ yum update -y
 
 #Deploying Firewall
 ./porygon.sh f 2>/dev/null
-service iptables save
 
 echo "Time to change the root password"
 passwd root
