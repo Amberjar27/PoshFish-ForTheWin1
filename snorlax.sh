@@ -86,6 +86,7 @@ seven(){
 
   yum groupinstall "X Window System" -y
   yum -y groups install "GNOME Desktop"
+  yum install xorg-x11-xinit-session -y
   systemctl set-default graphical.target
   reboot
 
