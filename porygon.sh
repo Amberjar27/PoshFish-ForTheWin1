@@ -40,38 +40,56 @@ firewall(){
 }
 
 firewall7(){
-  iptables -F
+  # FirewallD setup script for Splunk and Gravwell
+  # Uses Firewall-CMD commands
   
-  #Policy rules
-  iptables -A INPUT -m state --state ESTABLISHED -j ACCEPT
-  iptables -P INPUT DROP
-  iptables -P FORWARD DROP
-  iptables -P OUTPUT DROP
-
-  #loopback
-  iptables -A INPUT -i lo -j ACCEPT
-  iptables -A OUTPUT -o lo -j ACCEPT
-
-  #DNS
-  iptables -A OUTPUT -p tcp --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
-  iptables -A OUTPUT -p udp --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT 
+  printf "Getting current configuration"
+  Default_Zone=$(firewall-cmd --get-default-zone)
+  firewall-cmd --zone=$Default_Zone  --list-all
   
-  #Web traffic
-  iptables -A OUTPUT -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
-  iptables -A OUTPUT -p tcp --dport 443 -m state --state NEW,ESTABLISHED -j ACCEPT
+  if [[ "$Default_Zone" = "public" ]] ; then
+  	printf "Default zone is already set to public"
+  else
+  	printf "Setting active zone to public"
+  	# Get ethernet adapter
+  	eth=$(ip -br l | awk '$1 !~ "lo|vir|wl" {print $1}')
+  	firewall-cmd --zone=public --change-interface=$eth
+  fi
+  
+  printf "\nResetting firewall to defaults\n"
+  printf "Setting target to DROP"
+  firewall-cmd --zone=public --set-target=DROP --permanent
 
-  # Splunk WebGUI rules 
-  iptables -A INPUT -p tcp --dport 8000 -m state --state NEW,ESTABLISHED -j ACCEPT
-  iptables -A OUTPUT -p tcp --sport 8000 -m state --state ESTABLISHED -j ACCEPT
+  sudo firewall-cmd --zone=public --add-interface=lo
+  
+  firewall-cmd --zone=public --add-service=http
+  firewall-cmd --zone=public --add-service=https
+  firewall-cmd --zone=public --add-port=53/udp
+  
+  printf "Splunk installed\nBuilding firewall rules\n"
+  #  Serve Splunk GUI over 8000
+  firewall-cmd --zone=public --add-port=8000/tcp
+  # Splunk indexer
+  firewall-cmd --zone=public --add-port=8089/tcp 
+  firewall-cmd --zone=public --add-port=1514/udp
+  firewall-cmd --zone=public --add-port=1515/udp
+  firewall-cmd --zone=public --add-port=1516/tcp
 
-  # Splunk Management Port
-  iptables -A INPUT -p tcp --dport 8089 -m state --state NEW,ESTABLISHED -j ACCEPT
-
-  # Syslog traffic
-  iptables -A INPUT -p tcp --dport 9998 -m state --state NEW,ESTABLISHED -j ACCEPT
-  iptables -A INPUT -p tcp --dport 1516 -m state --state NEW,ESTABLISHED -j ACCEPT
-  iptables -A INPUT -p udp --dport 1515 -m state --state NEW,ESTABLISHED -j ACCEPT
-  iptables -A INPUT -p udp --dport 1514 -m state --state NEW,ESTABLISHED -j ACCEPT
+  
+  
+  printf "\nReview current rules\n"
+  Ports=$(firewall-cmd --list-ports)
+  Services=$(firewall-cmd --list-services)
+  Zones=$(firewall-cmd --get-active-zones)
+  printf "Active Zone: $Zones\nOpen Ports\n$Ports\nOpen Services\n$Services\n"
+  printf "Make current ruleset permanent?[y/n]\n"
+  read input
+  if [[ "$input" = "y" ]] ; then
+  	firewall-cmd --runtime-to-permanent
+  	firewall-cmd --reload
+  else
+  	printf "Rules are applied, but not permanent\nUse:\n\tfirewall-cmd --runtime-to-permanent\nTo make rules permanent\n"
+  fi
 }
 
 repos(){
