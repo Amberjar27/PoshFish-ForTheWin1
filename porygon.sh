@@ -24,17 +24,17 @@ firewall(){
   iptables -A OUTPUT -p tcp --dport 443 -m state --state NEW,ESTABLISHED -j ACCEPT
 
   # Splunk WebGUI rules 
-  iptables -A INPUT -i eth0 -p tcp --dport 8000 -m state --state NEW,ESTABLISHED -j ACCEPT
-  iptables -A OUTPUT -o eth0 -p tcp --sport 8000 -m state --state ESTABLISHED -j ACCEPT
+  iptables -A INPUT -p tcp --dport 8000 -m state --state NEW,ESTABLISHED -j ACCEPT
+  iptables -A OUTPUT -p tcp --sport 8000 -m state --state ESTABLISHED -j ACCEPT
 
   # Splunk Management Port
-  iptables -A INPUT -i eth0 -p tcp --dport 8089 -m state --state NEW,ESTABLISHED -j ACCEPT
+  iptables -A INPUT -p tcp --dport 8089 -m state --state NEW,ESTABLISHED -j ACCEPT
 
   # Syslog traffic
-  iptables -A INPUT -i eth0 -p tcp --dport 9998 -m state --state NEW,ESTABLISHED -j ACCEPT
-  iptables -A INPUT -i eth0 -p tcp --dport 1516 -m state --state NEW,ESTABLISHED -j ACCEPT
-  iptables -A INPUT -i eth0 -p udp --dport 1515 -m state --state NEW,ESTABLISHED -j ACCEPT
-  iptables -A INPUT -i eth0 -p udp --dport 1514 -m state --state NEW,ESTABLISHED -j ACCEPT
+  iptables -A INPUT -p tcp --dport 9998 -m state --state NEW,ESTABLISHED -j ACCEPT
+  iptables -A INPUT -p tcp --dport 1516 -m state --state NEW,ESTABLISHED -j ACCEPT
+  iptables -A INPUT -p udp --dport 1515 -m state --state NEW,ESTABLISHED -j ACCEPT
+  iptables -A INPUT -p udp --dport 1514 -m state --state NEW,ESTABLISHED -j ACCEPT
 
   #save rules
   service iptables save
