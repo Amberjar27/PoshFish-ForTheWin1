@@ -30,7 +30,7 @@ yum install -y ntp
 
 yum list installed | grep -E 'epel-release|clamav|firefox|tcpdump|ntp' 2>/dev/null
 
-#Edit rsyslog to allow incoming traffic on ports TCP 1601/UDP 1514
+#Edit rsyslog to allow incoming traffic on ports TCP 1516/UDP 1515/Palo 1514/UDP
 #UDP
 sed -i 's/^#$ModLoad imudp/$ModLoad imudp/' /etc/rsyslog.conf
 sed -i 's/^#$UDPServerRun 514/$UDPServerRun 1515/' /etc/rsyslog.conf
@@ -59,19 +59,23 @@ seven(){
   chmod 755 porygon.sh
 
   #Deploying Firewall
-  ./porygon.sh s 2>/dev/null
+  ./porygon.sh n 2>/dev/null
   
   echo "Time to change the root password"
   passwd root
   
   echo "Now for packages"
-  yum install -y -q epel-release
   yum install -y -q clamav
   yum install -y firefox
   yum install -y tcpdump
   yum install -y ntp
   
-  yum list installed | grep -E 'epel-release|clamav|firefox|tcpdump|ntp' 2>/dev/null
+  yum list installed | grep -E 'clamav|firefox|tcpdump|ntp' 2>/dev/null
+
+  yum -y groups install "GNOME Desktop"
+  echo "exec gnome-session" >> ~/.xinitrc
+  systemctl set-default graphical.target
+  reboot
 
 }
 
