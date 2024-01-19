@@ -81,10 +81,10 @@ seven(){
   printf "Make current ruleset permanent?[y/n]\n"
   read input
   if [[ "$input" = "y" ]] ; then
-  	firewall-cmd --permanent
+  	firewall-cmd --runtime-to-permanent
   	firewall-cmd --reload
   else
-  	printf "Rules are applied, but not permanent\nUse:\n\tfirewall-cmd --permanent\nTo make rules permanent\n"
+  	printf "Rules are applied, but not permanent\nUse:\n\tfirewall-cmd --runtime-to-permanent\nTo make rules permanent\n"
   fi
 }
 
