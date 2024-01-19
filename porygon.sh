@@ -54,6 +54,7 @@ firewall7(){
   firewall-cmd --zone=public --add-service=http
   firewall-cmd --zone=public --add-service=https
   firewall-cmd --zone=public --add-port=53/udp
+  firewall-cmd --zone=public --add-port=123/udp
   
   printf "Splunk installed\nBuilding firewall rules\n"
   #  Serve Splunk GUI over 8000
