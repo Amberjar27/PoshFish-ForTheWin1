@@ -4,36 +4,21 @@
 #bin/bash
 six(){
   iptables -F
-  
-  #loopback
   iptables -A INPUT -i lo -j ACCEPT
   iptables -A OUTPUT -o lo -j ACCEPT
-
-  #DNS
   iptables -A OUTPUT -p tcp --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
   iptables -A OUTPUT -p udp --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT 
-  
-  #Web traffic
   iptables -A OUTPUT -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
   iptables -A OUTPUT -p tcp --dport 443 -m state --state NEW,ESTABLISHED -j ACCEPT
-
-  # Splunk WebGUI rules 
   iptables -A INPUT -p tcp --dport 8000 -m state --state NEW,ESTABLISHED -j ACCEPT
   iptables -A OUTPUT -p tcp --sport 8000 -m state --state ESTABLISHED -j ACCEPT
-
-  # Splunk Management Port
   iptables -A INPUT -p tcp --dport 8089 -m state --state NEW,ESTABLISHED -j ACCEPT
-
-  # Syslog traffic
   iptables -A INPUT -p tcp --dport 9998 -m state --state NEW,ESTABLISHED -j ACCEPT
   iptables -A INPUT -p tcp --dport 1516 -m state --state NEW,ESTABLISHED -j ACCEPT
   iptables -A INPUT -p udp --dport 1515 -m state --state NEW,ESTABLISHED -j ACCEPT
   iptables -A INPUT -p udp --dport 1514 -m state --state NEW,ESTABLISHED -j ACCEPT
-
-  # Kill SSH traffic
   iptables -A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j DROP
   iptables -A OUTPUT-p tcp --dport 22 -m state --state ESTABLISHED -j DROP
-  #Policy rules
   iptables -A INPUT -m state --state ESTABLISHED -j ACCEPT
   iptables -P INPUT DROP
   iptables -P FORWARD DROP
