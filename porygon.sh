@@ -2,7 +2,7 @@
 #Firewall rules mostly stolen from Liam Powell
 
 #bin/bash
-firewall(){
+six(){
   iptables -F
   
   #loopback
