@@ -5,6 +5,8 @@
 #Option (r) will change the repos for CentOS6 to allow for updates
 #GUI Setup is currently commented out because of issues getting it working
 #on CentOS7 minimal install
+#I expect that the competition environment will not be on a fresh minimal install
+#if CentOS7 is the Splunk OS
 
 #bin/bash
 six(){
