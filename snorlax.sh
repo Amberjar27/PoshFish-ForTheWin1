@@ -90,15 +90,10 @@ seven(){
   echo "*.* ?RemoteLogs" >> /etc/rsyslog.conf
   echo "& ~" >> /etc/rsyslog.conf
 
-  #yum groupinstall "X Window System" -y
-  #yum -y groups install "GNOME Desktop"
-  #yum install xorg-x11-xinit-session -y
-  #systemctl set-default graphical.target
-  #echo "exec gnome-session" >> ~/.xinitrc
-  #reboot
-  #startx
-  
-
+  yum -y groups install "GNOME Desktop"
+  systemctl set-default graphical.target
+  echo "exec gnome-session" >> ~/.xinitrc
+  startx
 }
 
 case $1 in
