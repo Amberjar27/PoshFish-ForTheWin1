@@ -62,7 +62,7 @@ seven(){
   chmod 755 porygon.sh
 
   #Deploying Firewall
-  ./porygon.sh n 2>/dev/null
+  ./porygon.sh n
   
   echo "Time to change the root password"
   passwd root
