@@ -1,5 +1,8 @@
-#Initial Setup script for Splunk on CentOS6 written by Karl Boeh
-#Needs some minor changes as of 1-10-2024
+#Initial Setup script for Splunk on CentOS6/CentOS7 written by Karl Boeh
+#This script will automate initial hardening/setup tasks for the Splunk Machine
+#By running option (x) setup will be performed for CentOS6
+#By running option (n) setup will be performed for CentOS7
+#
 
 #!/bin/bash
 
@@ -16,7 +19,7 @@ cd ~
 yum update -y
 
 #Deploying Firewall
-./porygon.sh f 2>/dev/null
+./porygon.sh x 2>/dev/null
 
 echo "Time to change the root password"
 passwd root
