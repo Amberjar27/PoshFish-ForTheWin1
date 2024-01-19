@@ -2,10 +2,6 @@
 #This script will automate initial hardening/setup tasks for the Splunk Machine
 #By running option (x) setup will be performed for CentOS6
 #By running option (n) setup will be performed for CentOS7
-#GUI Setup is currently commented out because of issues getting it working
-#on CentOS7 minimal install
-#I expect that the competition environment will not be on a fresh minimal install
-#if CentOS7 is the Splunk OS
 
 #!/bin/bash
 
