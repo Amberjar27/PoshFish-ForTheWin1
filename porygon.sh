@@ -28,7 +28,7 @@ six(){
   service iptables save
 }
 
-firewall7(){
+seven(){
   # FirewallD setup script for Splunk and Gravwell
   # Uses Firewall-CMD commands
   
