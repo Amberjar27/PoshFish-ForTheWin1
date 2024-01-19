@@ -1,5 +1,8 @@
 #Repo and firewall script for Splunk on CentOS6 written by Karl Boeh
 #Firewall rules mostly stolen from Liam Powell
+#Option (x) sets firewall rules using iptables for CentOS6
+#Option (n) sets firewall rules using firewall-cmd for CentOS7
+#Option (r) will change the repos for CentOS6 to allow for updates
 
 #bin/bash
 six(){
