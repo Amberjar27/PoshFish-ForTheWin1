@@ -3,6 +3,8 @@
 #Option (x) sets firewall rules using iptables for CentOS6
 #Option (n) sets firewall rules using firewall-cmd for CentOS7
 #Option (r) will change the repos for CentOS6 to allow for updates
+#GUI Setup is currently commented out because of issues getting it working
+#on CentOS7 minimal install
 
 #bin/bash
 six(){
