@@ -89,8 +89,8 @@ seven(){
   #yum install xorg-x11-xinit-session -y
   #systemctl set-default graphical.target
   #reboot
-  yum -y groups install "GNOME Desktop" >/tmp/yum-out 2>&1 &
-  echo "exec gnome-session" >> ~/.xinitrc
+  #yum -y groups install "GNOME Desktop" >/tmp/yum-out 2>&1 &
+  #echo "exec gnome-session" >> ~/.xinitrc
 
 }
 
