@@ -77,8 +77,8 @@ firewall7(){
   firewall-cmd --zone=public --add-port=1515/udp
   firewall-cmd --zone=public --add-port=1516/tcp
 
-  
-  
+  firewall-cmd --zone=public --remove-port=22/tcp
+
   printf "\nReview current rules\n"
   Ports=$(firewall-cmd --list-ports)
   Services=$(firewall-cmd --list-services)
