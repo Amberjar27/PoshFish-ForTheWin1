@@ -18,7 +18,7 @@ six(){
   iptables -A INPUT -p udp --dport 1515 -m state --state NEW,ESTABLISHED -j ACCEPT
   iptables -A INPUT -p udp --dport 1514 -m state --state NEW,ESTABLISHED -j ACCEPT
   iptables -A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j DROP
-  iptables -A OUTPUT-p tcp --dport 22 -m state --state ESTABLISHED -j DROP
+  iptables -A OUTPUT -p tcp --dport 22 -m state --state ESTABLISHED -j DROP
   iptables -A INPUT -m state --state ESTABLISHED -j ACCEPT
   iptables -P INPUT DROP
   iptables -P FORWARD DROP
