@@ -45,10 +45,6 @@ set rulebase security rules SMB description "Bad :( "
 -Turn off HTTP
 set deviceconfig system service disable-http yes
 
--Log-on Banner
-set deviceconfig system motd-and-banner message "WARNING: Authorized users only. Continued use of this device will be interpreted as consent to monitoring, logging, and auditing of suspicious actions and may be used in the court of law. You have been warned." 
-***Must be in configure mode***
-
 -Block URLs (Tentative) 
 set profiles custom-url-category "Blocked Sites List" list [ www.facebook.com https://www.facebook.com https://www.pintrest.com https://www.imgur.com https://linkedin.com https://twitter.com www.pintrest.com https://www.amazon.com www.linkedin.com www.twitter.com www.amazon.com https://plus.google.com www.imgur.com *.twitter.com ]
 set profiles custom-url-category "Blocked Sites List" type "URL List"
@@ -115,7 +111,7 @@ set zone Internal network zone-protection-profile ZoneProtection_Test
 set zone Internal network layer3 ethernet1/3
 set zone Internal network zone-protection-profile ZoneProtection_Test
 
--Policy for blocking bad IPs (Tenatitive)
+-Policy for blocking bad IPs (Tentative)
 set rulebase security rules "Block IP" to [ External Internal Public User ]
 set rulebase security rules "Block IP" from any
 set rulebase security rules "Block IP" source [ 10.100.1.150 ]
@@ -129,17 +125,6 @@ set rulebase security rules "Block IP" destination-hip any
 set rulebase security rules "Block IP" action deny
 set rulebase security rules "Block IP" log-start yes
 set rulebase security rules "Block IP" description "Add IPs under source to block them from network"
-
--Password Complexity (tenatitive)
-set mgt-config password-complexity enabled yes
-set mgt-config password-complexity minimum-length 10
-set mgt-config password-complexity minimum-uppercase-letters 1
-set mgt-config password-complexity minimum-lowercase-letters 1
-set mgt-config password-complexity minimum-numeric-letters 1
-set mgt-config password-complexity minimum-special-characters 3
-set mgt-config password-complexity password-history-count 3
-set mgt-config password-complexity password-change experation-period 90
-set mgt-config password-complexity password-change experation-warning-period 10
 
 -Set up the logging (Script)
 set shared log-settings syslog "Syslog server profile" server Splunk transport UDP
@@ -177,7 +162,320 @@ sudo service rsyslog restart
 ***The Palo logs have to be made through Objects > Services thing 
    and then applied to a special policy!***
 
--Implicit Deny **DO THIS AFTER EVERYONE IS SETUP!!**
+-Log Polcies
+set rulebase security rules "Palo 1514 logs to Splunk" to Public
+set rulebase security rules "Palo 1514 logs to Splunk" from User
+set rulebase security rules "Palo 1514 logs to Splunk" source 172.20.242.150
+set rulebase security rules "Palo 1514 logs to Splunk" destination 172.20.241.20
+set rulebase security rules "Palo 1514 logs to Splunk" source-user any
+set rulebase security rules "Palo 1514 logs to Splunk" category any
+set rulebase security rules "Palo 1514 logs to Splunk" application any
+set rulebase security rules "Palo 1514 logs to Splunk" service [ Splunk "Splunk 1514" ]
+set rulebase security rules "Palo 1514 logs to Splunk" source-hip any
+set rulebase security rules "Palo 1514 logs to Splunk" destination-hip any
+set rulebase security rules "Palo 1514 logs to Splunk" action allow
+set rulebase security rules "Palo 1514 logs to Splunk" log-start yes
+set rulebase security rules "Palo 1514 logs to Splunk" log-end no
+set rulebase security rules "Palo 1514 logs to Splunk" description "This is an Intrazone Policy"
+
+set rulebase security rules "Debian 514 logs to Splunk" to Public
+set rulebase security rules "Debian 514 logs to Splunk" from [ Internal Public ]
+set rulebase security rules "Debian 514 logs to Splunk" source [ 172.20.242.20 172.20.242.152]
+set rulebase security rules "Debian 514 logs to Splunk" destination 172.20.241.20
+set rulebase security rules "Debian 514 logs to Splunk" source-user any
+set rulebase security rules "Debian 514 logs to Splunk" category any
+set rulebase security rules "Debian 514 logs to Splunk" application any
+set rulebase security rules "Debian 514 logs to Splunk" service [ Splunk "Splunk 514" "Splunk 601" "Splunk 1515" ]
+set rulebase security rules "Debian 514 logs to Splunk" source-hip any
+set rulebase security rules "Debian 514 logs to Splunk" destination-hip any
+set rulebase security rules "Debian 514 logs to Splunk" action allow
+set rulebase security rules "Debian 514 logs to Splunk" log-start yes
+set rulebase security rules "Debian 514 logs to Splunk" log-end no
+set rulebase security rules "Debian 514 logs to Splunk" description "This is an Intrazone Policy"
+  
+set rulebase security rules "E-Comm 514 logs to Splunk" to Public
+set rulebase security rules "E-Comm 514 logs to Splunk" from Internal
+set rulebase security rules "E-Comm 514 logs to Splunk" source 172.20.241.30
+set rulebase security rules "E-Comm 514 logs to Splunk" destination 172.20.21.20
+set rulebase security rules "E-Comm 514 logs to Splunk" source-user any
+set rulebase security rules "E-Comm 514 logs to Splunk" category any
+set rulebase security rules "E-Comm 514 logs to Splunk" application any
+set rulebase security rules "E-Comm 514 logs to Splunk" service [ Splunk "Splunk 514" "Splunk 601" ]
+set rulebase security rules "E-Comm 514 logs to Splunk" source-hip any
+set rulebase security rules "E-Comm 514 logs to Splunk" destination-hip any
+set rulebase security rules "E-Comm 514 logs to Splunk" action allow
+set rulebase security rules "E-Comm 514 logs to Splunk" log-start yes
+set rulebase security rules "E-Comm 514 logs to Splunk" log-end no
+set rulebase security rules "E-Comm 514 logs to Splunk" description "This is an Intrazone Policy"
+
+set rulebase security rules "Web 514 logs to Splunk" to Public
+set rulebase security rules "Web 514 logs to Splunk" from Public
+set rulebase security rules "Web 514 logs to Splunk" source 172.20.241.40
+set rulebase security rules "Web 514 logs to Splunk" destination 172.20.241.20
+set rulebase security rules "Web 514 logs to Splunk" source-user any
+set rulebase security rules "Web 514 logs to Splunk" category any
+set rulebase security rules "Web 514 logs to Splunk" application any
+set rulebase security rules "Web 514 logs to Splunk" service [ Splunk "Splunk 514" "Splunk 601" ]
+set rulebase security rules "Web 514 logs to Splunk" source-hip any
+set rulebase security rules "Web 514 logs to Splunk" destination-hip any
+set rulebase security rules "Web 514 logs to Splunk" action allow
+set rulebase security rules "Web 514 logs to Splunk" log-start yes
+set rulebase security rules "Web 514 logs to Splunk" log-end no
+set rulebase security rules "Web 514 logs to Splunk" description "This is an Intrazone Policy"
+
+set rulebase security rules "AD 9998 logs to Splunk" to Public
+set rulebase security rules "AD 9998 logs to Splunk" from User
+set rulebase security rules "AD 9998 logs to Splunk" source 172.20.242.200
+set rulebase security rules "AD 9998 logs to Splunk" destination 172.20.241.20
+set rulebase security rules "AD 9998 logs to Splunk" source-user any
+set rulebase security rules "AD 9998 logs to Splunk" category any
+set rulebase security rules "AD 9998 logs to Splunk" application any
+set rulebase security rules "AD 9998 logs to Splunk" service [ Splunk "Splunk 9998" ]
+set rulebase security rules "AD 9998 logs to Splunk" source-hip any
+set rulebase security rules "AD 9998 logs to Splunk" destination-hip any
+set rulebase security rules "AD 9998 logs to Splunk" action allow
+set rulebase security rules "AD 9998 logs to Splunk" log-start yes
+set rulebase security rules "AD 9998 logs to Splunk" log-end no
+set rulebase security rules "AD 9998 logs to Splunk" description "This is an Intrazone Policy"
+
+-Egress Policies
+set rulebase security rules "Egress example DNS" to External
+set rulebase security rules "Egress example DNS" from Internal
+set rulebase security rules "Egress example DNS" source 172.20.240.20
+set rulebase security rules "Egress example DNS" destination any
+set rulebase security rules "Egress example DNS" source-user any
+set rulebase security rules "Egress example DNS" category any
+set rulebase security rules "Egress example DNS" application [ apt-get dns github google-base ntp ssl syslog web-browsing yum ]
+set rulebase security rules "Egress example DNS" service application-default
+set rulebase security rules "Egress example DNS" source-hip any
+set rulebase security rules "Egress example DNS" destination-hip any
+set rulebase security rules "Egress example DNS" action allow
+set rulebase security rules "Egress example DNS" log-start yes
+set rulebase security rules "Egress example DNS" log-end no
+set rulebase security rules "Egress example DNS" description "An example of egress filtering (duh)"
+set rulebase security rules "Egress example DNS" log-setting 172.20.241.20
+set rulebase security rules "Egress example DNS" disabled no 
+
+set rulebase security rules "Egress Palo" to External
+set rulebase security rules "Egress Palo" from any
+set rulebase security rules "Egress Palo" source [ 172.20.242.150 172.20.242.151 172.20.242.152 ]
+set rulebase security rules "Egress Palo" destination any
+set rulebase security rules "Egress Palo" source-user any
+set rulebase security rules "Egress Palo" category any
+set rulebase security rules "Egress Palo" application [ apt-get dns dns-over-https github google-base ntp paloalto-dns-security ssl syslog web-browsing ]
+set rulebase security rules "Egress Palo" service application-default
+set rulebase security rules "Egress Palo" source-hip any
+set rulebase security rules "Egress Palo" destination-hip any
+set rulebase security rules "Egress Palo" action allow
+set rulebase security rules "Egress Palo" log-start yes
+set rulebase security rules "Egress Palo" log-end no
+set rulebase security rules "Egress Palo" description "my attempt at an egress policy"
+set rulebase security rules "Egress Palo" log-setting 172.20.241.20
+set rulebase security rules "Egress Palo" disabled no 
+
+set rulebase security rules "Egress E-Comm" to External
+set rulebase security rules "Egress E-Comm" from Public
+set rulebase security rules "Egress E-Comm" source 172.20.241.30
+set rulebase security rules "Egress E-Comm" destination any
+set rulebase security rules "Egress E-Comm" source-user any
+set rulebase security rules "Egress E-Comm" category any
+set rulebase security rules "Egress E-Comm" application [ apt-get dns github google-base ntp ssl web-browsing yum ]
+set rulebase security rules "Egress E-Comm" service any
+set rulebase security rules "Egress E-Comm" source-hip any
+set rulebase security rules "Egress E-Comm" destination-hip any
+set rulebase security rules "Egress E-Comm" action allow
+set rulebase security rules "Egress E-Comm" log-start yes
+set rulebase security rules "Egress E-Comm" log-end no
+set rulebase security rules "Egress E-Comm" description "My attempt at an egress policy"
+set rulebase security rules "Egress E-Comm" log-setting 172.20.241.20
+set rulebase security rules "Egress E-Comm" disabled no 
+
+set rulebase security rules "Egress Web" to External
+set rulebase security rules "Egress Web" from Public
+set rulebase security rules "Egress Web" source 172.20.241.40
+set rulebase security rules "Egress Web" destination any
+set rulebase security rules "Egress Web" source-user any
+set rulebase security rules "Egress Web" category any
+set rulebase security rules "Egress Web" application [ dns github google-base ntp ssl syslog web-browsing yum ]
+set rulebase security rules "Egress Web" service application-default
+set rulebase security rules "Egress Web" source-hip any
+set rulebase security rules "Egress Web" destination-hip any
+set rulebase security rules "Egress Web" action allow
+set rulebase security rules "Egress Web" log-start yes
+set rulebase security rules "Egress Web" log-end no
+set rulebase security rules "Egress Web" description "My attempt at an egress policy"
+set rulebase security rules "Egress Web" log-setting 172.20.241.20
+set rulebase security rules "Egress Web" disabled no 
+
+set rulebase security rules "Egress AD" to External
+set rulebase security rules "Egress AD" from User
+set rulebase security rules "Egress AD" source 172.20.242.200
+set rulebase security rules "Egress AD" destination any
+set rulebase security rules "Egress AD" source-user any
+set rulebase security rules "Egress AD" category any
+set rulebase security rules "Egress AD" application [ dns dns-over-https github google-base icmp ms-update ntp okta soap ssl web-browsing ]
+set rulebase security rules "Egress AD" service application-default
+set rulebase security rules "Egress AD" source-hip any
+set rulebase security rules "Egress AD" destination-hip any
+set rulebase security rules "Egress AD" action allow
+set rulebase security rules "Egress AD" log-start yes
+set rulebase security rules "Egress AD" log-end no
+set rulebase security rules "Egress AD" description "More practice"
+set rulebase security rules "Egress AD" log-setting 172.20.241.20
+set rulebase security rules "Egress AD" disabled no 
+
+set rulebase security rules "Egress Splunk" to External
+set rulebase security rules "Egress Splunk" from Public
+set rulebase security rules "Egress Splunk" source 172.20.241.20
+set rulebase security rules "Egress Splunk" destination any
+set rulebase security rules "Egress Splunk" source-user any
+set rulebase security rules "Egress Splunk" category any
+set rulebase security rules "Egress Splunk" application [ dns dns-over-https github google-base ntp ssl web-browsing yum ]
+set rulebase security rules "Egress Splunk" service application-default
+set rulebase security rules "Egress Splunk" source-hip any
+set rulebase security rules "Egress Splunk" destination-hip any
+set rulebase security rules "Egress Splunk" action allow
+set rulebase security rules "Egress Splunk" log-start yes
+set rulebase security rules "Egress Splunk" log-end no
+set rulebase security rules "Egress Splunk" description "More practice"
+set rulebase security rules "Egress Splunk" log-setting 172.20.241.20
+set rulebase security rules "Egress Splunk" disabled no 
+
+-Ingress Policies
+set rulebase security rules "Ingress UbuntuWrks" to User
+set rulebase security rules "Ingress UbuntuWrks" from External
+set rulebase security rules "Ingress UbuntuWrks" source any
+set rulebase security rules "Ingress UbuntuWrks" destination 172.20.242.152
+set rulebase security rules "Ingress UbuntuWrks" source-user any
+set rulebase security rules "Ingress UbuntuWrks" category any
+set rulebase security rules "Ingress UbuntuWrks" application [ dns dns-over-https github google-base ntp ssl web-browsing yum ]
+set rulebase security rules "Ingress UbuntuWrks" service application-default
+set rulebase security rules "Ingress UbuntuWrks" source-hip any
+set rulebase security rules "Ingress UbuntuWrks" destination-hip any
+set rulebase security rules "Ingress UbuntuWrks" action allow
+set rulebase security rules "Ingress UbuntuWrks" log-start yes
+set rulebase security rules "Ingress UbuntuWrks" log-end no
+set rulebase security rules "Ingress UbuntuWrks" description "More practice"
+set rulebase security rules "Ingress UbuntuWrks" log-setting 172.20.241.20
+set rulebase security rules "Ingress UbuntuWrks" disabled yes 
+
+set rulebase security rules "Ingress DNS" to Internal
+set rulebase security rules "Ingress DNS" from External
+set rulebase security rules "Ingress DNS" source any
+set rulebase security rules "Ingress DNS" destination 172.20.240.20
+set rulebase security rules "Ingress DNS" source-user any
+set rulebase security rules "Ingress DNS" category any
+set rulebase security rules "Ingress DNS" application [ dns ntp ]
+set rulebase security rules "Ingress DNS" service application-default
+set rulebase security rules "Ingress DNS" source-hip any
+set rulebase security rules "Ingress DNS" destination-hip any
+set rulebase security rules "Ingress DNS" action allow
+set rulebase security rules "Ingress DNS" log-start yes
+set rulebase security rules "Ingress DNS" log-end no
+set rulebase security rules "Ingress DNS" description "Use the ports!"
+set rulebase security rules "Ingress DNS" log-setting 172.20.241.20
+set rulebase security rules "Ingress DNS" disabled no 
+set rulebase security rules "Ingress DNS" profile-setting profiles virus default 
+set rulebase security rules "Ingress DNS" profile-setting profiles spyware strict
+set rulebase security rules "Ingress DNS" profile-setting profiles vulnerability strict
+
+set rulebase security rules "Ingress Splunk" to Public
+set rulebase security rules "Ingress Splunk" from External
+set rulebase security rules "Ingress Splunk" source any
+set rulebase security rules "Ingress Splunk" destination 172.20.241.20
+set rulebase security rules "Ingress Splunk" source-user any
+set rulebase security rules "Ingress Splunk" category any
+set rulebase security rules "Ingress Splunk" application [ dns ntp syslog ]
+set rulebase security rules "Ingress Splunk" service application-default
+set rulebase security rules "Ingress Splunk" source-hip any
+set rulebase security rules "Ingress Splunk" destination-hip any
+set rulebase security rules "Ingress Splunk" action allow
+set rulebase security rules "Ingress Splunk" log-start yes
+set rulebase security rules "Ingress Splunk" log-end no
+set rulebase security rules "Ingress Splunk" description "Note the application section because that is what is allowed into Splunk."
+set rulebase security rules "Ingress Splunk" log-setting 172.20.241.20
+set rulebase security rules "Ingress Splunk" disabled no 
+set rulebase security rules "Ingress Splunk" profile-setting profiles virus default 
+set rulebase security rules "Ingress Splunk" profile-setting profiles spyware strict
+set rulebase security rules "Ingress Splunk" profile-setting profiles vulnerability strict
+
+set rulebase security rules "Ingress E-Comm" to Public
+set rulebase security rules "Ingress E-Comm" from External
+set rulebase security rules "Ingress E-Comm" source any
+set rulebase security rules "Ingress E-Comm" destination 172.20.241.30
+set rulebase security rules "Ingress E-Comm" source-user any
+set rulebase security rules "Ingress E-Comm" category any
+set rulebase security rules "Ingress E-Comm" application [ dns ntp syslog ]
+set rulebase security rules "Ingress E-Comm" service application-default
+set rulebase security rules "Ingress E-Comm" source-hip any
+set rulebase security rules "Ingress E-Comm" destination-hip any
+set rulebase security rules "Ingress E-Comm" action allow
+set rulebase security rules "Ingress E-Comm" log-start yes
+set rulebase security rules "Ingress E-Comm" log-end no
+set rulebase security rules "Ingress E-Comm" description "Note the application section because that is what is allowed into Splunk."
+set rulebase security rules "Ingress E-Comm" log-setting 172.20.241.20
+set rulebase security rules "Ingress E-Comm" disabled no 
+set rulebase security rules "Ingress E-Comm" profile-setting profiles virus default 
+set rulebase security rules "Ingress E-Comm" profile-setting profiles spyware strict
+set rulebase security rules "Ingress E-Comm" profile-setting profiles vulnerability strict
+
+set rulebase security rules "Ingress Webmail" to Public
+set rulebase security rules "Ingress Webmail" from External
+set rulebase security rules "Ingress Webmail" source any
+set rulebase security rules "Ingress Webmail" destination 172.20.241.40 
+set rulebase security rules "Ingress Webmail" source-user any
+set rulebase security rules "Ingress Webmail" category any
+set rulebase security rules "Ingress Webmail" application [ dns ntp syslog ]
+set rulebase security rules "Ingress Webmail" service application-default
+set rulebase security rules "Ingress Webmail" source-hip any
+set rulebase security rules "Ingress Webmail" destination-hip any
+set rulebase security rules "Ingress Webmail" action allow
+set rulebase security rules "Ingress Webmail" log-start yes
+set rulebase security rules "Ingress Webmail" log-end no
+set rulebase security rules "Ingress Webmail" description "Dunno what the hell web needs so yolo"
+set rulebase security rules "Ingress Webmail" log-setting 172.20.241.20
+set rulebase security rules "Ingress Webmail" disabled no 
+set rulebase security rules "Ingress Webmail" profile-setting profiles virus default 
+set rulebase security rules "Ingress Webmail" profile-setting profiles spyware strict
+set rulebase security rules "Ingress Webmail" profile-setting profiles vulnerability strict
+
+set rulebase security rules "Ingress AD" to Public
+set rulebase security rules "Ingress AD" from External
+set rulebase security rules "Ingress AD" source any
+set rulebase security rules "Ingress AD" destination 172.20.242.200 
+set rulebase security rules "Ingress AD" source-user any
+set rulebase security rules "Ingress AD" category any
+set rulebase security rules "Ingress AD" application [ dns ntp syslog ]
+set rulebase security rules "Ingress AD" service application-default
+set rulebase security rules "Ingress AD" source-hip any
+set rulebase security rules "Ingress AD" destination-hip any
+set rulebase security rules "Ingress AD" action allow
+set rulebase security rules "Ingress AD" log-start yes
+set rulebase security rules "Ingress AD" log-end no
+set rulebase security rules "Ingress AD" description "Practice"
+set rulebase security rules "Ingress AD" log-setting 172.20.241.20
+set rulebase security rules "Ingress AD" disabled no 
+set rulebase security rules "Ingress AD" profile-setting profiles virus default 
+set rulebase security rules "Ingress AD" profile-setting profiles spyware strict
+set rulebase security rules "Ingress AD" profile-setting profiles vulnerability strict
+
+-Intra Zone Policies 
+set rulebase security rules "IntraZ AD" to [ Internal Public User ]
+set rulebase security rules "IntraZ AD" from User
+set rulebase security rules "IntraZ AD" source any
+set rulebase security rules "IntraZ AD" destination any 
+set rulebase security rules "IntraZ AD" source-user any
+set rulebase security rules "IntraZ AD" category any
+set rulebase security rules "IntraZ AD" application [ kerberos ldap ]
+set rulebase security rules "IntraZ AD" service application-default
+set rulebase security rules "IntraZ AD" source-hip any
+set rulebase security rules "IntraZ AD" destination-hip any
+set rulebase security rules "IntraZ AD" action allow
+set rulebase security rules "IntraZ AD" log-start yes
+set rulebase security rules "IntraZ AD" log-end no
+set rulebase security rules "IntraZ AD" description "I dunno who needs to talk to AD but I DO know AD need ldap which is dangerous to let out. So, this is an Intrazone policy for AD with ldap exclusivly in mind. ldap should not be permitted on any other policies! AD also needs dangerous kerberos to docker. We probably wont even have the docker going, but I'll include it here JIC.""
+
+-Implicit Deny 
 set rulebase security rules "Implicit Deny" to any
 set rulebase security rules "Implicit Deny" from any
 set rulebase security rules "Implicit Deny" source any
@@ -191,9 +489,60 @@ set rulebase security rules "Implicit Deny" destination-hip any
 set rulebase security rules "Implicit Deny" action deny
 set rulebase security rules "Implicit Deny" description "Goodbye, Internet!!" 
 
--Updates (Last!)
+-Wildfire
+set profiles wildfire-analysis "New Wildfire Profile" rules TestWildFire application any
+set profiles wildfire-analysis "New Wildfire Profile" rules TestWildFire file-type [ email-link jar ms-office pe script ]
+set profiles wildfire-analysis "New Wildfire Profile" rules TestWildFire direction both
+set profiles wildfire-analysis "New Wildfire Profile" rules TestWildFire analysis public-cloud 
+set profiles wildfire-analysis "New Wildfire Profile" description "My Wildfire policy. Not sure what I'm doing, mind you, but it's better than nothing."
+
+---Inject Specific Configurations---
+
+-Log-on Banner
+set deviceconfig system motd-and-banner message "WARNING: Authorized users only. Continued use of this device will be interpreted as consent to monitoring, logging, and auditing of suspicious actions and may be used in the court of law. You have been warned." 
+***Must be in configure mode***
+
+-Password Complexity
+set mgt-config password-complexity enabled yes
+set mgt-config password-complexity minimum-uppercase-letters 1
+set mgt-config password-complexity minimum-lowercase-letters 1
+set mgt-config password-complexity minimum-numeric-letters 1
+set mgt-config password-complexity minimum-special-characters 1
+set mgt-config password-complexity password-history-count 3
+set mgt-config password-complexity password-change expiration-period 90
+set mgt-config password-complexity password-change expiration-warning-period 10
+
+-QoS objects
+set rulebase qos rules "QoS Egress" dscp-tos codepoints "DSCP AF21" af codepoint af21
+set rulebase qos rules "QoS Egress" from [ Public User ]
+set rulebase qos rules "QoS Egress" to any
+set rulebase qos rules "QoS Egress" source [ 172.20.242.10 172.20.241.30 ]
+set rulebase qos rules "QoS Egress" destination any
+set rulebase qos rules "QoS Egress" source-user any
+set rulebase qos rules "QoS Egress" category any
+set rulebase qos rules "QoS Egress" application [ ssl web-browsing ]
+set rulebase qos rules "QoS Egress" service any
+set rulebase qos rules "QoS Egress" source-hip any
+set rulebase qos rules "QoS Egress" destination-hip any
+set rulebase qos rules "QoS Egress" action class 1
+set rulebase qos rules "QoS Egress" description "My attempt at completing this inject"
+
+set rulebase qos rules "QoS Inject" dscp-tos codepoints "DSCP AF21" af codepoint af21
+set rulebase qos rules "QoS Inject" from External
+set rulebase qos rules "QoS Inject" to [ Public User ]
+set rulebase qos rules "QoS Inject" source any
+set rulebase qos rules "QoS Inject" destination [ 172.20.242.10 172.20.241.30 ]
+set rulebase qos rules "QoS Inject" source-user any
+set rulebase qos rules "QoS Inject" category any
+set rulebase qos rules "QoS Inject" application [ ssl web-browsing ]
+set rulebase qos rules "QoS Inject" service any
+set rulebase qos rules "QoS Inject" source-hip any
+set rulebase qos rules "QoS Inject" destination-hip any
+set rulebase qos rules "QoS Inject" action class 1
+set rulebase qos rules "QoS Inject" description "My attempt at completing this inject"
+
+-Updates (Last! Do it manually/GUI so in case of issue not locked out)
 
 -Backups 
- Device > Setup > Operations > Export Device State
- Note: May bring down connections and is very time consuming. Use as a 
- last resort. 
+Device > Setup > Operations > Export Device State
+Note: May bring down connections and is very time consuming. Use as a last resort. 
