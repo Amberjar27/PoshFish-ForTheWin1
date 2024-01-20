@@ -1,3 +1,23 @@
+#########################################################################
+# This lovely mess was made by an impromptu Palo scrub the 2023-2024    # 
+# Metro CCDC team. Just call me Eggy. Anyway, most of these are pretty  #
+# self explanitory as each block of script is headed by a title that    #
+# esentially describes what each chunk does. A few are a bit funny      #
+# like the 'Inject Specific' rules I put on the way bottom under the    # 
+# content breaker of the same name. Just know you don't have to use     #
+# all of this and some things may be worth a second glance as, as       #
+# previously stated, I am a novice. Also, this script was created with  #
+# copy/pasting in mind so no, you cannot just make this executable and  #
+# run it. You have to pull out chunks if you want need certain things.  #
+# Finally, let it be noted that MOST of these run in configure mode of  #
+# Palo but not all. Which ones don't you may ask? I dunno. I forgot to  #
+# check. A couple are listed by the rest you're just gonna have to      #
+# figure out on your own. Anyway, good luck future Palo predecessor of  #
+# mine. Here's hoping you preceed me in all the best ways.              #
+#########################################################################
+
+
+
 -Change Passwords
 set password (palo)
 passwd (Ubuntu)
