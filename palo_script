@@ -2,10 +2,8 @@
 # This lovely mess was made by an impromptu Palo scrub the 2023-2024    # 
 # Metro CCDC team. Just call me Eggy. Anyway, most of these are pretty  #
 # self explanitory as each block of script is headed by a title that    #
-# esentially describes what each chunk does. A few are a bit funny      #
-# like the 'Inject Specific' rules I put on the way bottom under the    # 
-# content breaker of the same name. Just know you don't have to use     #
-# all of this and some things may be worth a second glance as, as       #
+# esentially describes what each chunk does. Just know you don't have   #
+# to use all of this and some things may be worth a second glance as    #
 # previously stated, I am a novice. Also, this script was created with  #
 # copy/pasting in mind so no, you cannot just make this executable and  #
 # run it. You have to pull out chunks if you want need certain things.  #
@@ -516,8 +514,6 @@ set profiles wildfire-analysis "New Wildfire Profile" rules TestWildFire directi
 set profiles wildfire-analysis "New Wildfire Profile" rules TestWildFire analysis public-cloud 
 set profiles wildfire-analysis "New Wildfire Profile" description "My Wildfire policy. Not sure what I'm doing, mind you, but it's better than nothing."
 
----Inject Specific Configurations---
-
 -Log-on Banner
 set deviceconfig system motd-and-banner message "WARNING: Authorized users only. Continued use of this device will be interpreted as consent to monitoring, logging, and auditing of suspicious actions and may be used in the court of law. You have been warned." 
 ***Must be in configure mode***
@@ -531,35 +527,6 @@ set mgt-config password-complexity minimum-special-characters 1
 set mgt-config password-complexity password-history-count 3
 set mgt-config password-complexity password-change expiration-period 90
 set mgt-config password-complexity password-change expiration-warning-period 10
-
--QoS objects
-set rulebase qos rules "QoS Egress" dscp-tos codepoints "DSCP AF21" af codepoint af21
-set rulebase qos rules "QoS Egress" from [ Public User ]
-set rulebase qos rules "QoS Egress" to any
-set rulebase qos rules "QoS Egress" source [ 172.20.242.10 172.20.241.30 ]
-set rulebase qos rules "QoS Egress" destination any
-set rulebase qos rules "QoS Egress" source-user any
-set rulebase qos rules "QoS Egress" category any
-set rulebase qos rules "QoS Egress" application [ ssl web-browsing ]
-set rulebase qos rules "QoS Egress" service any
-set rulebase qos rules "QoS Egress" source-hip any
-set rulebase qos rules "QoS Egress" destination-hip any
-set rulebase qos rules "QoS Egress" action class 1
-set rulebase qos rules "QoS Egress" description "My attempt at completing this inject"
-
-set rulebase qos rules "QoS Inject" dscp-tos codepoints "DSCP AF21" af codepoint af21
-set rulebase qos rules "QoS Inject" from External
-set rulebase qos rules "QoS Inject" to [ Public User ]
-set rulebase qos rules "QoS Inject" source any
-set rulebase qos rules "QoS Inject" destination [ 172.20.242.10 172.20.241.30 ]
-set rulebase qos rules "QoS Inject" source-user any
-set rulebase qos rules "QoS Inject" category any
-set rulebase qos rules "QoS Inject" application [ ssl web-browsing ]
-set rulebase qos rules "QoS Inject" service any
-set rulebase qos rules "QoS Inject" source-hip any
-set rulebase qos rules "QoS Inject" destination-hip any
-set rulebase qos rules "QoS Inject" action class 1
-set rulebase qos rules "QoS Inject" description "My attempt at completing this inject"
 
 -Updates (Last! Do it manually/GUI so in case of issue not locked out)
 
