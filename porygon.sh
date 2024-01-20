@@ -1,12 +1,9 @@
 #Repo and firewall script for Splunk on CentOS6 written by Karl Boeh
+#Includes firewall-cmd rules option for CentOS7
 #Firewall rules mostly stolen from Liam Powell
 #Option (x) sets firewall rules using iptables for CentOS6
 #Option (n) sets firewall rules using firewall-cmd for CentOS7
 #Option (r) will change the repos for CentOS6 to allow for updates
-#GUI Setup is currently commented out because of issues getting it working
-#on CentOS7 minimal install
-#I expect that the competition environment will not be on a fresh minimal install
-#if CentOS7 is the Splunk OS
 
 #bin/bash
 six(){
@@ -36,7 +33,7 @@ six(){
 }
 
 seven(){
-  # FirewallD setup script for Splunk and Gravwell
+  # FirewallD setup script for Splunk
   # Uses Firewall-CMD commands
   
   printf "Getting current configuration"
