@@ -1,6 +1,6 @@
 ################################################################################
-# Written by: Karl Boeh                                  #
-# For: Metro State CCDC 2024                             #
+# Written by: Karl Boeh                                                        #
+# For: Metro State CCDC 2024                                                   #
 # Purpose: Performs the initial hardening/setup tasks for the Splunk           #
 # machine. Running snorlax.sh with flag (x) will perform setup on CentOS6.     #
 # Running snorlax.sh with flag (n) will perform setup on CentOS7               #
