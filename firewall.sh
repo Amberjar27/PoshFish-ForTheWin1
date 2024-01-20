@@ -115,8 +115,8 @@ setPaloWS(){
   iptables -A OUTPUT -o lo -j ACCEPT
 
   #Splunk port?
-  #iptables -A INPUT -p tcp --dport 8000 -d $2 -j ACCEPT
-  #iptables -A OUTPUT -p tcp --dport 8000 -d $2 -j ACCEPT
+  iptables -A INPUT -p tcp --dport 8000 -d $2 -j ACCEPT
+  iptables -A OUTPUT -p tcp --dport 8000 -d $2 -j ACCEPT
 
   #SSH
   iptables -A INPUT -p tcp --dport 22 -d $1 -j ACCEPT
