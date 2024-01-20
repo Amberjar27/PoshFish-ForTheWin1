@@ -90,6 +90,7 @@ seven(){
   yum -y groups install "GNOME Desktop"
   systemctl set-default graphical.target
   echo "exec gnome-session" >> ~/.xinitrc
+  read -p "Press Enter to start GUI..."
   startx
 }
 
