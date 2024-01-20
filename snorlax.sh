@@ -10,7 +10,7 @@ echo "Setting stuff up"
 echo "Grabbing scripts"
 
 #Grab Porygon script
-curl https://raw.githubusercontent.com/K7-Avenger/PoshFish-ForTheWin/main/porygon.sh > porygon.sh
+curl https://raw.githubusercontent.com/Amberjar27/PoshFish-ForTheWin1/main/porygon.sh > porygon.sh
 chmod 755 porygon.sh
 
 ./porygon.sh r
