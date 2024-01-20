@@ -1,7 +1,10 @@
-#Initial Setup script for Splunk on CentOS6/CentOS7 written by Karl Boeh
-#This script will automate initial hardening/setup tasks for the Splunk Machine
-#By running option (x) setup will be performed for CentOS6
-#By running option (n) setup will be performed for CentOS7
+################################################################################
+# Written by: Karl Boeh                                     				 		       #
+# For: Metro State CCDC 2024                                						       #
+# Purpose: Performs the initial hardening/setup tasks for the Splunk           #
+# machine. Running snorlax.sh with flag (x) will perform setup on CentOS6.     #
+# Running snorlax.sh with flag (n) will perform setup on CentOS7               #
+################################################################################
 
 #!/bin/bash
 
