@@ -1,3 +1,14 @@
+################################################################################
+# Written by: Karl Boeh (Firewall Rules mostly stolen from Liam Powell)        #
+# For: Metro State CCDC 2024                                                   #
+# Purpose: This script contains firewall rules for both CentOS6 using          #
+# iptables commands and CentOS7 using firewall-cmd commands. Running           #
+# porygon.sh with the (x) flag will set firewall rules for CentOS6.            #
+# Running porygon.sh with the (n) flag will set firewall rules for CentOS7     #
+# Running porygon.sh with the (r) flag will update the repos on CentOS6        #
+################################################################################
+
+
 #Repo and firewall script for Splunk on CentOS6 written by Karl Boeh
 #Includes firewall-cmd rules option for CentOS7
 #Firewall rules mostly stolen from Liam Powell
