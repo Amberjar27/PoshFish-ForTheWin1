@@ -71,8 +71,9 @@ seven(){
   yum install -y firefox
   yum install -y tcpdump
   yum install -y ntp
+  yum install -y net-tools
   
-  yum list installed | grep -E 'clamav|firefox|tcpdump|ntp' 2>/dev/null
+  yum list installed | grep -E 'clamav|firefox|tcpdump|ntp|net-tools' 2>/dev/null
 
   #Edit rsyslog to allow incoming traffic on ports TCP 1516/UDP 1515/Palo 1514/UDP
   #UDP
