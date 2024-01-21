@@ -6,6 +6,8 @@
 # porygon.sh with the (x) flag will set firewall rules for CentOS6.            #
 # Running porygon.sh with the (n) flag will set firewall rules for CentOS7     #
 # Running porygon.sh with the (r) flag will update the repos on CentOS6        #
+# Running porygon.sh with the (u) flag will deploy firewall rules for the      #
+# Ubuntu Web 18.04 Server                                                      #
 ################################################################################
 
 #bin/bash
