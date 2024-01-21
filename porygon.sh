@@ -137,8 +137,31 @@ repos(){
   mv CentOS-Base.repo CentOS-Base.repo.back
   mv CentOS-Base.repo.bak CentOS-Base.repo
 }
+
+ubuntu_web(){
+  iptables -F
+  iptables -A INPUT -i lo -j ACCEPT
+  iptables -A OUTPUT -o lo -j ACCEPT
+  iptables -A INPUT -p udp --dport 123 -j ACCEPT
+  iptables -A OUTPUT -p udp --dport 123 -j ACCEPT
+  iptables -A OUTPUT -p tcp --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
+  iptables -A OUTPUT -p udp --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT 
+  iptables -A OUTPUT -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+  iptables -A OUTPUT -p tcp --dport 443 -m state --state NEW,ESTABLISHED -j ACCEPT
+  iptables -A OUTPUT -p tcp --dport 1516 -j ACCEPT
+  iptables -A OUTPUT -p udp --dport 1515 -j ACCEPT
+  iptables -A INPUT -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j DROP
+  iptables -A OUTPUT -p tcp --dport 22 -m state --state ESTABLISHED -j DROP
+  iptables -A INPUT -m state --state ESTABLISHED -j ACCEPT
+  iptables -P INPUT DROP
+  iptables -P FORWARD DROP
+  iptables -P OUTPUT DROP
+  service iptables save
+}
+
 case $1 in
   x) six;;
   n) seven;;
   r) repos;;
+  u) ubuntu_web;;
 esac
