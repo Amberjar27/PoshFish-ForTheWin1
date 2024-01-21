@@ -158,7 +158,7 @@ ubuntu_web(){
   iptables -P INPUT DROP
   iptables -P FORWARD DROP
   iptables -P OUTPUT DROP
-  service iptables save
+  #save rules manually or run script again to redeploy rules
 }
 
 case $1 in
