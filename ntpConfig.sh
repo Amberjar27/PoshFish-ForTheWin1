@@ -103,7 +103,7 @@ serverConfig(){
 	echo "server 2.us.pool.ntp.org iburst" >> /etc/ntp.conf
 	echo "server 3.us.pool.ntp.org iburst" >> /etc/ntp.conf
 	
-	echo -e "\nNon-pooled source(s)" >> /etc/ntp.conf
+	echo -e "#Non-pooled source(s)" >> /etc/ntp.conf
 	echo "server nss.nts.umn.edu iburst" >> /etc/ntp.conf
 	echo "server time.cloudflare.com iburst" >> /etc/ntp.conf
 	
@@ -130,14 +130,14 @@ serverConfig(){
 while getopts 'ucs :' OPTION; do
   case "$OPTION" in
     u)
-      read -p "Enter the IPv4 address of the servper providing NTP: " ntpIP
+      read -p "Enter the IPv4 address of the server providing NTP: " ntpIP
       echo -e "Applying NTP configs for Debian/Ubuntu clients...\n"
       echo -e -n "${GREEN}"
       debianClient $ntpIP
       echo -e "${RESET}"      
       ;;
     c)
-      read -p "Enter the IPv4 address of the servper providing NTP: " ntpIP
+      read -p "Enter the IPv4 address of the server providing NTP: " ntpIP
       echo -e "Applying NTP configs for centOS/Fedora clients...\n"
       echo -e -n "${GREEN}"
       centOsClient $ntpIP
