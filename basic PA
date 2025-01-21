@@ -1,0 +1,46 @@
+#basic script
+
+set rulebase security rules AllowScoring from any to any source any destination any application [ dns ssl web-browsing ] action allow service application-default log-start yes log-end yes
+
+#set rulebase security rules WebMail-Inbound from [ External Public ] to [ Public External ] source any destination 10.100.1.58 action allow service application-default
+set rulebase security rules WebMail-Inbound from [ External Public ] to [ Public External ] source any destination 172.25.20.8.39 action allow service application-default
+
+# Create WebMail-Inbound Rule
+set rulebase security rules WebMail-Inbound destination 172.20.241.40 application [ dns web-browsing ssl smtp pop3 imap ] log-start yes log-end yes
+# Create WebMail-Outbound Rule
+set rulebase security rules WebMail-Out from Public to External source 172.20.241.40 destination any action allow service application-default
+set rulebase security rules WebMail-Out application [ dns web-browsing ssl smtp pop3 imap ] log-start yes log-end yes
+
+
+#DNS out
+set service RNDC protocol tcp port 953
+set service RNDC protocol udp port 953
+set rulebase security rules Allow-RNDC from Internal to External source 172.20.240.20 destination any application any service RNDC action allow log-start yes log-end yes
+set rulebase security rules Allow-RNDC from Internal to External source 172.20.240.20 destination any application any service RNDC action allow log-start yes log-end yes
+
+set rulebase security rules NTP-Out from Internal to External source 172.20.240.20 destination any application ntp action allow service application-default log-start yes log-end yes
+
+#Splunk Int 
+set rulebase security rules Splunk-Internal-Logging from [ Internal User Public ] to Public source [ 172.20.242.10 172.20.240.20 172.20.241.30 172.20.241.40 172.20.242.150 ] destination 172.20.241.20 application any action allow
+set service Splunk-1514 protocol udp port 1514
+set service Splunk-1514 protocol tcp port 1514
+set rulebase security rules Splunk-Internal-Logging service Splunk-1514 log-start yes log-end yes
+set rulebase security rules Splunk-User-9998 from User to Public source 172.20.242.200 destination 172.20.241.20 application splunk action allow
+set service Splunk-9998 protocol tcp port 9998
+set rulebase security rules Splunk-User-9998 service Splunk-9998
+set rulebase security rules Splunk-User-9998 log-start yes log-end yes
+
+
+set rulebase security rules PaloOut from User to External source 172.20.242.153 destination any application [ dns web-browsing ssl ] service application-default action allow log-start yes log-end yes
+set rulebase security rules PaloGUI from User to User source 172.20.242.153 destination [ 172.20.242.150 172.20.242.254 ] application [ ssh ] service application-default action allow log-start yes log-end yes
+set rulebase security rules PaloOutUpdate from User to External source 172.20.242.150 destination any application [ pan-db-cloud paloalto-updates ] service application-default action allow log-start yes log-end yes
+
+set rulebase security rules Allow-File from [ Internal User Public ] to External source any destination any application [ github apt-get google-base yum ] service application-default action allow log-start yes log-end yes
+
+
+# TEST IN pracTICe
+set rulebase security rules Deny-ICMP-Team8-Core from any to any source any destination 172.31.28.1 application ping service application-default action deny log-start yes log-end yes
+set rulebase security rules Allow-ICMP-Global from any to any source any destination any application ping action allow service application-default log-start yes log-end yes
+
+
+set rulebase security rules Deny-All from any to any source any destination any application any service any action deny log-start yes log-end yes
