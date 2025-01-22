@@ -144,4 +144,45 @@ Enter at your own risk."
     echo "MOTD added sucessfully"
     }
 
-  
+while true; do
+    show_menu
+    read -p "Select Option(Enter 10 to exit): " choice
+    
+    case $choice in
+        1)
+            option1
+            ;;
+        2)
+            option2
+            ;;
+        3)
+            option3
+            ;;
+        4)
+            option4
+            ;;
+        5)
+            option5
+            ;;
+        6)
+            option6
+            ;;
+        7)
+            option7
+            ;;
+        8)
+            option8
+            ;;
+        9)
+            option9
+            ;;
+        10)
+            echo "Exiting..."
+            exit 0
+            ;;
+        *)
+            echo "Invalid option. Please try again."
+            ;;
+    esac
+done
+        
