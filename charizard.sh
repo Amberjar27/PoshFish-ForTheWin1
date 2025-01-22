@@ -40,14 +40,11 @@ iptables -A INPUT -p tcp --dport 443 -j ACCEPT
 iptables -A INPUT -p udp --dport 53 -j ACCEPT
 iptables -A INPUT -p tcp --dport 53 -j ACCEPT
 
-# Allow MySQL traffic (if remote access is needed)
-iptables -A INPUT -p tcp --dport 3306 -j ACCEPT
-
 # Allow NTP traffic
-iptables -A INPUT -p udp --dport 123 -j ACCEPT
+iptables -A INPUT -p udp --dport 123 -d 172.20.241.20 -j ACCEPT
 
 # Allow rsyslog traffic
-iptables -A INPUT -p udp --dport 1514 -j ACCEPT
+iptables -A OUPTUT -p tcp --dport 1514 -d 172.20.241.20 -j ACCEPT
 
 # Allow established and related connections
 iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
