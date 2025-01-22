@@ -21,13 +21,13 @@ oddish_check() {
   fi
 }
 
-Option1() {
+option1() {
   echo "Enabling GUI..."
   yum groupinstall "GNOME Desktop" -y
   reboot
   }
 
-Option2() {
+option2() {
   oddish_check
   password users=$(cat /etc/shadow | grep -wv * | grep -wv ! | cut -d \: -f 1)
   for user in $password_users
@@ -38,7 +38,7 @@ Option2() {
     done
   }
 
-Option3() {
+option3() {
   echo "Updating System..."
   yum update && yum update epel-release
   yum clean all
@@ -47,14 +47,14 @@ Option3() {
   echo "System Updated"
   }
 
-Option4() {
+option4() {
   echo "Installing ClamAV..."
   yum install clamav -y
   freshclam
   echo "Install Complete"
   }
 
-Option5() {
+option5() {
   echo "Installing Fail2Ban..."
   yum install fail2ban -y
   echo "Fail2Ban Installed, enabling services..."
@@ -63,7 +63,7 @@ Option5() {
   echo "Adding Jails..."
   ###***ADD JAILS***###
 
-  Option6() {
+  option6() {
     echo "Applying permissions for directories..."
     chmod -R 755 /var/www/html/
     chmod -R 755 /var/www/html/uploads
@@ -75,7 +75,7 @@ Option5() {
     chown root:root /opt/prestashop/config/settings.inc.php
     }
 
-  Option7() {
+  option7() {
     echo "Enabling iptables..."
     systemctl stop firewalld
     systemctl disable firewalld
@@ -110,7 +110,7 @@ Option5() {
     echo "Firewall rules enabled"
     }
 
-  Option8() {
+  option8() {
     ###***NEED TO ADD FILE LOCATION***###
     echo "Backing up directories..."
     cp -r /var/www/html /path/of/preference
@@ -132,7 +132,7 @@ Option5() {
     echo "Backup complete"
   }
 
-  Option9() {
+  option9() {
     echo "Applying MOTD warning..."
     MOTD="Be advised all systems within this network are actively monitored, and all
 activity is logged. Network activity is subject to random audits at any time.
