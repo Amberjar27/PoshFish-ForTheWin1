@@ -1,0 +1,147 @@
+#! /bin/bash
+
+show_menu() {
+  echo "******************************"
+  echo "             Menu             "
+  echo "******************************"
+  echo "1) Set up GUI"
+  echo "2) Issue Password Update"
+  echo "3) System Update"
+  echo "4) Install ClamAV"
+  echo "5) Install Fail2Ban and Create Jails"
+  echo "6) Set Directory Permissions"
+  echo "7) Apply Firewall Rules"
+  echo "8) Backup Directories"
+  echo "9) Create MOTD"
+}
+oddish_check() {
+  if [[ $EUID != 0 ]]; then
+    echo "Not running as root...exiting."
+    exit 1
+  fi
+}
+
+Option1() {
+  echo "Enabling GUI..."
+  yum groupinstall "GNOME Desktop" -y
+  reboot
+  }
+
+Option2() {
+  oddish_check
+  password users=$(cat /etc/shadow | grep -wv * | grep -wv ! | cut -d \: -f 1)
+  for user in $password_users
+    do
+      read -p "Enter a new and unique password for $user: " newpass
+      echo "$user:$newpass" | chapasswd
+      echo "Password for $user updated."
+    done
+  }
+
+Option3() {
+  echo "Updating System..."
+  yum update && yum update epel-release
+  yum clean all
+  yum list updates
+  yum update httpd mysql-server php
+  echo "System Updated"
+  }
+
+Option4() {
+  echo "Installing ClamAV..."
+  yum install clamav -y
+  freshclam
+  echo "Install Complete"
+  }
+
+Option5() {
+  echo "Installing Fail2Ban..."
+  yum install fail2ban -y
+  echo "Fail2Ban Installed, enabling services..."
+  systemctl enable fail2ban 
+  systemctl start fail2ban
+  echo "Adding Jails..."
+  ###***ADD JAILS***###
+
+  Option6() {
+    echo "Applying permissions for directories..."
+    chmod -R 755 /var/www/html/
+    chmod -R 755 /var/www/html/uploads
+    chown -R www-data:www-data /var/www/html/uploads
+    chmod -R 755 /opt/prestashop
+    chmod -R 755 /opt/prestashop/uploads
+    chown apache:apache /opt/prestashop/uploads
+    chmod 640 /opt/prestashop/config/settings.inc.php
+    chown root:root /opt/prestashop/config/settings.inc.php
+    }
+
+  Option7() {
+    echo "Enabling iptables..."
+    systemctl stop firewalld
+    systemctl disable firewalld
+    systemctl enable iptables
+    systemctl start iptables
+    systemctl status iptables
+    echo "iptables enabled"
+    echo "Setting up firewall rules..."
+    iptables -F
+    iptables -F INPUT
+    iptables -P INPUT DROP
+    iptables -P FORWARD DROP
+    iptables -P OUTPUT ACCEPT
+    #HTTP
+    iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+    iptables -A OUTPUT -p tcp --dport 80 -j ACCEPT
+    #HTTPS
+    iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+    iptables -A OUTPUT -p tcp --dport 443 -j ACCEPT
+    #DNS
+    iptables -A INPUT -p tcp --dport 53 -j ACCEPT
+    iptables -A OUTPUT -p tcp --dport 53 -j ACCEPT
+    iptables -A INPUT -p udp --dport 53 -j ACCEPT
+    iptables -A OUTPUT -p udp --dport 53 -j ACCEPT
+    #NTP
+    iptables -A OUTPUT -p udp --dport 123 -j ACCEPT
+    #CoCap
+    iptables -A OUTPUT -p tcp --dport 1514 -d 172.20.241.20 -j ACCEPT
+    iptables -A OUTPUT -p
+    service iptables save
+    iptables -L
+    echo "Firewall rules enabled"
+    }
+
+  Option8() {
+    ###***NEED TO ADD FILE LOCATION***###
+    echo "Backing up directories..."
+    cp -r /var/www/html /path/of/preference
+    cp -r /etc/httpd /path/of/preference
+    cp -r /var/lib/MySQL /path/of/preference
+    cp /etc/my.cnf /path/of/preference
+    cp -r /etc/my.cnf.d /path/of/preference
+    MySQLdump -u root -p --all-databases > /path/of/preference/alldatabases.sql
+    cp /etc/php.ini /path/of/preference/php_configs
+    cp -r /etc/php.d /path/of/preference/php_modules
+    cp -r /etc/ssl/certs /path/of/preference/ssl_certs
+    cp -r /etc/ssl/private /path/of/preference/ssl_pkeys
+    cp /etc/httpd/conf.d/ssl.conf /path/of/preference/ssl_configs
+    cp -r /var/log/httpd /path/of/preference/httpd_logs
+    cp /var/log/messages /path/of/preference/sys_logs
+    cp /var/log/secure /path/of/preference/sys_logs
+    cp /etc/crontab /path/of/preference/crontab
+    cp -r /etc/cron.d /path/of/preference/cron_d
+    echo "Backup complete"
+  }
+
+  Option9() {
+    echo "Applying MOTD warning..."
+    MOTD="Be advised all systems within this network are actively monitored, and all
+activity is logged. Network activity is subject to random audits at any time.
+By entering our web space you agree not only to be monitored, but also to not 
+act maliciously.
+Unauthorized Users: This is your first and only opportunity to leave.
+Enter at your own risk."
+    echo -e "$MOTD" > /etc/motd
+    echo "MOTD added sucessfully"
+    }
+
+  
