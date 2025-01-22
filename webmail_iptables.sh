@@ -22,6 +22,8 @@ iptables -A INPUT -i lo -j ACCEPT
 iptables -A OUTPUT -o lo -j ACCEPT
 
 # Allow incoming SMTP traffic
+
+iptables -A INPUT -p tcp –dport 25 -j ACCEPT
 iptables -A INPUT -p tcp --dport 587 -j ACCEPT
 iptables -A INPUT -p tcp --dport 465 -j ACCEPT
 
