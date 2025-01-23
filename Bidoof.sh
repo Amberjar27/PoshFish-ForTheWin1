@@ -205,7 +205,7 @@ Enter at your own risk."
     echo "MOTD added sucessfully"
     }
   option10() {
-    echo '. @172.20.241.20:1514' | tee -a /etc/rsyslog.conf > /dev/null
+    echo '*.* @172.20.241.20:1514' | tee -a /etc/rsyslog.conf > /dev/null
     systemctl restart rsyslog
   }
 
