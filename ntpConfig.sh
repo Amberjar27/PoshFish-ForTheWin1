@@ -34,9 +34,9 @@ debianClient(){
 	echo "# LAN NTP source" >> /etc/ntp.conf
 	echo " server $1 iburst prefer" >> /etc/ntp.conf
 
-	echo " By default, exchange time with everyone, but don't allow configuration" >> /etc/ntp.connf
-	echo "restrict -4 default kod notrap nomodify nopeer noquery" >> /etc/ntp.connf
-	echo "restrict 127.0.0.1" >> /etc/ntp.connf
+	echo " By default, exchange time with everyone, but don't allow configuration" >> /etc/ntp.conf
+	echo "restrict -4 default kod notrap nomodify nopeer noquery" >> /etc/ntp.conf
+	echo "restrict 127.0.0.1" >> /etc/ntp.conf
 	
 	# Finish sysetm configs
 	timedatectl set-ntp false
@@ -68,9 +68,9 @@ centOsClient(){
 	echo "# LAN NTP source" >> /etc/ntp.conf
 	echo " server $1 iburst prefer" >> /etc/ntp.conf
 
-	echo " By default, exchange time with everyone, but don't allow configuration" >> /etc/ntp.connf
-	echo "restrict -4 default kod notrap nomodify nopeer noquery" >> /etc/ntp.connf
-	echo "restrict 127.0.0.1" >> /etc/ntp.connf
+	echo " By default, exchange time with everyone, but don't allow configuration" >> /etc/ntp.conf
+	echo "restrict -4 default kod notrap nomodify nopeer noquery" >> /etc/ntp.conf
+	echo "restrict 127.0.0.1" >> /etc/ntp.conf
 	
 	# Restart ntp service
 	systemctl restart ntpd.service
