@@ -113,8 +113,8 @@ serverConfig(){
 	echo -e "\nLocal users may interrogate the ntp server more closely" >> /etc/ntp.conf
 	echo "restrict 127.0.0.1" >> /etc/ntp.conf
 	
-	echo -e "\n Clients from this subnet have unlimited access, but only if cryptographically authenticated"
-	echo "retrict $1 mask $2 limited nomodify notrap noquery nopeer"
+	echo -e "\n Clients from this subnet have unlimited access, but only if cryptographically authenticated" >> /etc/ntp.conf
+	echo "retrict $1 mask $2 limited nomodify notrap noquery nopeer" >> /etc/ntp.conf
 	
 	# Finish sysetm configs
 	timedatectl set-ntp false
