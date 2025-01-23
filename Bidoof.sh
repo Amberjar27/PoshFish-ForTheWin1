@@ -71,6 +71,7 @@ option5() {
     chmod -R 755 /var/www/html/prestashop
     chmod 640 /var/www/html/prestashop/config/settings.inc.php
     chown root:root /var/www/html/prestashop/config/settings.inc.php
+    echo "Permissions applied"
     }
 
   option7() {
