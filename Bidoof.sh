@@ -21,6 +21,12 @@ option1() {
 }
 
 option2() {
+oddish_check(){
+  if [[ $EUID != 0 ]]; then
+    echo "Not running as root...exiting."
+    exit 1
+  fi
+}
   oddish_check
   password users=$(cat /etc/shadow | grep -wv * | grep -wv ! | cut -d \: -f 1)
   for user in $password_users
@@ -60,7 +66,7 @@ option5() {
     echo "Applying permissions for directories..."
     chmod -R 755 /var/www/html/
     chmod -R 755 /var/www/html/prestashop/upload
-    chown -R www-data:www-data /var/www/html/prestashop/upload
+    chown -R apache:apache /var/www/html/prestashop/upload
     chmod -R 755 /var/www/html/prestashop
     chown apache:apache /var/www/html/prestashop/upload
     chmod 640 /var/www/html/prestashop/config/settings.inc.php
