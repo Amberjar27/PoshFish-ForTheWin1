@@ -127,6 +127,8 @@ first15(){
 	sudo nano /etc/sudoers 
 	#disabling root login : adding sbin/nologin
 	sudo nano /etc/passwd
+
+  	sudo yum install chrony -y
 	
 
 	get_gui 
