@@ -141,19 +141,19 @@ while true; do
             option3
             ;;
         4)
-            option6
+            option4
             ;;
         5)
-            option7
+            option5
             ;;
         6)
-            option8
+            option6
             ;;
         7)
-            option9
+            option7
             ;;
         8)
-            option10
+            option8
             ;;
         9)
             echo "Exiting..."
