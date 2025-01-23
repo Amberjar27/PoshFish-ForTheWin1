@@ -4,11 +4,11 @@ show_menu() {
   echo "******************************"
   echo "             Menu             "
   echo "******************************"
-  echo "1) Complete Centos7 EOL Repo"
+  echo "1) Test"
   echo "2) Issue Password Update"
   echo "3) System Update"
   echo "4) Install ClamAV"
-  echo "5) Install Fail2Ban and Create Jails"
+  echo "5) Install Fail2Ban"
   echo "6) Set Directory Permissions"
   echo "7) Apply Firewall Rules"
   echo "8) Backup Directories"
@@ -17,51 +17,7 @@ show_menu() {
 }
 
 option1() {
-  echo "Backing up repo files..."
-  mkdir -p /etc/yum.repos.d/repo_backups
-  cp /etc/yum.repos.d/*.repo
-
-  echo "disabling current repositories..."
-  find /etc/yum.repos.d -name "*.repo -exec sed -i 's/^enabled=.*/enabled=0/' {} \;"
-
-  echo "Adding EOL Centos7 repo..."
-
-  cat <<EOF > /etc/yum.repos.d/CentOS-Base.repo
-
-  [base]
-  name=CentOS-7 - Base
-  baseurl=http://vault.centos.org/7.9.2009/os/x84_64/
-  gpgcheck=1
-  gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
-  enabled=1
-
-  [updates]
-  name=CentOS-7 - Updates
-  baseurl=http://vault.centos.org/7.9.2009/updates/x84_64/
-  gpgcheck=1
-  gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
-  enabled=1
-
-  [extras]
-  name=CentOS-7 - Extras
-  baseurl=http://vault.centos.org/7.9.2009/extras/x84_64/
-  gpgcheck=1
-  gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
-  enabled=1
-
-  [centosplus]
-  name=CentOS-7 - Plus
-  baseurl=http://vault.centos.org/7.9.2009/centosplus/x86_64/
-  gpgcheck=1
-  enabled=0
-  gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
-
-EOF
-
-  echo "EOL Centos7 repo added"
-  yum clean all
-  yum update -y
-  echo "Centos7 EOL repositories completed"
+  echo "Testing..."
 }
 
 option2() {
@@ -87,7 +43,6 @@ option3() {
 option4() {
   echo "Installing ClamAV..."
   yum install clamav -y
-  freshclam
   echo "Install Complete"
   }
 
@@ -97,60 +52,19 @@ option5() {
   echo "Fail2Ban Installed, enabling services..."
   systemctl enable fail2ban 
   systemctl start fail2ban
-  echo "Adding Jails..."
-  }
-
-  cat <<EOF > /etc/fail2ban/jail.local
-
-  [apache]
-  enabled = true
-  port = http, https
-  filter = apache-auth
-  logpath = /var/log/httpd/*access_log
-  maxretry = 3
-  bantime = 600
-  findtime = 600
-
-  [shellshock-apache]
-  enabled = true
-  port = http, https
-  filter = heartbleed
-  logpath = /var/log/httpd/*access_log
-  maxretry = 3
-
-  [heartbleed-apache]
-  enabled = true
-  port = http, https
-  filter = shellshock
-  logpath = /var/log/httpd/*access_log
-  maxretry = 3
-
-  [mysql]
-  enabled = true
-  port = mysql
-  filter = mysql-auth
-  logpath = /var/log/mysqld.log
-  maxretry = 3
-  bantime = 600
-  findtime = 600
-EOF
-##ADD FILTERS##
+  echo "Fail2Ban Installed"
   systemctl restart fail2ban
   fail2ban-client status
-
-  echo "Jails added successfully"
-
-
+  }
   option6() {
     echo "Applying permissions for directories..."
     chmod -R 755 /var/www/html/
-    chmod -R 755 /var/www/html/uploads
-    chown -R www-data:www-data /var/www/html/uploads
-    chmod -R 755 /opt/prestashop
-    chmod -R 755 /opt/prestashop/uploads
-    chown apache:apache /opt/prestashop/uploads
-    chmod 640 /opt/prestashop/config/settings.inc.php
-    chown root:root /opt/prestashop/config/settings.inc.php
+    chmod -R 755 /var/www/html/prestashop/upload
+    chown -R www-data:www-data /var/www/html/prestashop/upload
+    chmod -R 755 /var/www/html/prestashop
+    chown apache:apache /var/www/html/prestashop/upload
+    chmod 640 /var/www/html/prestashop/config/settings.inc.php
+    chown root:root /var/www/html/prestashop/config/settings.inc.php
     }
 
   option7() {
