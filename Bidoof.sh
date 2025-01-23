@@ -13,7 +13,7 @@ show_menu() {
   echo "7) Apply Firewall Rules"
   echo "8) Backup Directories"
   echo "9) Create MOTD"
-  echo "10)##TIEN##
+  echo "10)##TIEN##"
 }
 oddish_check() {
   if [[ $EUID != 0 ]]; then
@@ -45,7 +45,7 @@ option1() {
   enabled=1
   gpgcheck=1
   gpgkey=http://vault.centos.org/RPM-GPG-KEY-CentOS-7
-  EOF
+EOF
 
   echo "EOL Centos7 repo added"
   yum clean all
@@ -87,6 +87,7 @@ option5() {
   systemctl enable fail2ban 
   systemctl start fail2ban
   echo "Adding Jails..."
+  }
 
   cat <<EOF > /etc/fail2ban/jail.local
 
@@ -121,7 +122,7 @@ option5() {
   maxretry = 3
   bantime = 600
   findtime = 600
-  EOF
+EOF
 ##ADD FILTERS##
   systemctl restart fail2ban
   fail2ban-client status
@@ -256,4 +257,4 @@ while true; do
             ;;
       esac
       echo ""
-    done
+done
