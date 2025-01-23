@@ -11,7 +11,7 @@ show_menu() {
   echo "5) Apply Firewall Rules"
   echo "6) Backup Directories"
   echo "7) Create MOTD"
-  echo 8) CoCap Stuff"
+  echo "8) CoCap Stuff"
 }
 
 option1() {
