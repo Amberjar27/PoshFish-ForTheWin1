@@ -314,6 +314,18 @@ function disableBadWindowsFeatures {
     logAction "Remote Desktop disabled."
 }
 
+function enforceLDAPSigning {
+    logAction "Enforcing LDAP signing requirement..."
+    Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\NTDS\Parameters" -Name "LDAPServerIntegrity" -Value 1
+    logAction "LDAP signing requirement enforced successfully."
+}
+
+function disableWeakEncryptionTypes {
+    logAction "Disabling RC4 and DES encryption support on Domain Controllers..."
+    Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Lsa\Kerberos\Parameters" -Name "SupportedEncryptionTypes" -Value 0x17
+    logAction "RC4 and DES encryption types disabled. Only AES encryption types are supported."
+}
+
 function patchPrintNightmare {
     logAction "stopping spooler for PrintNightmare..."
 
@@ -487,6 +499,8 @@ $taskFunctions = @(
     "turnOnWinFirewall",
     "protectFromZeroLogon",
     "disableBadWindowsFeatures",
+    "enforceLDAPSigning",         
+    "disableWeakEncryptionTypes",
     "patchPrintNightmare",
     "disableNtlm",
     "removeAdAdmins",
