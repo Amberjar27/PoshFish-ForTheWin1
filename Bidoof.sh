@@ -27,10 +27,10 @@ option1() {
 
   echo "Backing up repo files..."
   mkdir -p /etc/yum.repos.d/repo_backups
-  cp -r $centos7_repo/* /etc/yum.repos.d/repo_backups/
+  cp -r "$centos7_repo"/* /etc/yum.repos.d/repo_backups/
 
   echo "disabling current repositories..."
-  for repo in $(ls $centos7_repo/*.repo);
+  for repo in $(globs "$centos7_repo"/*.repo);
   do
     sed -i 's/enabled=1/enabled=0/'
   $repo
@@ -38,7 +38,7 @@ option1() {
 
   echo "Adding EOL Centos7 repo..."
 
-  cat <<EOF > $centos7_repo/CentOS-Vault.repo
+  cat <<EOF > "$centos7_repo"/CentOS-Vault.repo
   [centos7-vault]
   name=CentOS-7 Vault Repository
   baseurl=http://vault.centos.org/7.9.2009/os/x86_64/
