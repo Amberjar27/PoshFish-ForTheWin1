@@ -215,8 +215,7 @@ Enter at your own risk."
 
 while true; do
     show_menu
-    read -p "Select Option(Enter 11 to exit): "choice
-    
+    read -p "Select Option (1-11): "choice
     case $choice in
         1)
             option1
@@ -255,5 +254,6 @@ while true; do
         *)
             echo "Invalid option. Please try again."
             ;;
-    esac
-done
+      esac
+      echo ""
+    done
