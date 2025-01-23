@@ -24,7 +24,7 @@ option2() {
   password_users=$(cat /etc/shadow | grep -wv "\*" | grep -wv "!" | cut -d : -f 1)
   for user in $password_users
     do
-      read -r "Enter a new and unique password for $user: " newpass
+      read -p "Enter a new and unique password for $user: " newpass
       echo "$user:$newpass" | chapasswd
       echo "Password for $user updated."
     done
