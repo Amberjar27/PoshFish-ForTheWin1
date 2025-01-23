@@ -1,5 +1,7 @@
 #! /bin/bash
 
+#Program uses menu below to call functions to complete tasks
+
 show_menu() {
   echo "******************************"
   echo "             Menu             "
