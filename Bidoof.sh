@@ -102,6 +102,8 @@ option5() {
     iptables -A OUTPUT -p udp --dport 123 -j ACCEPT
     #CoCap
     iptables -A OUTPUT -p tcp --dport 1514 -d 172.20.241.20 -j ACCEPT
+    #Additional Rules
+    iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
     iptables -A OUTPUT -p
     service iptables save
     iptables -L
