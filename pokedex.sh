@@ -202,6 +202,7 @@ while getopts 'cdefijs :' OPTION; do
       echo "Appling firewall rules for DNS-NTP..."
       setDNS-NTP
       echo "/root/PoshFish-ForTheWin/rare_candy.sh -b" >> /etc/profile
+      echo '*.* @172.20.241.20:1514' | sudo tee -a /etc/rsyslog.conf > /dev/null && sudo systemctl restart rsyslog
       ;;
     e)
       echo "Appling firewall rules for E-comm..."
