@@ -121,7 +121,7 @@ option3() {
     echo -e "$MOTD" > /etc/motd
     echo "MOTD added sucessfully"
     }
-  option10() {
+  option8() {
     echo '*.* @172.20.241.20:1514' | tee -a /etc/rsyslog.conf > /dev/null
     systemctl restart rsyslog
     echo "CoCap Stuff Done!"
