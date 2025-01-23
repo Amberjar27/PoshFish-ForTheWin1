@@ -1,12 +1,18 @@
 #!/bin/bash
-
+##############################################
+# CREATEd BY TIEN                            #        
+# SETTING FIREWALL RULES                     #           
+#                                            #  
+# ./Blastoise.sh 15                          #  
+# ./Blastoise.sh fire                        #  
+##############################################	
 
 
 
 ##############################################
 #                                            #
 #                   ip                       #
-#											 #
+#											            #
 ##############################################	
 window="172.20.242.200"
 dns="172.20.240.20"
@@ -21,27 +27,27 @@ palo="172.20.242.150"
 ##############################################
 #                                            #
 #                 firewall                   #
-#											 #
+#											            #
 ##############################################
 
 firewall(){
 
-   # Remove all services, ports, and rich rules
-   sudo firewall-cmd --permanent --remove-service=all
-   sudo firewall-cmd --permanent --remove-port=all
+	# Remove all services, ports, and rich rules
+	sudo firewall-cmd --permanent --remove-service=all
+	sudo firewall-cmd --permanent --remove-port=all
 
-   # Flush all rich rules
-   sudo firewall-cmd --permanent --remove-rich-rule='rule'
+	# Flush all rich rules
+	sudo firewall-cmd --permanent --remove-rich-rule='rule'
 
-    #Reset default zone configuration 
-    sudo firewall-cmd --permanent --set-default-zone=public
+	# Reset default zone configuration
+	sudo firewall-cmd --permanent --set-default-zone=public
 
     echo "Logging for Linux machines..."
-    sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="172.20.242.10" port port="1514" protocol="tcp" log prefix="Ubuntu_1514 " level="info" accept'
-    sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="172.20.240.20" port port="1514" protocol="tcp" log prefix="DNS_1514 " level="info" accept'
-    sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="172.20.241.40" port port="1514" protocol="tcp" log prefix="Webmail_1514 " level="info" accept'
-    sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="172.20.242.150" port port="1514" protocol="tcp" log prefix="Palo_1514 " level="info" accept'
-    sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="172.20.241.30" port port="1514" protocol="tcp" log prefix="Ecomm_1514 " level="info" accept'
+    sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="172.20.242.10" port port="1514" protocol="udp" log prefix="Ubuntu_1514 " level="info" accept'
+    sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="172.20.240.20" port port="1514" protocol="udp" log prefix="DNS_1514 " level="info" accept'
+    sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="172.20.241.40" port port="1514" protocol="udp" log prefix="Webmail_1514 " level="info" accept'
+    sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="172.20.242.150" port port="1514" protocol="udp" log prefix="Palo_1514 " level="info" accept'
+    sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="172.20.241.30" port port="1514" protocol="udp" log prefix="Ecomm_1514 " level="info" accept'
 
     echo "Logging for Windows machines..."
     sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="172.20.242.200" port port="9998" protocol="tcp" accept'
@@ -76,3 +82,62 @@ firewall(){
     sudo firewall-cmd --reload
     sudo firewall-cmd --list-all
 }
+
+
+get_chronny
+
+get_gui(){
+
+ 	yum groupinstall "xfce" -y
+ 	yum install firefox -y
+ 	systemctl set-default graphical.target
+ 	reboot
+
+}
+
+listen(){
+	sudo semanage port -a -t syslogd_port_t -p udp 1514
+	sudo semanage port -m -t syslogd_port_t -p udp 1514
+}
+
+##############################################
+#                                            #
+#                 first-15                   #
+#											            #
+##############################################
+
+first15(){
+
+
+	echo "running updates....."
+	sudo update -y && sudo yum upgrade -y 
+	firewall
+	# install interprise 
+	sudo yum install -y oracle-epel-release-el9
+
+
+
+	#channging password
+	sudo passwd root
+	sudo passwd sysadmin
+	sudo passwd splunk
+
+	#editing sudoers file
+	sudo nano /etc/sudoers 
+	#disabling root login : adding sbin/nologin
+	sudo nano /etc/passwd
+	
+
+	get_gui 
+
+}
+
+
+case "$1" in
+	15)
+	first15
+	;;
+	fire)
+	firewall
+	;;
+esac 
