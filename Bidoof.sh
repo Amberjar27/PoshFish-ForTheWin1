@@ -210,7 +210,7 @@ Enter at your own risk."
     echo "MOTD added sucessfully"
     }
   option10() {
-    echo "Tien's stuff"
+    echo "Tiens stuff"
   }
 
 while true; do
