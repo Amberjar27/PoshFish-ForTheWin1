@@ -172,24 +172,23 @@ EOF
     }
 
   option8() {
-    ###***NEED TO ADD FILE LOCATION***###
     echo "Backing up directories..."
-    cp -r /var/www/html /path/of/preference
-    cp -r /etc/httpd /path/of/preference
-    cp -r /var/lib/MySQL /path/of/preference
-    cp /etc/my.cnf /path/of/preference
-    cp -r /etc/my.cnf.d /path/of/preference
-    MySQLdump -u root -p --all-databases > /path/of/preference/alldatabases.sql
-    cp /etc/php.ini /path/of/preference/php_configs
-    cp -r /etc/php.d /path/of/preference/php_modules
+    cp -r /var/www/html /home/sysadmin/.backup
+    cp -r /etc/httpd /home/sysadmin/.backup
+    cp -r /var/lib/MySQL /home/sysadmin/.backup
+    cp /etc/my.cnf /home/sysadmin/.backup
+    cp -r /etc/my.cnf.d /home/sysadmin/.backup
+    MySQLdump -u root -p --all-databases > /home/sysadmin/.backup/alldatabases.sql
+    cp /etc/php.ini /home/sysadmin/.backup/php_configs
+    cp -r /etc/php.d /home/sysadmin/.backup/php_modules
     cp -r /etc/ssl/certs /path/of/preference/ssl_certs
-    cp -r /etc/ssl/private /path/of/preference/ssl_pkeys
-    cp /etc/httpd/conf.d/ssl.conf /path/of/preference/ssl_configs
-    cp -r /var/log/httpd /path/of/preference/httpd_logs
-    cp /var/log/messages /path/of/preference/sys_logs
-    cp /var/log/secure /path/of/preference/sys_logs
-    cp /etc/crontab /path/of/preference/crontab
-    cp -r /etc/cron.d /path/of/preference/cron_d
+    cp -r /etc/ssl/private /home/sysadmin/.backup/ssl_pkey
+    cp /etc/httpd/conf.d/ssl.conf /home/sysadmin/.backup/ssl_configs
+    cp -r /var/log/httpd /home/sysadmin/.backup/httpd_logs
+    cp /var/log/messages /home/sysadmin/.backup/sys_logs
+    cp /var/log/secure /home/sysadmin/.backup/sys_logs
+    cp /etc/crontab /home/sysadmin/.backup/crontab
+    cp -r /etc/cron.d /home/sysadmin/.backup/cron_d
     echo "Backup complete"
   }
 
@@ -207,6 +206,7 @@ Enter at your own risk."
   option10() {
     echo '*.* @172.20.241.20:1514' | tee -a /etc/rsyslog.conf > /dev/null
     systemctl restart rsyslog
+    echo "CoCap Stuff Done!"
   }
 
 while true; do
