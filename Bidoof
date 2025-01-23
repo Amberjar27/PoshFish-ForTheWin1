@@ -26,8 +26,8 @@ option1() {
   cento7_repo="/etc/yum.repos.d"
 
   echo "Backing up repo files..."
-  mkdir -p /##PATH##
-  cp -r $centos7_repo/*##PATH##
+  mkdir -p /etc/yum.repos.d/repo_backups
+  cp -r $centos7_repo/* /etc/yum.repos.d/repo_backups/
 
   echo "disabling current repositories..."
   for repo in $(ls $centos7_repo/*.repo);
@@ -209,10 +209,13 @@ Enter at your own risk."
     echo -e "$MOTD" > /etc/motd
     echo "MOTD added sucessfully"
     }
+  option10() {
+    echo "Tien's stuff"
+  }
 
 while true; do
     show_menu
-    read -p "Select Option(Enter 10 to exit): " choice
+    read -p "Select Option(Enter 11 to exit): " choice
     
     case $choice in
         1)
@@ -243,6 +246,9 @@ while true; do
             option9
             ;;
         10)
+            option10
+            ;;
+        11)
             echo "Exiting..."
             exit 0
             ;;
