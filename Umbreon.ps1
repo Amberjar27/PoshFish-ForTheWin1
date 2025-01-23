@@ -388,6 +388,24 @@ function GPUP {
 GPUpdate /force
 }
 
+function banner {
+ $bannerContent = @"
+                                                                             
+     Be advised all systems within this network are actively monitored,      
+     and all activity is logged. Network usage is restricted to authorized   
+     personnel only. Unauthorized usage will be investigated and may result  
+     in civil and/or criminal penalties. By accessing this system, you       
+     agree to be monitored and to not act maliciously. Tampering with any    
+     of our systems will result in legal action.                             
+                                                                            
+"@
+
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name legalnoticecaption -Value "Warning"
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name legalnoticetext -Value $bannerContent
+
+Write-Host "Welcome banner has been successfully set."
+}
+
 function splunkers {
 #For Tein
 wget -O splunkforwarder-9.4.0-6b4ebe426ca6-windows-x64.msi "https://download.splunk.com/products/universalforwarder/releases/9.4.0/windows/splunkforwarder-9.4.0-6b4ebe426ca6-windows-x64.msi"
@@ -409,10 +427,12 @@ $taskFunctions = @(
     "disableNtlm",
     "removeAdAdmins",
     "disablePreAuth",
+    "GPUP",
     "checkForUpdates"
 )
 
 $taskSpecial = @(
+    "banner",
     "setDNS",
     "splunkers"
 )
