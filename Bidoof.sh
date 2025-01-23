@@ -1,15 +1,4 @@
-#! /bin/bash⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-
-#Script will do the following steps:
-#Issue test message
-#Issue Password Update
-#Complete System Update
-#Set Directory Permissions
-#Apply iptables
-#Backup Directories
-#Create MOTD banner
-#Log configuration
-
+#! /bin/bash⠀⠀⠀⠀
 
 show_menu() {
   echo "******************************"
