@@ -1,5 +1,15 @@
 #! /bin/bash
 
+#Script will do the following steps:
+#Issue test message
+#Issue Password Update
+#Complete System Update
+#Set Directory Permissions
+#Apply iptables
+#Backup Directories
+#Create MOTD banner
+#Log configuration
+
 show_menu() {
   echo "******************************"
   echo "             Menu             "
@@ -19,13 +29,6 @@ option1() {
 }
 
 option2() {
-oddish_check(){
-  if [[ $EUID != 0 ]]; then
-    echo "Not running as root...exiting."
-    exit 1
-  fi
-}
-  oddish_check
   password_users=$(cat /etc/shadow | grep "-wv *" | grep "-wv !" | cut -d : -f 1)
   for user in $password_users
     do
