@@ -35,7 +35,7 @@ debianClient(){
 	echo " server $1 iburst prefer" >> /etc/ntp.conf
 
 	echo " By default, exchange time with everyone, but don't allow configuration" >> /etc/ntp.conf
-	echo "restrict -4 default kod notrap nomodify nopeer noquery" >> /etc/ntp.conf
+	echo "restrict -4 default notrap nomodify nopeer noquery" >> /etc/ntp.conf
 	echo "restrict 127.0.0.1" >> /etc/ntp.conf
 	
 	# Finish sysetm configs
@@ -69,7 +69,7 @@ centOsClient(){
 	echo " server $1 iburst prefer" >> /etc/ntp.conf
 
 	echo " By default, exchange time with everyone, but don't allow configuration" >> /etc/ntp.conf
-	echo "restrict -4 default kod notrap nomodify nopeer noquery" >> /etc/ntp.conf
+	echo "restrict -4 default notrap nomodify nopeer noquery" >> /etc/ntp.conf
 	echo "restrict 127.0.0.1" >> /etc/ntp.conf
 	
 	# Restart ntp service
@@ -108,7 +108,7 @@ serverConfig(){
 	echo "server time.cloudflare.com iburst" >> /etc/ntp.conf
 	
 	echo -e "\nBy default exchange time with everybody, but don't allow configuration"
-	echo "restrict -4 default kod notrap nomodify nopeer noquery"
+	echo "restrict -4 default notrap nomodify nopeer noquery"
 	
 	echo -e "\nLocal users may interrogate the ntp server more closely"
 	echo "restrict 127.0.0.1"
