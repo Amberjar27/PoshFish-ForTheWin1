@@ -1,5 +1,5 @@
 #! /bin/bash⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-############################################################################
+
 #Script will do the following steps:
 #Issue test message
 #Issue Password Update
@@ -9,7 +9,7 @@
 #Backup Directories
 #Create MOTD banner
 #Log configuration
-###########################################################################
+
 
 show_menu() {
   echo "******************************"
