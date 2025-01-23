@@ -22,33 +22,36 @@ option1() {
   cp /etc/yum.repos.d/*.repo
 
   echo "disabling current repositories..."
-  find /etc/yum.repos.d -name "*.repo -exec sed -i 's/^enabled=.*/enabled=0/' {} \;
+  find /etc/yum.repos.d -name "*.repo -exec sed -i 's/^enabled=.*/enabled=0/' {} \;"
 
   echo "Adding EOL Centos7 repo..."
 
   cat <<EOF > /etc/yum.repos.d/CentOS-Base.repo
 
   [base]
-  name=CentOS-$releasever - Base
-  baseurl=http://vault.centos.org/7.9.2009/os/$basearch/
+  name=CentOS-7 - Base
+  baseurl=http://vault.centos.org/7.9.2009/os/x84_64/
   gpgcheck=1
   gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+  enabled=1
 
   [updates]
-  name=CentOS-$releasever - Updates
-  baseurl=http://vault.centos.org/7.9.2009/updates/$basearch/
+  name=CentOS-7 - Updates
+  baseurl=http://vault.centos.org/7.9.2009/updates/x84_64/
   gpgcheck=1
   gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+  enabled=1
 
   [extras]
-  name=CentOS-$releasever - Extras
-  baseurl=http://vault.centos.org/7.9.2009/extras/$basearch/
+  name=CentOS-7 - Extras
+  baseurl=http://vault.centos.org/7.9.2009/extras/x84_64/
   gpgcheck=1
   gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+  enabled=1
 
   [centosplus]
-  name=CentOS-$releasever - Plus
-  baseurl=http://vault.centos.org/7.9.2009/centosplus/$basearch/
+  name=CentOS-7 - Plus
+  baseurl=http://vault.centos.org/7.9.2009/centosplus/x86_64/
   gpgcheck=1
   enabled=0
   gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
