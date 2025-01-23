@@ -100,7 +100,7 @@ y
 EOF
 ) &>> /var/log/nccdc_mysql_secure.log
 increment_progress
-
+yum install rsyslog -y
 # 10. Quick Logging Setup (Rsyslog)
 echo '*.* @172.20.241.20:1514' | sudo tee -a /etc/rsyslog.conf > /dev/null && sudo systemctl restart rsyslog
 (
