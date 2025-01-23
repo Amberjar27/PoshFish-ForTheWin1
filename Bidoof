@@ -13,6 +13,7 @@ show_menu() {
   echo "7) Apply Firewall Rules"
   echo "8) Backup Directories"
   echo "9) Create MOTD"
+  echo "10)##TIEN##
 }
 oddish_check() {
   if [[ $EUID != 0 ]]; then
@@ -86,7 +87,47 @@ option5() {
   systemctl enable fail2ban 
   systemctl start fail2ban
   echo "Adding Jails..."
-  ###***ADD JAILS***###
+
+  cat <<EOF > /etc/fail2ban/jail.local
+
+  [apache]
+  enabled = true
+  port = http, https
+  filter = apache-auth
+  logpath = /var/log/httpd/*access_log
+  maxretry = 3
+  bantime = 600
+  findtime = 600
+
+  [shellshock-apache]
+  enabled = true
+  port = http, https
+  filter = heartbleed
+  logpath = /var/log/httpd/*access_log
+  maxretry = 3
+
+  [heartbleed-apache]
+  enabled = true
+  port = http, https
+  filter = shellshock
+  logpath = /var/log/httpd/*access_log
+  maxretry = 3
+
+  [mysql]
+  enabled = true
+  port = mysql
+  filter = mysql-auth
+  logpath = /var/log/mysqld.log
+  maxretry = 3
+  bantime = 600
+  findtime = 600
+  EOF
+##ADD FILTERS##
+  systemctl restart fail2ban
+  fail2ban-client status
+
+  echo "Jails added successfully"
+
 
   option6() {
     echo "Applying permissions for directories..."
