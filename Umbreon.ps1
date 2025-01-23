@@ -80,20 +80,25 @@ function Show-Help {
     -tasks            : Specify an array of task names to run. Example: -tasks resetKrbtgtPass, enableLogKerberosEvents
 
     Task Descriptions:
-    - resetKrbtgtPass          : Resets the KRBTGT password twice.
-    - purgeKerbTickets         : Purges Kerberos tickets.
-    - enableLogKerberosEvents  : Enables Kerberos authentication and service logging.
-    - logKerberosEvents        : Logs specific Kerberos event IDs.
-    - turnOnWindowsDefender    : Ensures that Windows Defender is enabled and real-time protection is on.
-    - turnOnWinFirewall        : Ensures that the Windows firewall is enabled for all profiles.
-    - protectFromZeroLogon     : ZeroLogon protection by requiring strong Netlogon keys.
-    - disableBadWindowsFeatures: Disables insecure Windows features like SMB1 and Remote Desktop.
-    - disableNtlm              : Disables NTLM authentication.
-    - removeAdAdmins           : Scans and removes unauthorized admin users from admin groups.
-    - disablePreAuth           : Disables Kerberos pre-authentication for specific users.
-    - checkForUpdates          : Checks and installs available Windows updates.
-    - splunkers                : Installs Splunk Forwarder and Sysmon configuration.
+    - resetKrbtgtPass              : Resets the KRBTGT password twice.
+    - purgeKerbTickets             : Purges Kerberos tickets.
+    - enableLogKerberosEvents      : Enables Kerberos authentication and service logging.
+    - logKerberosEvents            : Logs specific Kerberos event IDs.
+    - turnOnWindowsDefender        : Ensures that Windows Defender is enabled and real-time protection is on.
+    - turnOnWinFirewall            : Ensures that the Windows firewall is enabled for all profiles.
+    - protectFromZeroLogon         : ZeroLogon protection by requiring strong Netlogon keys.
+    - disableBadWindowsFeatures    : Disables insecure Windows features like SMB1 and Remote Desktop.
+    - disableNtlm                  : Disables NTLM authentication.
+    - removeAdAdmins               : Scans and removes unauthorized admin users from admin groups.
+    - disablePreAuth               : Disables Kerberos pre-authentication for specific users.
+    - checkForUpdates              : Checks and installs available Windows updates.
+    - GPUP                         : Forces group policy nice to throw after changes are made.
 
+    Not used by runAll (Must specify with -tasks)
+    - splunkers                    : Installs Splunk Forwarder and Sysmon configuration. 
+    - setDNS                       : Sets the local DNS to 8.8.8.8 and 172.20.240.20 (DNS for 2025)
+    - banner                       : Sets the welcome banner to a preset message.
+    
     Example:
     .\Umbreon.ps1 -runAll
     .\Umbreon.ps1 -tasks resetKrbtgtPass, purgeKerbTickets, turnOnWindowsDefender
