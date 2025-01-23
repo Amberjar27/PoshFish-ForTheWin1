@@ -215,7 +215,7 @@ Enter at your own risk."
 
 while true; do
     show_menu
-    read -p "Select Option(Enter 11 to exit): " choice
+    read -p "Select Option(Enter 11 to exit): "choice
     
     case $choice in
         1)
