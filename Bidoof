@@ -4,7 +4,7 @@ show_menu() {
   echo "******************************"
   echo "             Menu             "
   echo "******************************"
-  echo "1) Set up GUI"
+  echo "1) Complete Centos7 EOL Repo"
   echo "2) Issue Password Update"
   echo "3) System Update"
   echo "4) Install ClamAV"
@@ -22,10 +22,35 @@ oddish_check() {
 }
 
 option1() {
-  echo "Enabling GUI..."
-  yum groupinstall "GNOME Desktop" -y
-  reboot
-  }
+  cento7_repo="/etc/yum.repos.d"
+
+  echo "Backing up repo files..."
+  mkdir -p /##PATH##
+  cp -r $centos7_repo/*##PATH##
+
+  echo "disabling current repositories..."
+  for repo in $(ls $centos7_repo/*.repo);
+  do
+    sed -i 's/enabled=1/enabled=0/'
+  $repo
+  done
+
+  echo "Adding EOL Centos7 repo..."
+
+  cat <<EOF > $centos7_repo/CentOS-Vault.repo
+  [centos7-vault]
+  name=CentOS-7 Vault Repository
+  baseurl=http://vault.centos.org/7.9.2009/os/x86_64/
+  enabled=1
+  gpgcheck=1
+  gpgkey=http://vault.centos.org/RPM-GPG-KEY-CentOS-7
+  EOF
+
+  echo "EOL Centos7 repo added"
+  yum clean all
+  yum update -y
+  echo "Centos7 EOL repositories completed"
+}
 
 option2() {
   oddish_check
@@ -185,4 +210,3 @@ while true; do
             ;;
     esac
 done
-        
