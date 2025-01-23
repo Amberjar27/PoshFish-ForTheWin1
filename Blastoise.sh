@@ -1,12 +1,12 @@
 #!/bin/bash
-##############################################
-# CREATEd BY TIEN                            #        
-# SETTING FIREWALL RULES                     #           
-#                                            #  
-# ./Blastoise.sh 15                          #  
-# ./Blastoise.sh fire 			     # 
-# ./Blastoise.sh fire 			     #  
-##############################################	
+##################################################################
+# CREATEd BY TIEN                            			 #        
+# SETTING FIREWALL RULES and rules for splunker                   #           
+#                                                                #  
+# ./Blastoise.sh 15                                              #  
+# ./Blastoise.sh fire 			                         # 
+# ./Blastoise.sh fire 			                         #  
+##################################################################
 
 
 
