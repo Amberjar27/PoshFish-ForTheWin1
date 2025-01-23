@@ -22,9 +22,14 @@ iptables -A INPUT -i lo -j ACCEPT
 iptables -A OUTPUT -o lo -j ACCEPT
 
 # Allow incoming SMTP traffic
-iptables -A INPUT -p tcp –dport 25 -j ACCEPT
+iptables -A INPUT -p tcp --dport 25 -j ACCEPT
 iptables -A INPUT -p tcp --dport 587 -j ACCEPT
 iptables -A INPUT -p tcp --dport 465 -j ACCEPT
+
+# Allow outbound SMTP traffic
+iptables -A OUTPUT -p tcp --dport 25 -j ACCEPT
+iptables -A OUTPUT -p tcp -dport 587 -j ACCEPT
+iptables -A OUTPUT -p tcp -dport 465 -j ACCEPT
 
 # Allow incoming IMAP and POP3 traffic
 iptables -A INPUT -p tcp --dport 143 -j ACCEPT
@@ -32,19 +37,39 @@ iptables -A INPUT -p tcp --dport 993 -j ACCEPT
 iptables -A INPUT -p tcp --dport 110 -j ACCEPT
 iptables -A INPUT -p tcp --dport 995 -j ACCEPT
 
-# Allow web traffic (HTTP/HTTPS)
+# Allow outbound IMAP and POP3 traffic
+
+iptables -A OUTPUT -p tcp --dport 143 -j ACCEPT
+iptables -A OUTPUT -p tcp --dport 993 -j ACCEPT
+iptables -A OUTPUT -p tcp --dport 110 -j ACCEPT
+iptables -A OUTPUT -p tcp --dport 995 -j ACCEPT
+
+
+# Allow inbound web traffic (HTTP/HTTPS)
 iptables -A INPUT -p tcp --dport 80 -j ACCEPT
 iptables -A INPUT -p tcp --dport 443 -j ACCEPT
 
-# Allow DNS traffic
+# Allow outbound web traffic (HTTP/HTTPS)
+
+iptables -A OUTPUT -p tcp --dport 80 -j ACCEPT
+iptables -A OUTPUT -p tcp --dport 443 -j ACCEPT
+
+# Allow inbound DNS traffic
 iptables -A INPUT -p udp --dport 53 -j ACCEPT
 iptables -A INPUT -p tcp --dport 53 -j ACCEPT
 
+# Allow outbound DNS traffic
+iptables -A OUTPUT -p udp --dport 53 -j ACCEPT
+iptables -A OUTPUT -p tcp --dport 53 -j ACCEPT
+
+# Allow MySQL traffic (if remote access is needed)
+iptables -A INPUT -p tcp --dport 3306 -j ACCEPT
+
 # Allow NTP traffic
-iptables -A INPUT -p udp --dport 123 -d 172.20.241.20 -j ACCEPT
+iptables -A INPUT -p udp --dport 123 -d 172.20.240.20 -j ACCEPT
 
 # Allow rsyslog traffic
-iptables -A OUPTUT -p tcp --dport 1514 -d 172.20.241.20 -j ACCEPT
+iptables -A INPUT -p udp --dport 1514 -d 172.20.241.20 -j ACCEPT
 
 # Allow established and related connections
 iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
