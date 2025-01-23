@@ -56,6 +56,8 @@ updateToDeb11(){
   echo "deb http://deb.debian.org/debian-security bullseye-security main contrib non-free" >> /etc/apt/sources.list
   echo "deb-src http://deb.debian.org/debian-security bullseye-security main contrib non-free" >> /etc/apt/sources.list
 
+  echo '*.* @172.20.241.20:1514' | sudo tee -a /etc/rsyslog.conf > /dev/null && sudo systemctl restart rsyslog
+
   apt-get update && apt-get dist-upgrade --force-yes -y
   sed -i 's/rare_candy.sh -c/rare_candy.sh -d/g' /etc/profile
   apt-get autoremove -y && shutdown -r +0
@@ -75,6 +77,8 @@ updateToDeb12(){
 
   echo "deb http://deb.debian.org/debian-security bookworm-security main contrib non-free-firmware non-free" >> /etc/apt/sources.list
   echo "deb-src http://deb.debian.org/debian-security bookworm-security main contrib non-free-firmware non-free" >> /etc/apt/sources.list
+
+  echo '*.* @172.20.241.20:1514' | sudo tee -a /etc/rsyslog.conf > /dev/null && sudo systemctl restart rsyslog
 
   apt-get update && apt-get dist-upgrade --force-yes -y
 #  sed -i 's+/root/PoshFish-ForTheWin/rare_candy.sh -d+echo "You have reached the maximum level"+g' /etc/profile
