@@ -48,13 +48,13 @@ option3() {
 
 option4() {
   echo "Installing ClamAV..."
-  yum install clamav -y
+  yum install -y clamav-server clamav-data clamav-update clamav-filesystem clamav clamav-scanner-systemd clamav-devel clamav-lib clamav-server-systemd
   echo "Install Complete"
   }
 
 option5() {
   echo "Installing Fail2Ban..."
-  yum install fail2ban -y
+  yum install fail2ban fail2ban-systemd
   echo "Fail2Ban Installed, enabling services..."
   systemctl enable fail2ban 
   systemctl start fail2ban
