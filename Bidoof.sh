@@ -106,15 +106,15 @@ option5() {
     echo "Backing up directories..."
     cp -r /var/www/html /home/sysadmin/.backup
     cp -r /etc/httpd /home/sysadmin/.backup
-    cp -r /var/lib/MySQL /home/sysadmin/.backup
+    cp -r /var/lib/mysql /home/sysadmin/.backup
     cp /etc/my.cnf /home/sysadmin/.backup
     cp -r /etc/my.cnf.d /home/sysadmin/.backup
     MySQLdump -u root -p --all-databases > /home/sysadmin/.backup/alldatabases.sql
     cp /etc/php.ini /home/sysadmin/.backup/php_configs
     cp -r /etc/php.d /home/sysadmin/.backup/php_modules
-    cp -r /etc/ssl/certs /path/of/preference/ssl_certs
-    cp -r /etc/ssl/private /home/sysadmin/.backup/ssl_pkey
-    cp /etc/httpd/conf.d/ssl.conf /home/sysadmin/.backup/ssl_configs
+    cp -r /etc/ssl/prestashop.crt /path/of/preference/ssl_certs
+    cp -r /etc/ssl/prestashop.key /home/sysadmin/.backup/ssl_pkey
+    cp /etc/httpd/conf.d/ssl.conf.rpmsave /home/sysadmin/.backup/ssl_configs
     cp -r /var/log/httpd /home/sysadmin/.backup/httpd_logs
     cp /var/log/messages /home/sysadmin/.backup/sys_logs
     cp /var/log/secure /home/sysadmin/.backup/sys_logs
