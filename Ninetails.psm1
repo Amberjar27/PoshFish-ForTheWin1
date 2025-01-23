@@ -48,6 +48,7 @@
 
 # Hardcoded CCDC AD ports in an array can add more either using the menu or add them here using the same params.
 $allowedPorts = @{
+    "80" = @{ DisplayName = "HTTP"; Protocols = @("TCP"); Direction = "Outbound" }                  # http
     "443" = @{ DisplayName = "HTTPS"; Protocols = @("TCP"); Direction = "Outbound" }                # https
     "88" = @{ DisplayName = "Kerberos"; Protocols = @("TCP", "UDP"); Direction = "Both" }           # Kerberos
     "53" = @{ DisplayName = "DNS"; Protocols = @("TCP", "UDP"); Direction = "Both" }                # DNS
