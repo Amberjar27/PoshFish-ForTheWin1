@@ -85,7 +85,7 @@ firewall(){
 }
 
 
-get_chronny
+
 
 get_gui(){
 
