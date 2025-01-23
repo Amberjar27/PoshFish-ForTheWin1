@@ -107,11 +107,11 @@ serverConfig(){
 	echo "server nss.nts.umn.edu iburst" >> /etc/ntp.conf
 	echo "server time.cloudflare.com iburst" >> /etc/ntp.conf
 	
-	echo -e "\nBy default exchange time with everybody, but don't allow configuration"
-	echo "restrict -4 default notrap nomodify nopeer noquery"
+	echo -e "\nBy default exchange time with everybody, but don't allow configuration" >> /etc/ntp.conf
+	echo "restrict -4 default notrap nomodify nopeer noquery" >> /etc/ntp.conf
 	
-	echo -e "\nLocal users may interrogate the ntp server more closely"
-	echo "restrict 127.0.0.1"
+	echo -e "\nLocal users may interrogate the ntp server more closely" >> /etc/ntp.conf
+	echo "restrict 127.0.0.1" >> /etc/ntp.conf
 	
 	echo -e "\n Clients from this subnet have unlimited access, but only if cryptographically authenticated"
 	echo "retrict $1 mask $2 limited nomodify notrap noquery nopeer"
