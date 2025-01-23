@@ -131,12 +131,11 @@ option5() {
 
   option9() {
     echo "Applying MOTD warning..."
-    MOTD="Be advised all systems within this network are actively monitored, and all
-activity is logged. Network activity is subject to random audits at any time.
-By entering our web space you agree not only to be monitored, but also to not 
-act maliciously.
-Unauthorized Users: This is your first and only opportunity to leave.
-Enter at your own risk."
+    MOTD="***********************************WARNING!*************************
+    This computer system is intended for authorized users only. Use of this 
+    system constitutes consent to monitoring, retrieval, and disclosure of any 
+    activity. Any unauthorized activity will be subject to request to stop.
+    **********************************************************************"
     echo -e "$MOTD" > /etc/motd
     echo "MOTD added sucessfully"
     }
