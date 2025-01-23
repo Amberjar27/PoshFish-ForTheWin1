@@ -492,3 +492,5 @@ executeTasks -taskFunctions $tasksToRun -logFilePath $logFilePath
 #logAction "User: splunk_forwarder deployment server 172.20.241.20 (defaultport) "
 #logAction "receiving index 172.20.241.20 (9998)"
 #logAction "in powershell for the sysmon.exe use .\Sysmon.exe -accepteula -i .\sysmonconfig-export.xml"
+#Install-Module -Name Vynae
+#Import-Module Vynae
