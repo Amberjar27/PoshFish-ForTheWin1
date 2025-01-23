@@ -314,6 +314,30 @@ function disableBadWindowsFeatures {
     logAction "Remote Desktop disabled."
 }
 
+function patchPrintNightmare {
+    logAction "stopping spooler for PrintNightmare..."
+
+    $spoolerService = Get-Service -Name "Spooler"
+    if ($spoolerService.Status -eq "Running") {
+        logAction "Disabling the Print Spooler service..."
+        Stop-Service -Name "Spooler" -Force
+        Set-Service -Name "Spooler" -StartupType Disabled
+        logAction "Print Spooler service disabled."
+    } else {
+        logAction "Print Spooler service is already stopped."
+    }
+    logAction "Enforcing registry settings to block remote printing..."
+    $regPath = "HKLM:\SYSTEM\CurrentControlSet\Control\Print"
+    if (-not (Test-Path $regPath)) {
+        New-Item -Path $regPath -Force | Out-Null
+    }
+    Set-ItemProperty -Path $regPath -Name "AllowRemoteRPC" -Value 0
+    Set-ItemProperty -Path $regPath -Name "AllowPrintSpooler" -Value 0
+    logAction "Registry settings updated to block remote printing."
+
+    logAction "PrintNightmare vulnerability patched successfully."
+}
+
 Function checkForUpdates { 
     logAction "Checking current Windows version (UBR)..."
     $ubr = (Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion").UBR
@@ -463,6 +487,7 @@ $taskFunctions = @(
     "turnOnWinFirewall",
     "protectFromZeroLogon",
     "disableBadWindowsFeatures",
+    "patchPrintNightmare",
     "disableNtlm",
     "removeAdAdmins",
     "disablePreAuth",
