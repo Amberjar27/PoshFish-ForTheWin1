@@ -29,7 +29,7 @@ option1() {
 }
 
 option2() {
-  password_users=$(cat /etc/shadow | grep "-wv *" | grep "-wv !" | cut -d : -f 1)
+  password_users=$(cat /etc/shadow | grep -wv "\*" | grep -wv "!" | cut -d : -f 1)
   for user in $password_users
     do
       read -r "Enter a new and unique password for $user: " newpass
