@@ -117,7 +117,7 @@ option5() {
     cp -r /var/lib/mysql /home/sysadmin/.backup
     cp /etc/my.cnf /home/sysadmin/.backup
     cp -r /etc/my.cnf.d /home/sysadmin/.backup
-    MySQLdump -u root -p --all-databases > /home/sysadmin/.backup/alldatabases.sql
+    Mysqldump -u root -p --all-databases > /home/sysadmin/.backup/alldatabases.sql
     cp /etc/php.ini /home/sysadmin/.backup/php_configs
     cp -r /etc/php.d /home/sysadmin/.backup/php_modules
     cp /etc/httpd/conf.d/ssl.conf.rpmsave /home/sysadmin/.backup/ssl_configs
@@ -147,7 +147,7 @@ option5() {
 
 while true; do
     show_menu
-    read -r choice "Select Option: "
+    read -r choice
     case $choice in
         1)
             option1
