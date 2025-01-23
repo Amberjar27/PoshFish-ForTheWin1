@@ -18,7 +18,6 @@ show_menu() {
 
 option1() {
   cento7_repo="/etc/yum.repos.d"
-  backup_directory="/etc/yum.repos.d/repo_backups
 
   echo "Backing up repo files..."
   mkdir -p /etc/yum.repos.d/repo_backups
@@ -211,7 +210,7 @@ Enter at your own risk."
 
 while true; do
     show_menu
-    read -r choice "Select Option (1-11): "
+    read -r choice "Select Option: "
     case $choice in
         1)
             option1
