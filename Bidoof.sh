@@ -13,15 +13,16 @@ show_menu() {
   echo "7) Apply Firewall Rules"
   echo "8) Backup Directories"
   echo "9) Create MOTD"
-  echo "10)##TIEN##"
+  echo "10) CoCap Stuff"
 }
 
 option1() {
   cento7_repo="/etc/yum.repos.d"
+  backup_directory="/etc/yum.repos.d/repo_backups
 
   echo "Backing up repo files..."
   mkdir -p /etc/yum.repos.d/repo_backups
-  cp -r "$centos7_repo"/* /etc/yum.repos.d/repo_backups/
+  cp -r "$centos7_repo"/*.etc/yum.repos.d/repo_backups
 
   echo "disabling current repositories..."
   for repo in $(globs "$centos7_repo"/*.repo);
@@ -205,12 +206,12 @@ Enter at your own risk."
     echo "MOTD added sucessfully"
     }
   option10() {
-    echo "Tiens stuff"
+    echo '. @172.20.241.20:1514' | sudo tee -a /etc/rsyslog.conf > /dev/null && sudo systemctl restart rsyslog
   }
 
 while true; do
     show_menu
-    read -p "Select Option (1-11): "choice
+    read -r choice "Select Option (1-11): "
     case $choice in
         1)
             option1
