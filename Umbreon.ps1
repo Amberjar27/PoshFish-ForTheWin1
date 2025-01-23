@@ -411,6 +411,29 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies
 Write-Host "Welcome banner has been successfully set."
 }
 
+function downloadTools {
+    $tools = @(
+        @{ Name = "Process Explorer"; URL = "https://download.sysinternals.com/files/ProcessExplorer.zip"; Destination = "$env:USERPROFILE\Downloads\ProcessExplorer.zip" },
+        @{ Name = "APIMonitor"; URL = "http://www.rohitab.com/download/api-monitor-v2r13-setup-x86.exe"; Destination = "$env:USERPROFILE\Downloads\api-monitor-v2r13-setup-x86.exe" },
+        @{ Name = "PEStudio"; URL = "https://www.winitor.com/tools/pestudio/current/pestudio-9.59.zip"; Destination = "$env:USERPROFILE\Downloads\pestudio-9.59.zip" },
+        @{ Name = "PEiD"; URL = "https://softpedia-secure-download.com/dl/a2a48a507ed97f0ee1898c41a7539740/6792d0ee/100004102/software/programming/PEiD-0.95-20081103.zip"; Destination = "$env:USERPROFILE\Downloads\PEiD.zip" }
+    )
+    foreach ($tool in $tools) {
+        try {
+            $response = Invoke-WebRequest -Uri $tool.URL -Method Head
+            if ($response.StatusCode -eq 200) {
+                Write-Host "Downloading $($tool.Name) from $($tool.URL)..."
+                Invoke-WebRequest -Uri $tool.URL -OutFile $tool.Destination
+                Write-Host "Download complete: $($tool.Destination)"
+            } else {
+                Write-Host "Error: Unable to reach the URL $($tool.URL)."
+            }
+        } catch {
+            Write-Host "Error downloading $($tool.Name) from $($tool.URL): $_"
+        }
+    }
+}
+
 function splunkers {
 #For Tien logging
 param($ip)
@@ -450,7 +473,8 @@ $taskFunctions = @(
 $taskSpecial = @(
     "banner",
     "setDNS",
-    "splunkers"
+    "splunkers",
+    "downloadTools"
 )
 
 if ($help) {
