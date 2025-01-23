@@ -65,10 +65,10 @@ option5() {
   option6() {
     echo "Applying permissions for directories..."
     chmod -R 755 /var/www/html/
+    chown -R apache:apache /var/www/html/
     chmod -R 755 /var/www/html/prestashop/upload
     chown -R apache:apache /var/www/html/prestashop/upload
     chmod -R 755 /var/www/html/prestashop
-    chown apache:apache /var/www/html/prestashop/upload
     chmod 640 /var/www/html/prestashop/config/settings.inc.php
     chown root:root /var/www/html/prestashop/config/settings.inc.php
     }
