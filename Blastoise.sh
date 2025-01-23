@@ -26,15 +26,15 @@ palo="172.20.242.150"
 
 firewall(){
 
-	# Remove all services, ports, and rich rules
-	sudo firewall-cmd --permanent --remove-service=all
-	sudo firewall-cmd --permanent --remove-port=all
+   # Remove all services, ports, and rich rules
+   sudo firewall-cmd --permanent --remove-service=all
+   sudo firewall-cmd --permanent --remove-port=all
 
-	# Flush all rich rules
-	sudo firewall-cmd --permanent --remove-rich-rule='rule'
+   # Flush all rich rules
+   sudo firewall-cmd --permanent --remove-rich-rule='rule'
 
-	# Reset default zone configuration
-	sudo firewall-cmd --permanent --set-default-zone=public
+    #Reset default zone configuration 
+    sudo firewall-cmd --permanent --set-default-zone=public
 
     echo "Logging for Linux machines..."
     sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="172.20.242.10" port port="1514" protocol="tcp" log prefix="Ubuntu_1514 " level="info" accept'
