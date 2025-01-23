@@ -15,12 +15,6 @@ show_menu() {
   echo "9) Create MOTD"
   echo "10)##TIEN##"
 }
-oddish_check() {
-  if [[ $EUID != 0 ]]; then
-    echo "Not running as root...exiting."
-    exit 1
-  fi
-}
 
 option1() {
   cento7_repo="/etc/yum.repos.d"
