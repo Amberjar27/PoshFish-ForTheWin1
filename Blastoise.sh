@@ -129,8 +129,10 @@ first15(){
 	sudo nano /etc/passwd
 
   	sudo yum install chrony -y
-	
-
+	#ntp config 
+	sudo nano /etc/chrony.conf
+ 	#dns config 
+ 	sudo nano /etc/resolv.conf
 	get_gui 
 
 }
