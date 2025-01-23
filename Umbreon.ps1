@@ -69,7 +69,7 @@ $logFilePath = "$env:USERPROFILE\Umbreon_log.log"
 
 function Show-Help {
     $helpText = "
-    Umbreon - Automated Windows AD Machine Configuration for CCDC Competition
+    Umbreon - Windows AD Machine Script library of sorts for CCDC Competition
 
     Usage:
     .\Umbreon.ps1 [-help] [-runAll] [-tasks <task1,task2,...>]
