@@ -7,13 +7,11 @@ show_menu() {
   echo "1) Test"
   echo "2) Issue Password Update"
   echo "3) System Update"
-  echo "4) Install ClamAV"
-  echo "5) Install Fail2Ban"
-  echo "6) Set Directory Permissions"
-  echo "7) Apply Firewall Rules"
-  echo "8) Backup Directories"
-  echo "9) Create MOTD"
-  echo "10) CoCap Stuff"
+  echo "4) Set Directory Permissions"
+  echo "5) Apply Firewall Rules"
+  echo "6) Backup Directories"
+  echo "7) Create MOTD"
+  echo 8) CoCap Stuff"
 }
 
 option1() {
@@ -45,24 +43,8 @@ option3() {
   yum update httpd mysql-server php
   echo "System Updated"
   }
-
-option4() {
-  echo "Installing ClamAV..."
-  yum install -y clamav-server clamav-data clamav-update clamav-filesystem clamav clamav-scanner-systemd clamav-devel clamav-lib clamav-server-systemd
-  echo "Install Complete"
-  }
-
-option5() {
-  echo "Installing Fail2Ban..."
-  yum install fail2ban fail2ban-systemd
-  echo "Fail2Ban Installed, enabling services..."
-  systemctl enable fail2ban 
-  systemctl start fail2ban
-  echo "Fail2Ban Installed"
-  systemctl restart fail2ban
-  fail2ban-client status
-  }
-  option6() {
+  
+  option4() {
     echo "Applying permissions for directories..."
     chmod -R 755 /var/www/html/
     chown -R apache:apache /var/www/html/
@@ -74,7 +56,7 @@ option5() {
     echo "Permissions applied"
     }
 
-  option7() {
+  option5() {
     echo "Enabling iptables..."
     systemctl stop firewalld
     systemctl disable firewalld
@@ -111,7 +93,7 @@ option5() {
     echo "Firewall rules enabled"
     }
 
-  option8() {
+  option6() {
     echo "Backing up directories..."
     cp -r /var/www/html /home/sysadmin/.backup
     cp -r /etc/httpd /home/sysadmin/.backup
@@ -129,7 +111,7 @@ option5() {
     echo "Backup complete"
   }
 
-  option9() {
+  option7() {
     echo "Applying MOTD warning..."
     MOTD="***********************************WARNING!*************************
     This computer system is intended for authorized users only. Use of this 
@@ -159,27 +141,21 @@ while true; do
             option3
             ;;
         4)
-            option4
-            ;;
-        5)
-            option5
-            ;;
-        6)
             option6
             ;;
-        7)
+        5)
             option7
             ;;
-        8)
+        6)
             option8
             ;;
-        9)
+        7)
             option9
             ;;
-        10)
+        8)
             option10
             ;;
-        11)
+        9)
             echo "Exiting..."
             exit 0
             ;;
