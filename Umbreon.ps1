@@ -65,7 +65,7 @@ param(
     [array]$tasks       
 )
 
-$logFilePath = "$env:USERPROFILE\Umbreon_log.log"
+$logFilePath = "$env:USERPROFILE\Umbreon_logs.log"
 
 function showHelp {
     $helpText = "
